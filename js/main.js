@@ -66,7 +66,7 @@ const VENTURES = [
   { name: '@BensEstates', tag: 'Real Estate', desc: 'Helping buyers, sellers, and investors win in the Minneapolis market — with content that keeps it real.', url: 'https://linktr.ee/bensestates',
     icon: '<span class="text-3xl leading-none">🏠</span>' },
   { name: '@JPGBenji', tag: 'Photography', desc: 'Portraits, real estate, events, and aerial work. Series projects: skyscapes, strangers, moving photos.', url: 'https://instagram.com/JPGBenji',
-    icon: '<span class="text-3xl leading-none">📷</span>' },
+    icon: '<span class="text-3xl leading-none">📸</span>' },
   { name: 'Mow Bros MN', tag: 'Lawn Care', desc: 'North metro lawn care done right — proof that the fundamentals of business work in any industry.', url: 'https://share.google/I07Zv9gb9vr2mikUy',
     icon: '<img src="images/mowbros.png" alt="Mow Bros logo" class="w-10 h-10 object-contain rounded bg-white">' },
 ];
