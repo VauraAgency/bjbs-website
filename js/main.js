@@ -61,18 +61,18 @@ document.getElementById('category-tabs').addEventListener('click', (e) => {
 
 // ---------- Ventures ----------
 const VENTURES = [
-  { name: 'Vaura', tag: 'Branding & Marketing Agency', desc: 'All-in-one digital branding and marketing — websites, social, and growth for local businesses.', url: 'https://vaura.site',
+  { name: 'Vaura', tag: 'Branding & Marketing Agency', desc: 'All-in-one digital branding and marketing — websites, social, and growth for local businesses.', url: 'https://popl.co/card/7kmqlK11/4/dash',
     icon: '<img src="images/vaura-black.png" alt="Vaura logo" class="w-10 h-10 object-contain dark:hidden"><img src="images/vaura-white.png" alt="Vaura logo" class="w-10 h-10 object-contain hidden dark:block">' },
   { name: '@BensEstates', tag: 'Real Estate', desc: 'Helping buyers, sellers, and investors win in the Minneapolis market — with content that keeps it real.', url: 'https://linktr.ee/bensestates',
     icon: '<span class="text-3xl leading-none">🏠</span>' },
-  { name: '@JPGBenji', tag: 'Photography & Drone', desc: 'Portraits, real estate, events, and aerial work. Series projects: skyscapes, strangers, moving photos.', url: '#',
+  { name: '@JPGBenji', tag: 'Photography', desc: 'Portraits, real estate, events, and aerial work. Series projects: skyscapes, strangers, moving photos.', url: 'https://instagram.com/JPGBenji',
     icon: '<span class="text-3xl leading-none">📷</span>' },
-  { name: 'Mow Bros MN', tag: 'Lawn Care', desc: 'North metro lawn care done right — proof that the fundamentals of business work in any industry.', url: 'https://poplme.co/mowbrosmn',
+  { name: 'Mow Bros MN', tag: 'Lawn Care', desc: 'North metro lawn care done right — proof that the fundamentals of business work in any industry.', url: 'https://share.google/I07Zv9gb9vr2mikUy',
     icon: '<img src="images/mowbros.png" alt="Mow Bros logo" class="w-10 h-10 object-contain rounded bg-white">' },
 ];
 
 document.getElementById('ventures-grid').innerHTML = VENTURES.map(v => `
-  <a href="${v.url}" class="block p-5 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-indigo-400 dark:hover:border-indigo-500 transition bg-slate-50 dark:bg-slate-850">
+  <a href="${v.url}" target="_blank" rel="noopener" class="block p-5 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-indigo-400 dark:hover:border-indigo-500 transition bg-slate-50 dark:bg-slate-850">
     <div class="h-10 flex items-center mb-4">${v.icon}</div>
     <h3 class="font-semibold mb-0.5 text-slate-900 dark:text-slate-100">${v.name}</h3>
     <p class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-2">${v.tag}</p>
