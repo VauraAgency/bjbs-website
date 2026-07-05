@@ -19,22 +19,37 @@ const CONTENT = [
 ];
 
 const grid = document.getElementById('articles-grid');
+let feed = [...CONTENT];
+let activeCat = 'all';
 
-function thumb(hue) {
-  return `<div class="aspect-video rounded-xl mb-3 transition group-hover:opacity-90" style="background:linear-gradient(135deg,hsl(${hue[0]} ${hue[1]}% 55%),hsl(${(hue[0] + 60) % 360} ${hue[1]}% 45%))"></div>`;
+function thumb(c) {
+  if (c.thumb) return `<div class="aspect-video rounded-xl mb-3 overflow-hidden"><img src="${c.thumb}" alt="" loading="lazy" class="w-full h-full object-cover transition group-hover:scale-105"></div>`;
+  return `<div class="aspect-video rounded-xl mb-3 transition group-hover:opacity-90" style="background:linear-gradient(135deg,hsl(${c.hue[0]} ${c.hue[1]}% 55%),hsl(${(c.hue[0] + 60) % 360} ${c.hue[1]}% 45%))"></div>`;
 }
 
 function render(cat) {
-  grid.innerHTML = CONTENT.filter(c => cat === 'all' || c.cat === cat)
+  activeCat = cat;
+  grid.innerHTML = feed.filter(c => cat === 'all' || c.cat === cat)
     .map(c => `
-      <a href="${c.url}" class="group block">
-        ${thumb(c.hue)}
+      <a href="${c.url}" ${c.url.startsWith('http') ? 'target="_blank" rel="noopener"' : ''} class="group block">
+        ${thumb(c)}
         <p class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1">${c.label} · ${c.date}</p>
         <h3 class="font-bold text-lg leading-snug mb-1 text-slate-900 dark:text-slate-100 group-hover:text-indigo-500 transition">${c.title}</h3>
         <p class="text-sm text-slate-500 dark:text-slate-400">${c.desc}</p>
       </a>`).join('');
 }
 render('all');
+
+// Live feed: data/videos.json is refreshed daily by GitHub Actions from the
+// YouTube channel RSS. Real videos replace the placeholder video cards.
+fetch('data/videos.json')
+  .then(r => r.ok ? r.json() : [])
+  .then(videos => {
+    if (!videos.length) return;
+    feed = [...videos.slice(0, 6), ...CONTENT.filter(c => c.cat !== 'video')];
+    render(activeCat);
+  })
+  .catch(() => {});
 
 document.getElementById('category-tabs').addEventListener('click', (e) => {
   const btn = e.target.closest('button');
@@ -47,9 +62,9 @@ document.getElementById('category-tabs').addEventListener('click', (e) => {
 // ---------- Ventures ----------
 const VENTURES = [
   { name: 'Vaura', tag: 'Branding & Marketing Agency', desc: 'All-in-one digital branding and marketing — websites, social, and growth for local businesses.', url: 'https://vaura.site', hue: 239 },
-  { name: 'BensEstates', tag: 'Real Estate', desc: 'Helping buyers, sellers, and investors win in the Minneapolis market — with content that keeps it real.', url: '#', hue: 199 },
+  { name: 'BensEstates', tag: 'Real Estate', desc: 'Helping buyers, sellers, and investors win in the Minneapolis market — with content that keeps it real.', url: 'https://linktr.ee/bensestates', hue: 199 },
   { name: 'JPG Benji', tag: 'Photography & Drone', desc: 'Portraits, real estate, events, and aerial work. Series projects: skyscapes, strangers, moving photos.', url: '#', hue: 280 },
-  { name: 'Mow Bros', tag: 'Lawn Care', desc: 'North metro lawn care done right — proof that the fundamentals of business work in any industry.', url: '#', hue: 130 },
+  { name: 'Mow Bros', tag: 'Lawn Care', desc: 'North metro lawn care done right — proof that the fundamentals of business work in any industry.', url: 'https://poplme.co/mowbrosmn', hue: 130 },
 ];
 
 document.getElementById('ventures-grid').innerHTML = VENTURES.map(v => `
@@ -63,11 +78,11 @@ document.getElementById('ventures-grid').innerHTML = VENTURES.map(v => `
 // ---------- Social links (footer) ----------
 // Fill in real profile URLs — icons render automatically.
 const SOCIALS = [
-  { name: 'Instagram', url: '#', icon: '<path d="M8 0C5.8 0 5.6 0 4.7.1 3.9.1 3.3.2 2.8.4c-.5.2-.9.5-1.4.9-.4.5-.7.9-.9 1.4-.2.5-.3 1.1-.3 1.9C.1 5.6 0 5.8 0 8s0 2.4.1 3.3c0 .8.1 1.4.3 1.9.2.5.5.9.9 1.4.5.4.9.7 1.4.9.5.2 1.1.3 1.9.3.9.1 1.1.1 3.4.1s2.4 0 3.3-.1c.8 0 1.4-.1 1.9-.3.5-.2.9-.5 1.4-.9.4-.5.7-.9.9-1.4.2-.5.3-1.1.3-1.9.1-.9.1-1.1.1-3.3s0-2.4-.1-3.3c0-.8-.1-1.4-.3-1.9-.2-.5-.5-.9-.9-1.4-.5-.4-.9-.7-1.4-.9-.5-.2-1.1-.3-1.9-.3C10.4 0 10.2 0 8 0Zm0 1.4c2.2 0 2.4 0 3.2.1.8 0 1.2.2 1.5.3.4.1.6.3.9.6.3.3.5.5.6.9.1.3.3.7.3 1.5.1.8.1 1 .1 3.2s0 2.4-.1 3.2c0 .8-.2 1.2-.3 1.5-.1.4-.3.6-.6.9-.3.3-.5.5-.9.6-.3.1-.7.3-1.5.3-.8.1-1 .1-3.2.1s-2.4 0-3.2-.1c-.8 0-1.2-.2-1.5-.3-.4-.1-.6-.3-.9-.6-.3-.3-.5-.5-.6-.9-.1-.3-.3-.7-.3-1.5C1.4 10.4 1.4 10.2 1.4 8s0-2.4.1-3.2c0-.8.2-1.2.3-1.5.1-.4.3-.6.6-.9.3-.3.5-.5.9-.6.3-.1.7-.3 1.5-.3.8-.1 1-.1 3.2-.1Zm0 2.5a4.1 4.1 0 1 0 0 8.2 4.1 4.1 0 0 0 0-8.2Zm0 6.8a2.7 2.7 0 1 1 0-5.4 2.7 2.7 0 0 1 0 5.4Zm5.2-7a1 1 0 1 1-1.9 0 1 1 0 0 1 1.9 0Z"/>' },
-  { name: 'TikTok', url: '#', icon: '<path d="M11.4 0h-2.7v10.8a2.3 2.3 0 1 1-2.3-2.3c.2 0 .5 0 .7.1V5.8a5 5 0 1 0 4.3 5V5.4A6.3 6.3 0 0 0 15 6.6V4a3.9 3.9 0 0 1-3.6-4Z"/>' },
-  { name: 'YouTube', url: '#', icon: '<path d="M15.7 4.1a2 2 0 0 0-1.4-1.4C13 2.3 8 2.3 8 2.3s-5 0-6.3.4A2 2 0 0 0 .3 4.1C0 5.4 0 8 0 8s0 2.6.3 3.9a2 2 0 0 0 1.4 1.4c1.3.4 6.3.4 6.3.4s5 0 6.3-.4a2 2 0 0 0 1.4-1.4C16 10.6 16 8 16 8s0-2.6-.3-3.9ZM6.4 10.4V5.6L10.6 8l-4.2 2.4Z"/>' },
-  { name: 'X', url: '#', icon: '<path d="M12.6 0h2.5L9.6 6.8 16 16h-5l-3.9-5.6L2.6 16H.1l5.9-7.3L0 0h5.1l3.5 5.1L12.6 0Zm-.9 14.4h1.4L4.4 1.5H2.9l8.8 12.9Z"/>' },
-  { name: 'LinkedIn', url: '#', icon: '<path d="M3.6 1.8a1.8 1.8 0 1 1-3.6 0 1.8 1.8 0 0 1 3.6 0ZM.2 5.4h3.2V16H.2V5.4Zm5.4 0h3v1.5h.1c.4-.8 1.5-1.7 3-1.7 3.2 0 3.8 2.1 3.8 4.9V16h-3.2v-5.2c0-1.2 0-2.8-1.7-2.8s-2 1.3-2 2.7V16H5.6V5.4Z"/>' },
+  { name: 'Instagram', url: 'https://instagram.com/benjaminjbsmith', icon: '<path d="M8 0C5.8 0 5.6 0 4.7.1 3.9.1 3.3.2 2.8.4c-.5.2-.9.5-1.4.9-.4.5-.7.9-.9 1.4-.2.5-.3 1.1-.3 1.9C.1 5.6 0 5.8 0 8s0 2.4.1 3.3c0 .8.1 1.4.3 1.9.2.5.5.9.9 1.4.5.4.9.7 1.4.9.5.2 1.1.3 1.9.3.9.1 1.1.1 3.4.1s2.4 0 3.3-.1c.8 0 1.4-.1 1.9-.3.5-.2.9-.5 1.4-.9.4-.5.7-.9.9-1.4.2-.5.3-1.1.3-1.9.1-.9.1-1.1.1-3.3s0-2.4-.1-3.3c0-.8-.1-1.4-.3-1.9-.2-.5-.5-.9-.9-1.4-.5-.4-.9-.7-1.4-.9-.5-.2-1.1-.3-1.9-.3C10.4 0 10.2 0 8 0Zm0 1.4c2.2 0 2.4 0 3.2.1.8 0 1.2.2 1.5.3.4.1.6.3.9.6.3.3.5.5.6.9.1.3.3.7.3 1.5.1.8.1 1 .1 3.2s0 2.4-.1 3.2c0 .8-.2 1.2-.3 1.5-.1.4-.3.6-.6.9-.3.3-.5.5-.9.6-.3.1-.7.3-1.5.3-.8.1-1 .1-3.2.1s-2.4 0-3.2-.1c-.8 0-1.2-.2-1.5-.3-.4-.1-.6-.3-.9-.6-.3-.3-.5-.5-.6-.9-.1-.3-.3-.7-.3-1.5C1.4 10.4 1.4 10.2 1.4 8s0-2.4.1-3.2c0-.8.2-1.2.3-1.5.1-.4.3-.6.6-.9.3-.3.5-.5.9-.6.3-.1.7-.3 1.5-.3.8-.1 1-.1 3.2-.1Zm0 2.5a4.1 4.1 0 1 0 0 8.2 4.1 4.1 0 0 0 0-8.2Zm0 6.8a2.7 2.7 0 1 1 0-5.4 2.7 2.7 0 0 1 0 5.4Zm5.2-7a1 1 0 1 1-1.9 0 1 1 0 0 1 1.9 0Z"/>' },
+  { name: 'TikTok', url: 'https://www.tiktok.com/@benjaminjbsmith', icon: '<path d="M11.4 0h-2.7v10.8a2.3 2.3 0 1 1-2.3-2.3c.2 0 .5 0 .7.1V5.8a5 5 0 1 0 4.3 5V5.4A6.3 6.3 0 0 0 15 6.6V4a3.9 3.9 0 0 1-3.6-4Z"/>' },
+  { name: 'YouTube', url: 'https://www.youtube.com/@benjaminjbsmith', icon: '<path d="M15.7 4.1a2 2 0 0 0-1.4-1.4C13 2.3 8 2.3 8 2.3s-5 0-6.3.4A2 2 0 0 0 .3 4.1C0 5.4 0 8 0 8s0 2.6.3 3.9a2 2 0 0 0 1.4 1.4c1.3.4 6.3.4 6.3.4s5 0 6.3-.4a2 2 0 0 0 1.4-1.4C16 10.6 16 8 16 8s0-2.6-.3-3.9ZM6.4 10.4V5.6L10.6 8l-4.2 2.4Z"/>' },
+  { name: 'Facebook', url: 'https://www.facebook.com/benjaminjbsmith', icon: '<path d="M16 8a8 8 0 1 0-9.25 7.9v-5.59H4.72V8h2.03V6.24c0-2 1.19-3.11 3.02-3.11.88 0 1.79.16 1.79.16v1.97h-1.01c-.99 0-1.3.62-1.3 1.25V8h2.22l-.36 2.31H9.25v5.59A8 8 0 0 0 16 8Z"/>' },
+  { name: 'LinkedIn', url: 'https://www.linkedin.com/in/benjaminjbsmith', icon: '<path d="M3.6 1.8a1.8 1.8 0 1 1-3.6 0 1.8 1.8 0 0 1 3.6 0ZM.2 5.4h3.2V16H.2V5.4Zm5.4 0h3v1.5h.1c.4-.8 1.5-1.7 3-1.7 3.2 0 3.8 2.1 3.8 4.9V16h-3.2v-5.2c0-1.2 0-2.8-1.7-2.8s-2 1.3-2 2.7V16H5.6V5.4Z"/>' },
   { name: 'GitHub', url: 'https://github.com/VauraAgency', icon: '<path d="M8 0a8 8 0 0 0-2.5 15.6c.4 0 .5-.2.5-.4v-1.4c-2 .4-2.5-.5-2.7-1-.1-.2-.5-1-.8-1.2-.3-.2-.7-.5 0-.5s1.1.6 1.3.9c.8 1.3 2 1 2.5.7 0-.6.3-1 .5-1.2-2-.2-4-1-4-4.4 0-1 .3-1.8.9-2.4 0-.2-.4-1.1.1-2.4 0 0 .7-.2 2.4.9a8.3 8.3 0 0 1 4.4 0c1.7-1.1 2.4-.9 2.4-.9.5 1.3.2 2.2.1 2.4.6.6.9 1.4.9 2.4 0 3.4-2 4.2-4 4.4.3.3.6.8.6 1.6v2.4c0 .2.1.5.5.4A8 8 0 0 0 8 0Z"/>' },
 ];
 
