@@ -7,6 +7,7 @@ feeds by adding entries to FEEDS.
 """
 import json
 import re
+import urllib.error
 import urllib.request
 import xml.etree.ElementTree as ET
 from pathlib import Path
@@ -20,6 +21,27 @@ NS = {
     "yt": "http://www.youtube.com/xml/schemas/2015",
     "media": "http://search.yahoo.com/mrss/",
 }
+
+
+class NoRedirect(urllib.request.HTTPRedirectHandler):
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        return None
+
+
+def is_short(video_id: str) -> bool:
+    """youtube.com/shorts/<id> returns 200 for Shorts, redirects for regular videos."""
+    opener = urllib.request.build_opener(NoRedirect)
+    req = urllib.request.Request(
+        f"https://www.youtube.com/shorts/{video_id}", method="HEAD",
+        headers={"User-Agent": "Mozilla/5.0"},
+    )
+    try:
+        with opener.open(req, timeout=15) as resp:
+            return resp.status == 200
+    except urllib.error.HTTPError as e:
+        return e.code == 200
+    except Exception:
+        return True  # channel is mostly shorts; safest default
 
 
 def clean_title(title: str) -> str:
@@ -41,9 +63,10 @@ def main() -> None:
         media_group = entry.find("media:group", NS)
         if media_group is not None:
             desc = (media_group.findtext("media:description", "", NS) or "").split("\n")[0][:140]
+        short = is_short(vid)
         videos.append({
-            "cat": "video",
-            "label": "Video",
+            "cat": "reel" if short else "video",
+            "label": "Reel" if short else "Video",
             "date": published,
             "title": clean_title(title),
             "desc": desc,

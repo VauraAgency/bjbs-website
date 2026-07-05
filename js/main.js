@@ -46,7 +46,9 @@ fetch('data/videos.json')
   .then(r => r.ok ? r.json() : [])
   .then(videos => {
     if (!videos.length) return;
-    feed = [...videos.slice(0, 6), ...CONTENT.filter(c => c.cat !== 'video')];
+    const longform = videos.filter(v => v.cat === 'video').slice(0, 6);
+    const reels = videos.filter(v => v.cat === 'reel').slice(0, 6);
+    feed = [...longform, ...reels, ...CONTENT.filter(c => c.cat !== 'video')];
     render(activeCat);
   })
   .catch(() => {});
@@ -87,7 +89,6 @@ const SOCIALS = [
   { name: 'YouTube', url: 'https://www.youtube.com/@benjaminjbsmith', icon: '<path d="M15.7 4.1a2 2 0 0 0-1.4-1.4C13 2.3 8 2.3 8 2.3s-5 0-6.3.4A2 2 0 0 0 .3 4.1C0 5.4 0 8 0 8s0 2.6.3 3.9a2 2 0 0 0 1.4 1.4c1.3.4 6.3.4 6.3.4s5 0 6.3-.4a2 2 0 0 0 1.4-1.4C16 10.6 16 8 16 8s0-2.6-.3-3.9ZM6.4 10.4V5.6L10.6 8l-4.2 2.4Z"/>' },
   { name: 'Facebook', url: 'https://www.facebook.com/benjaminjbsmith', icon: '<path d="M16 8a8 8 0 1 0-9.25 7.9v-5.59H4.72V8h2.03V6.24c0-2 1.19-3.11 3.02-3.11.88 0 1.79.16 1.79.16v1.97h-1.01c-.99 0-1.3.62-1.3 1.25V8h2.22l-.36 2.31H9.25v5.59A8 8 0 0 0 16 8Z"/>' },
   { name: 'LinkedIn', url: 'https://www.linkedin.com/in/benjaminjbsmith', icon: '<path d="M3.6 1.8a1.8 1.8 0 1 1-3.6 0 1.8 1.8 0 0 1 3.6 0ZM.2 5.4h3.2V16H.2V5.4Zm5.4 0h3v1.5h.1c.4-.8 1.5-1.7 3-1.7 3.2 0 3.8 2.1 3.8 4.9V16h-3.2v-5.2c0-1.2 0-2.8-1.7-2.8s-2 1.3-2 2.7V16H5.6V5.4Z"/>' },
-  { name: 'GitHub', url: 'https://github.com/VauraAgency', icon: '<path d="M8 0a8 8 0 0 0-2.5 15.6c.4 0 .5-.2.5-.4v-1.4c-2 .4-2.5-.5-2.7-1-.1-.2-.5-1-.8-1.2-.3-.2-.7-.5 0-.5s1.1.6 1.3.9c.8 1.3 2 1 2.5.7 0-.6.3-1 .5-1.2-2-.2-4-1-4-4.4 0-1 .3-1.8.9-2.4 0-.2-.4-1.1.1-2.4 0 0 .7-.2 2.4.9a8.3 8.3 0 0 1 4.4 0c1.7-1.1 2.4-.9 2.4-.9.5 1.3.2 2.2.1 2.4.6.6.9 1.4.9 2.4 0 3.4-2 4.2-4 4.4.3.3.6.8.6 1.6v2.4c0 .2.1.5.5.4A8 8 0 0 0 8 0Z"/>' },
 ];
 
 document.getElementById('social-links').innerHTML = SOCIALS.map(s => `
