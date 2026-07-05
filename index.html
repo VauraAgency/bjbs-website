@@ -130,17 +130,24 @@
             <div class="flex justify-center -space-x-3 mb-5" id="community-avatars"><!-- populated by js/main.js --></div>
             <h2 class="text-2xl font-bold mb-2 text-slate-900 dark:text-slate-100">Come along for the ride</h2>
             <p class="text-slate-500 dark:text-slate-400 mb-6">One email with my best content on business, investing, and living intentionally. No spam, ever.</p>
-            <form class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto" onsubmit="event.preventDefault(); this.querySelector('button').textContent='Subscribed ✓';">
-              <input type="email" required placeholder="Your email" class="grow px-4 py-2.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
+            <form id="subscribe-form" class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+              <input type="email" name="email" required placeholder="Your email" class="grow px-4 py-2.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
               <button type="submit" class="px-5 py-2.5 rounded-lg bg-indigo-500 hover:bg-indigo-600 text-white font-medium text-sm transition">Subscribe</button>
             </form>
           </div>
         </section>
 
         <!-- Footer -->
-        <footer class="pt-8 border-t border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row gap-4 items-center justify-between text-sm text-slate-500 dark:text-slate-400">
-          <p>© 2026 Benjamin Smith. All rights reserved.</p>
-          <div class="flex gap-4" id="social-links"><!-- populated by js/main.js --></div>
+        <footer class="pt-8 border-t border-slate-200 dark:border-slate-800 space-y-4 text-sm text-slate-500 dark:text-slate-400">
+          <div class="flex flex-col sm:flex-row gap-4 items-center justify-between">
+            <p>© 2026 Benjamin Smith. All rights reserved.</p>
+            <div class="flex gap-4" id="social-links"><!-- populated by js/main.js --></div>
+          </div>
+          <a href="https://popl.co/card/7kmqlK11/4/dash" target="_blank" rel="noopener" class="flex items-center justify-center gap-2 opacity-70 hover:opacity-100 transition">
+            <span class="text-xs uppercase tracking-wide">Powered by</span>
+            <img src="images/vaura-black.png" alt="Vaura" class="h-6 dark:hidden">
+            <img src="images/vaura-white.png" alt="Vaura" class="h-6 hidden dark:block">
+          </a>
         </footer>
 
       </main>

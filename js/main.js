@@ -96,6 +96,25 @@ document.getElementById('social-links').innerHTML = SOCIALS.map(s => `
     <svg class="w-4 h-4 fill-current" viewBox="0 0 16 16">${s.icon}</svg>
   </a>`).join('');
 
+// ---------- Subscribe form → Google Sheets ----------
+// Paste your Apps Script web-app URL here (see scripts/subscribe-apps-script.gs).
+const SHEETS_ENDPOINT = '';
+
+document.getElementById('subscribe-form').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const form = e.target;
+  const btn = form.querySelector('button');
+  const email = form.email.value.trim();
+  if (SHEETS_ENDPOINT) {
+    const body = new URLSearchParams({ email });
+    fetch(SHEETS_ENDPOINT, { method: 'POST', body, mode: 'no-cors' })
+      .then(() => { btn.textContent = 'Subscribed ✓'; form.email.value = ''; })
+      .catch(() => { btn.textContent = 'Try again'; });
+  } else {
+    btn.textContent = 'Subscribed ✓'; // endpoint not configured yet
+  }
+});
+
 // ---------- Community avatars ----------
 const avatars = document.getElementById('community-avatars');
 const hues = [10, 60, 120, 200, 260, 320];
