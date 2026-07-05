@@ -5,38 +5,37 @@ document.getElementById('theme-toggle').addEventListener('click', () => {
   localStorage.theme = root.classList.contains('dark') ? 'dark' : 'light';
 });
 
-// ---------- Articles (placeholder data — swap with your real posts) ----------
-const ARTICLES = [
-  { cat: 'coding',    date: 'Jun 24, 2026', title: 'How I structure every new TypeScript project', desc: 'The folder layout, tooling, and conventions I reach for on day one of every build.', hue: [239, 84] },
-  { cat: 'startups',  date: 'Jun 12, 2026', title: 'Pricing your first SaaS: lessons from 3 launches', desc: 'What actually moved the needle when I stopped guessing and started testing prices.', hue: [199, 89] },
-  { cat: 'tutorials', date: 'May 30, 2026', title: 'Build a realtime dashboard with server-sent events', desc: 'Skip the websocket complexity — SSE gets you live updates with a fraction of the code.', hue: [160, 84] },
-  { cat: 'indie',     date: 'May 18, 2026', title: 'One year of building in public: the honest numbers', desc: 'Revenue, traffic, churn, and everything I would do differently starting over.', hue: [280, 80] },
-  { cat: 'coding',    date: 'May 02, 2026', title: 'Stop writing brittle tests — test behavior, not code', desc: 'A practical guide to tests that survive refactors and actually catch regressions.', hue: [24, 90] },
-  { cat: 'tutorials', date: 'Apr 20, 2026', title: 'Deploy a static site to GitHub Pages in 5 minutes', desc: 'From empty repo to live URL, with a custom domain and HTTPS thrown in for free.', hue: [335, 78] },
-  { cat: 'startups',  date: 'Apr 08, 2026', title: 'Finding your first 100 users without an audience', desc: 'The unglamorous channels that actually worked when nobody knew who I was.', hue: [45, 93] },
-  { cat: 'indie',     date: 'Mar 27, 2026', title: 'The maker schedule that finally stuck for me', desc: 'How I balance a full-time maker life without burning out — deep work blocks and all.', hue: [190, 90] },
+// ---------- Content feed ----------
+// Swap `url: '#'` with real links as content gets published.
+const CONTENT = [
+  { cat: 'video',   label: 'Video',       date: 'Coming soon', title: 'Bitcoin DCA: why it beats timing the market', desc: 'Dollar cost averaging, compound returns, and why BTC is the best-performing asset class.', hue: [39, 92], url: '#' },
+  { cat: 'video',   label: 'Video',       date: 'Coming soon', title: 'The 3 types of traders', desc: 'Day trader wakes up panicking. Swing trader hits the gym. Long-term holder wakes up at 3pm.', hue: [239, 84], url: '#' },
+  { cat: 'article', label: 'Article',     date: 'Coming soon', title: 'Entrepreneurship is lead gen, sales, and follow-up. Repeat.', desc: 'Every business has a formula — the fundamentals that apply from lawn care to real estate.', hue: [199, 89], url: '#' },
+  { cat: 'podcast', label: 'Podcast',     date: 'Coming soon', title: 'Storytime with Benji: booking one-way flights', desc: 'I remember when I used to fear missing flights. Now I book one-ways. Tulum, Basel, and beyond.', hue: [280, 80], url: '#' },
+  { cat: 'photo',   label: 'Photography', date: 'Coming soon', title: 'Skyscapes: a drone series over Minneapolis', desc: 'JPG Benji drone work — golden hour over the skyline and the lakes.', hue: [160, 84], url: '#' },
+  { cat: 'article', label: 'Article',     date: 'Coming soon', title: 'Build systems so discipline isn’t required', desc: 'Procedures plus protocols equals proficiency — how I run multiple ventures without burning out.', hue: [24, 90], url: '#' },
+  { cat: 'video',   label: 'Video',       date: 'Coming soon', title: 'Do you own or rent in Minnesota?', desc: 'Stopping strangers in Minneapolis to talk real estate — BensEstates in the wild.', hue: [335, 78], url: '#' },
+  { cat: 'photo',   label: 'Photography', date: 'Coming soon', title: 'Moving photos: stills that breathe', desc: 'A photo and a short video of the same frame — an experiment in living images.', hue: [190, 90], url: '#' },
 ];
 
 const grid = document.getElementById('articles-grid');
 
 function thumb(hue) {
-  // decorative gradient thumbnail (no external images needed)
   return `<div class="aspect-video rounded-xl mb-3 transition group-hover:opacity-90" style="background:linear-gradient(135deg,hsl(${hue[0]} ${hue[1]}% 55%),hsl(${(hue[0] + 60) % 360} ${hue[1]}% 45%))"></div>`;
 }
 
 function render(cat) {
-  grid.innerHTML = ARTICLES.filter(a => cat === 'all' || a.cat === cat)
-    .map(a => `
-      <a href="#" class="group block">
-        ${thumb(a.hue)}
-        <p class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1">${a.date}</p>
-        <h3 class="font-bold text-lg leading-snug mb-1 text-slate-900 dark:text-slate-100 group-hover:text-indigo-500 transition">${a.title}</h3>
-        <p class="text-sm text-slate-500 dark:text-slate-400">${a.desc}</p>
+  grid.innerHTML = CONTENT.filter(c => cat === 'all' || c.cat === cat)
+    .map(c => `
+      <a href="${c.url}" class="group block">
+        ${thumb(c.hue)}
+        <p class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1">${c.label} · ${c.date}</p>
+        <h3 class="font-bold text-lg leading-snug mb-1 text-slate-900 dark:text-slate-100 group-hover:text-indigo-500 transition">${c.title}</h3>
+        <p class="text-sm text-slate-500 dark:text-slate-400">${c.desc}</p>
       </a>`).join('');
 }
 render('all');
 
-// ---------- Category tabs ----------
 document.getElementById('category-tabs').addEventListener('click', (e) => {
   const btn = e.target.closest('button');
   if (!btn) return;
@@ -44,6 +43,38 @@ document.getElementById('category-tabs').addEventListener('click', (e) => {
   btn.className = 'tab-active px-3 py-1.5 rounded-full text-sm font-medium transition';
   render(btn.dataset.cat);
 });
+
+// ---------- Ventures ----------
+const VENTURES = [
+  { name: 'Vaura', tag: 'Branding & Marketing Agency', desc: 'All-in-one digital branding and marketing — websites, social, and growth for local businesses.', url: 'https://vaura.site', hue: 239 },
+  { name: 'BensEstates', tag: 'Real Estate', desc: 'Helping buyers, sellers, and investors win in the Minneapolis market — with content that keeps it real.', url: '#', hue: 199 },
+  { name: 'JPG Benji', tag: 'Photography & Drone', desc: 'Portraits, real estate, events, and aerial work. Series projects: skyscapes, strangers, moving photos.', url: '#', hue: 280 },
+  { name: 'Mow Bros', tag: 'Lawn Care', desc: 'North metro lawn care done right — proof that the fundamentals of business work in any industry.', url: '#', hue: 130 },
+];
+
+document.getElementById('ventures-grid').innerHTML = VENTURES.map(v => `
+  <a href="${v.url}" class="block p-5 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-indigo-400 dark:hover:border-indigo-500 transition bg-slate-50 dark:bg-slate-850">
+    <div class="w-10 h-10 rounded-lg flex items-center justify-center mb-4 font-bold text-white" style="background:hsl(${v.hue} 70% 55%)">${v.name[0]}</div>
+    <h3 class="font-semibold mb-0.5 text-slate-900 dark:text-slate-100">${v.name}</h3>
+    <p class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-2">${v.tag}</p>
+    <p class="text-sm text-slate-500 dark:text-slate-400">${v.desc}</p>
+  </a>`).join('');
+
+// ---------- Social links (footer) ----------
+// Fill in real profile URLs — icons render automatically.
+const SOCIALS = [
+  { name: 'Instagram', url: '#', icon: '<path d="M8 0C5.8 0 5.6 0 4.7.1 3.9.1 3.3.2 2.8.4c-.5.2-.9.5-1.4.9-.4.5-.7.9-.9 1.4-.2.5-.3 1.1-.3 1.9C.1 5.6 0 5.8 0 8s0 2.4.1 3.3c0 .8.1 1.4.3 1.9.2.5.5.9.9 1.4.5.4.9.7 1.4.9.5.2 1.1.3 1.9.3.9.1 1.1.1 3.4.1s2.4 0 3.3-.1c.8 0 1.4-.1 1.9-.3.5-.2.9-.5 1.4-.9.4-.5.7-.9.9-1.4.2-.5.3-1.1.3-1.9.1-.9.1-1.1.1-3.3s0-2.4-.1-3.3c0-.8-.1-1.4-.3-1.9-.2-.5-.5-.9-.9-1.4-.5-.4-.9-.7-1.4-.9-.5-.2-1.1-.3-1.9-.3C10.4 0 10.2 0 8 0Zm0 1.4c2.2 0 2.4 0 3.2.1.8 0 1.2.2 1.5.3.4.1.6.3.9.6.3.3.5.5.6.9.1.3.3.7.3 1.5.1.8.1 1 .1 3.2s0 2.4-.1 3.2c0 .8-.2 1.2-.3 1.5-.1.4-.3.6-.6.9-.3.3-.5.5-.9.6-.3.1-.7.3-1.5.3-.8.1-1 .1-3.2.1s-2.4 0-3.2-.1c-.8 0-1.2-.2-1.5-.3-.4-.1-.6-.3-.9-.6-.3-.3-.5-.5-.6-.9-.1-.3-.3-.7-.3-1.5C1.4 10.4 1.4 10.2 1.4 8s0-2.4.1-3.2c0-.8.2-1.2.3-1.5.1-.4.3-.6.6-.9.3-.3.5-.5.9-.6.3-.1.7-.3 1.5-.3.8-.1 1-.1 3.2-.1Zm0 2.5a4.1 4.1 0 1 0 0 8.2 4.1 4.1 0 0 0 0-8.2Zm0 6.8a2.7 2.7 0 1 1 0-5.4 2.7 2.7 0 0 1 0 5.4Zm5.2-7a1 1 0 1 1-1.9 0 1 1 0 0 1 1.9 0Z"/>' },
+  { name: 'TikTok', url: '#', icon: '<path d="M11.4 0h-2.7v10.8a2.3 2.3 0 1 1-2.3-2.3c.2 0 .5 0 .7.1V5.8a5 5 0 1 0 4.3 5V5.4A6.3 6.3 0 0 0 15 6.6V4a3.9 3.9 0 0 1-3.6-4Z"/>' },
+  { name: 'YouTube', url: '#', icon: '<path d="M15.7 4.1a2 2 0 0 0-1.4-1.4C13 2.3 8 2.3 8 2.3s-5 0-6.3.4A2 2 0 0 0 .3 4.1C0 5.4 0 8 0 8s0 2.6.3 3.9a2 2 0 0 0 1.4 1.4c1.3.4 6.3.4 6.3.4s5 0 6.3-.4a2 2 0 0 0 1.4-1.4C16 10.6 16 8 16 8s0-2.6-.3-3.9ZM6.4 10.4V5.6L10.6 8l-4.2 2.4Z"/>' },
+  { name: 'X', url: '#', icon: '<path d="M12.6 0h2.5L9.6 6.8 16 16h-5l-3.9-5.6L2.6 16H.1l5.9-7.3L0 0h5.1l3.5 5.1L12.6 0Zm-.9 14.4h1.4L4.4 1.5H2.9l8.8 12.9Z"/>' },
+  { name: 'LinkedIn', url: '#', icon: '<path d="M3.6 1.8a1.8 1.8 0 1 1-3.6 0 1.8 1.8 0 0 1 3.6 0ZM.2 5.4h3.2V16H.2V5.4Zm5.4 0h3v1.5h.1c.4-.8 1.5-1.7 3-1.7 3.2 0 3.8 2.1 3.8 4.9V16h-3.2v-5.2c0-1.2 0-2.8-1.7-2.8s-2 1.3-2 2.7V16H5.6V5.4Z"/>' },
+  { name: 'GitHub', url: 'https://github.com/VauraAgency', icon: '<path d="M8 0a8 8 0 0 0-2.5 15.6c.4 0 .5-.2.5-.4v-1.4c-2 .4-2.5-.5-2.7-1-.1-.2-.5-1-.8-1.2-.3-.2-.7-.5 0-.5s1.1.6 1.3.9c.8 1.3 2 1 2.5.7 0-.6.3-1 .5-1.2-2-.2-4-1-4-4.4 0-1 .3-1.8.9-2.4 0-.2-.4-1.1.1-2.4 0 0 .7-.2 2.4.9a8.3 8.3 0 0 1 4.4 0c1.7-1.1 2.4-.9 2.4-.9.5 1.3.2 2.2.1 2.4.6.6.9 1.4.9 2.4 0 3.4-2 4.2-4 4.4.3.3.6.8.6 1.6v2.4c0 .2.1.5.5.4A8 8 0 0 0 8 0Z"/>' },
+];
+
+document.getElementById('social-links').innerHTML = SOCIALS.map(s => `
+  <a href="${s.url}" class="hover:text-indigo-500 transition" aria-label="${s.name}" title="${s.name}">
+    <svg class="w-4 h-4 fill-current" viewBox="0 0 16 16">${s.icon}</svg>
+  </a>`).join('');
 
 // ---------- Community avatars ----------
 const avatars = document.getElementById('community-avatars');

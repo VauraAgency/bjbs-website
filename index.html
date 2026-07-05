@@ -3,8 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ben Smith — I write about coding and being a full-time maker</title>
-  <meta name="description" content="Personal site of Ben Smith — developer, maker, and writer.">
+  <title>Benjamin Smith — Entrepreneur, Photographer, Investor</title>
+  <meta name="description" content="Benjamin 'Benji' Smith — entrepreneur building in public. Podcasts, videos, articles, and photography on business, real estate, crypto, and the maker life.">
+  <meta property="og:title" content="Benjamin Smith — Entrepreneur, Photographer, Investor">
+  <meta property="og:description" content="Building businesses and documenting the whole ride — content on entrepreneurship, real estate, crypto, photography, and self-mastery.">
+  <meta property="og:type" content="website">
   <script>
     // Apply saved theme before paint to avoid flash
     if (localStorage.theme === 'light') document.documentElement.classList.remove('dark');
@@ -40,13 +43,13 @@
           <a href="#home" class="nav-link group" title="Home">
             <svg class="w-5 h-5 fill-slate-400 group-hover:fill-indigo-500 transition" viewBox="0 0 20 20"><path d="M10 1.5 1.5 9h2v9h5v-6h3v6h5V9h2L10 1.5Z"/></svg>
           </a>
-          <a href="#articles" class="nav-link group" title="Articles">
+          <a href="#content" class="nav-link group" title="Content">
             <svg class="w-5 h-5 fill-slate-400 group-hover:fill-indigo-500 transition" viewBox="0 0 20 20"><path d="M3 2h11a3 3 0 0 1 3 3v13H6a3 3 0 0 1-3-3V2Zm2 2v11a1 1 0 0 0 1 1h9V5a1 1 0 0 0-1-1H5Zm2 2h6v2H7V6Zm0 4h6v2H7v-2Z"/></svg>
           </a>
-          <a href="#projects" class="nav-link group" title="Projects">
+          <a href="#ventures" class="nav-link group" title="Ventures">
             <svg class="w-5 h-5 fill-slate-400 group-hover:fill-indigo-500 transition" viewBox="0 0 20 20"><path d="m10 1 9 5-9 5-9-5 9-5Zm-9 9 9 5 9-5v3l-9 5-9-5v-3Z"/></svg>
           </a>
-          <a href="#talks" class="nav-link group" title="Talks">
+          <a href="#philosophy" class="nav-link group" title="Philosophy">
             <svg class="w-5 h-5 fill-slate-400 group-hover:fill-indigo-500 transition" viewBox="0 0 20 20"><path d="M2 3h16v10H9l-4 4v-4H2V3Zm3 3v2h10V6H5Z"/></svg>
           </a>
           <a href="#subscribe" class="nav-link group" title="Subscribe">
@@ -64,89 +67,69 @@
 
         <!-- Hero -->
         <section id="home" class="scroll-mt-16">
-          <img src="images/avatar.svg" alt="Ben Smith" class="w-20 h-20 rounded-full mb-6 ring-2 ring-slate-200 dark:ring-slate-700">
+          <img src="images/avatar.svg" alt="Benjamin Smith" class="w-20 h-20 rounded-full mb-6 ring-2 ring-slate-200 dark:ring-slate-700">
           <h1 class="text-4xl md:text-5xl font-extrabold leading-tight mb-4 text-slate-900 dark:text-slate-100">
-            I write about coding and being a <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-sky-400">full-time maker</span>.
+            Building businesses and <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-sky-400">documenting the whole ride</span>.
           </h1>
-          <p class="text-lg text-slate-500 dark:text-slate-400">
-            Hi, I'm Ben — software engineer, indie hacker, and writer. I build products in public and share everything I learn about code, startups, and the maker life.
+          <p class="text-lg text-slate-500 dark:text-slate-400 mb-5">
+            I'm Benjamin Smith — entrepreneur, photographer, and investor out of Minneapolis. I run multiple ventures and share everything I learn about business, real estate, crypto, and self-mastery along the way.
           </p>
-          <div class="flex gap-3 mt-6">
+          <!-- Pillars -->
+          <div class="flex flex-wrap gap-2 mb-6" aria-label="Brand pillars">
+            <span class="pillar">Unc Benji</span>
+            <span class="pillar">Entrepreneur</span>
+            <span class="pillar">Photographer</span>
+            <span class="pillar">Philosopher</span>
+            <span class="pillar">Investor</span>
+            <span class="pillar">Crypto Magnate</span>
+          </div>
+          <div class="flex gap-3">
             <a href="#subscribe" class="px-4 py-2 rounded-lg bg-indigo-500 hover:bg-indigo-600 text-white font-medium text-sm transition">Subscribe</a>
-            <a href="#articles" class="px-4 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 font-medium text-sm transition">Read articles</a>
+            <a href="#content" class="px-4 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 font-medium text-sm transition">Latest content</a>
           </div>
         </section>
 
-        <!-- Articles -->
-        <section id="articles" class="scroll-mt-16">
-          <h2 class="text-2xl font-bold mb-2 text-slate-900 dark:text-slate-100">Latest articles</h2>
-          <!-- Category tabs -->
-          <div class="flex flex-wrap gap-2 mb-8 mt-4" id="category-tabs">
+        <!-- Content feed -->
+        <section id="content" class="scroll-mt-16">
+          <h2 class="text-2xl font-bold mb-2 text-slate-900 dark:text-slate-100">Latest content</h2>
+          <p class="text-slate-500 dark:text-slate-400 text-sm mb-4">Videos, podcast episodes, articles, and photo drops — all in one feed.</p>
+          <div class="flex flex-wrap gap-2 mb-8" id="category-tabs">
             <button data-cat="all" class="tab-active px-3 py-1.5 rounded-full text-sm font-medium transition">All</button>
-            <button data-cat="coding" class="tab px-3 py-1.5 rounded-full text-sm font-medium transition">Coding</button>
-            <button data-cat="startups" class="tab px-3 py-1.5 rounded-full text-sm font-medium transition">Startups</button>
-            <button data-cat="tutorials" class="tab px-3 py-1.5 rounded-full text-sm font-medium transition">Tutorials</button>
-            <button data-cat="indie" class="tab px-3 py-1.5 rounded-full text-sm font-medium transition">Indie Hacking</button>
+            <button data-cat="video" class="tab px-3 py-1.5 rounded-full text-sm font-medium transition">Videos</button>
+            <button data-cat="podcast" class="tab px-3 py-1.5 rounded-full text-sm font-medium transition">Podcast</button>
+            <button data-cat="article" class="tab px-3 py-1.5 rounded-full text-sm font-medium transition">Articles</button>
+            <button data-cat="photo" class="tab px-3 py-1.5 rounded-full text-sm font-medium transition">Photography</button>
           </div>
           <div id="articles-grid" class="grid sm:grid-cols-2 gap-8"><!-- populated by js/main.js --></div>
         </section>
 
-        <!-- Talks -->
-        <section id="talks" class="scroll-mt-16">
-          <h2 class="text-2xl font-bold mb-6 text-slate-900 dark:text-slate-100">Popular talks</h2>
-          <div class="grid sm:grid-cols-2 gap-8">
-            <a href="#" class="group block">
-              <div class="relative rounded-xl overflow-hidden mb-3 aspect-video bg-gradient-to-br from-indigo-600 to-purple-600 flex items-center justify-center">
-                <span class="text-white/90 font-bold text-xl px-6 text-center">Scaling Side Projects Into Products</span>
-                <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition"></div>
-                <div class="absolute bottom-3 left-3 w-10 h-10 rounded-full bg-white/90 flex items-center justify-center">
-                  <svg class="w-4 h-4 fill-indigo-600 ml-0.5" viewBox="0 0 16 16"><path d="M3 2l11 6-11 6V2z"/></svg>
-                </div>
-              </div>
-              <p class="text-sm text-slate-500 dark:text-slate-400">MakerConf 2025 · 32 min</p>
-            </a>
-            <a href="#" class="group block">
-              <div class="relative rounded-xl overflow-hidden mb-3 aspect-video bg-gradient-to-br from-sky-500 to-emerald-500 flex items-center justify-center">
-                <span class="text-white/90 font-bold text-xl px-6 text-center">Shipping Fast Without Breaking Things</span>
-                <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition"></div>
-                <div class="absolute bottom-3 left-3 w-10 h-10 rounded-full bg-white/90 flex items-center justify-center">
-                  <svg class="w-4 h-4 fill-sky-600 ml-0.5" viewBox="0 0 16 16"><path d="M3 2l11 6-11 6V2z"/></svg>
-                </div>
-              </div>
-              <p class="text-sm text-slate-500 dark:text-slate-400">DevSummit 2024 · 28 min</p>
-            </a>
+        <!-- Ventures -->
+        <section id="ventures" class="scroll-mt-16">
+          <h2 class="text-2xl font-bold mb-6 text-slate-900 dark:text-slate-100">What I'm building</h2>
+          <div class="grid sm:grid-cols-2 gap-6" id="ventures-grid"><!-- populated by js/main.js --></div>
+        </section>
+
+        <!-- Philosophy -->
+        <section id="philosophy" class="scroll-mt-16">
+          <h2 class="text-2xl font-bold mb-6 text-slate-900 dark:text-slate-100">Philosophy</h2>
+          <figure class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-850 p-8">
+            <blockquote class="text-xl md:text-2xl font-bold leading-snug text-slate-900 dark:text-slate-100">
+              “Don't be a victim of your mentality — be an architect of your reality.”
+            </blockquote>
+            <figcaption class="mt-3 text-sm text-slate-500 dark:text-slate-400">— Benjamin Smith</figcaption>
+          </figure>
+          <div class="grid sm:grid-cols-2 gap-4 mt-4 text-sm">
+            <p class="rounded-xl border border-slate-200 dark:border-slate-800 p-4 text-slate-500 dark:text-slate-400">“Success comes from action, not ambition.”</p>
+            <p class="rounded-xl border border-slate-200 dark:border-slate-800 p-4 text-slate-500 dark:text-slate-400">“Build systems so discipline isn't required.”</p>
           </div>
         </section>
 
-        <!-- Projects -->
-        <section id="projects" class="scroll-mt-16">
-          <h2 class="text-2xl font-bold mb-6 text-slate-900 dark:text-slate-100">Open-source projects</h2>
-          <div class="grid sm:grid-cols-2 gap-6">
-            <a href="#" class="block p-5 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-indigo-400 dark:hover:border-indigo-500 transition bg-slate-50 dark:bg-slate-850">
-              <div class="w-10 h-10 rounded-lg bg-indigo-500/10 flex items-center justify-center mb-4">
-                <svg class="w-5 h-5 fill-indigo-500" viewBox="0 0 20 20"><path d="M4 3h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Zm1 4 3 3-3 3 1.4 1.4L10.8 10 6.4 5.6 5 7Zm5 6h5v2h-5v-2Z"/></svg>
-              </div>
-              <h3 class="font-semibold mb-1 text-slate-900 dark:text-slate-100">shipkit</h3>
-              <p class="text-sm text-slate-500 dark:text-slate-400">A zero-config CLI for scaffolding and deploying side projects in minutes, not days.</p>
-              <p class="text-xs text-slate-400 dark:text-slate-500 mt-3">★ 2.4k · MIT</p>
-            </a>
-            <a href="#" class="block p-5 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-indigo-400 dark:hover:border-indigo-500 transition bg-slate-50 dark:bg-slate-850">
-              <div class="w-10 h-10 rounded-lg bg-sky-500/10 flex items-center justify-center mb-4">
-                <svg class="w-5 h-5 fill-sky-500" viewBox="0 0 20 20"><path d="M10 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16Zm1 3v5l4 2-.8 1.6L9 11V5h2Z"/></svg>
-              </div>
-              <h3 class="font-semibold mb-1 text-slate-900 dark:text-slate-100">metricd</h3>
-              <p class="text-sm text-slate-500 dark:text-slate-400">Lightweight, privacy-first analytics engine you can self-host with a single binary.</p>
-              <p class="text-xs text-slate-400 dark:text-slate-500 mt-3">★ 1.1k · MIT</p>
-            </a>
-          </div>
-        </section>
-
-        <!-- Subscribe / community -->
+        <!-- Subscribe -->
         <section id="subscribe" class="scroll-mt-16">
           <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-850 p-8 text-center">
             <div class="flex justify-center -space-x-3 mb-5" id="community-avatars"><!-- populated by js/main.js --></div>
-            <h2 class="text-2xl font-bold mb-2 text-slate-900 dark:text-slate-100">Join 5,000+ makers</h2>
-            <p class="text-slate-500 dark:text-slate-400 mb-6">Get my best writing on code, startups, and shipping — straight to your inbox. No spam, ever.</p>
+            <h2 class="text-2xl font-bold mb-2 text-slate-900 dark:text-slate-100">Come along for the ride</h2>
+            <p class="text-slate-500 dark:text-slate-400 mb-6">One email with my best content on business, investing, and living intentionally. No spam, ever.</p>
             <form class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto" onsubmit="event.preventDefault(); this.querySelector('button').textContent='Subscribed ✓';">
               <input type="email" required placeholder="Your email" class="grow px-4 py-2.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
               <button type="submit" class="px-5 py-2.5 rounded-lg bg-indigo-500 hover:bg-indigo-600 text-white font-medium text-sm transition">Subscribe</button>
@@ -155,19 +138,9 @@
         </section>
 
         <!-- Footer -->
-        <footer class="pt-8 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between text-sm text-slate-500 dark:text-slate-400">
-          <p>© 2026 Ben Smith. All rights reserved.</p>
-          <div class="flex gap-4">
-            <a href="#" class="hover:text-indigo-500 transition" aria-label="Twitter/X">
-              <svg class="w-4 h-4 fill-current" viewBox="0 0 16 16"><path d="M12.6 0h2.5L9.6 6.8 16 16h-5l-3.9-5.6L2.6 16H.1l5.9-7.3L0 0h5.1l3.5 5.1L12.6 0Zm-.9 14.4h1.4L4.4 1.5H2.9l8.8 12.9Z"/></svg>
-            </a>
-            <a href="https://github.com/VauraAgency" class="hover:text-indigo-500 transition" aria-label="GitHub">
-              <svg class="w-4 h-4 fill-current" viewBox="0 0 16 16"><path d="M8 0a8 8 0 0 0-2.5 15.6c.4 0 .5-.2.5-.4v-1.4c-2 .4-2.5-.5-2.7-1-.1-.2-.5-1-.8-1.2-.3-.2-.7-.5 0-.5s1.1.6 1.3.9c.8 1.3 2 1 2.5.7 0-.6.3-1 .5-1.2-2-.2-4-1-4-4.4 0-1 .3-1.8.9-2.4 0-.2-.4-1.1.1-2.4 0 0 .7-.2 2.4.9a8.3 8.3 0 0 1 4.4 0c1.7-1.1 2.4-.9 2.4-.9.5 1.3.2 2.2.1 2.4.6.6.9 1.4.9 2.4 0 3.4-2 4.2-4 4.4.3.3.6.8.6 1.6v2.4c0 .2.1.5.5.4A8 8 0 0 0 8 0Z"/></svg>
-            </a>
-            <a href="#" class="hover:text-indigo-500 transition" aria-label="LinkedIn">
-              <svg class="w-4 h-4 fill-current" viewBox="0 0 16 16"><path d="M3.6 1.8a1.8 1.8 0 1 1-3.6 0 1.8 1.8 0 0 1 3.6 0ZM.2 5.4h3.2V16H.2V5.4Zm5.4 0h3v1.5h.1c.4-.8 1.5-1.7 3-1.7 3.2 0 3.8 2.1 3.8 4.9V16h-3.2v-5.2c0-1.2 0-2.8-1.7-2.8s-2 1.3-2 2.7V16H5.6V5.4Z"/></svg>
-            </a>
-          </div>
+        <footer class="pt-8 border-t border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row gap-4 items-center justify-between text-sm text-slate-500 dark:text-slate-400">
+          <p>© 2026 Benjamin Smith. All rights reserved.</p>
+          <div class="flex gap-4" id="social-links"><!-- populated by js/main.js --></div>
         </footer>
 
       </main>
