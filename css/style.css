@@ -1,0 +1,17 @@
+/* Small extras on top of Tailwind */
+html { scroll-behavior: smooth; }
+
+.tab {
+  background: rgb(241 245 249); /* slate-100 */
+  color: rgb(100 116 139);
+}
+.dark .tab {
+  background: rgb(30 41 59); /* slate-800 */
+  color: rgb(148 163 184);
+}
+.tab:hover { color: rgb(99 102 241); }
+
+.tab-active {
+  background: rgb(99 102 241); /* indigo-500 */
+  color: #fff;
+}
