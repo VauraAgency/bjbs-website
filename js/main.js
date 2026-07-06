@@ -42,8 +42,7 @@ fetch('data/videos.json')
   .then(videos => {
     if (!videos.length) return;
     const longform = videos.filter(v => v.cat === 'video').slice(0, 6);
-    const reels = videos.filter(v => v.cat === 'reel').slice(0, 6);
-    feed = [...longform, ...reels, ...CONTENT.filter(c => c.cat !== 'video')];
+    feed = [...longform, ...CONTENT.filter(c => c.cat !== 'video')];
     render(activeCat);
   })
   .catch(() => {});

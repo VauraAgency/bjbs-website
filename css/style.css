@@ -182,3 +182,9 @@ img, svg, video { max-width: 100%; height: auto; }
     hsl(0 100% 100% / 0.8), transparent 100%
   );
 }
+
+/* ---------- Mobile-only carousel: grids become one swipeable row on phones ---------- */
+@media (max-width: 639px) {
+  .m-carousel { display: flex !important; gap: 1.25rem; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 0.75rem; }
+  .m-carousel > * { scroll-snap-align: start; flex: 0 0 auto; width: 80vw; }
+}

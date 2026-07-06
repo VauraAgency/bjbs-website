@@ -46,7 +46,7 @@
 
         <!-- Hero -->
         <section id="home" class="scroll-mt-24">
-          <div class="glow-ring rounded-full w-20 h-20 mb-6">
+          <div class="glow-ring rounded-full w-20 h-20 mb-6 hidden sm:block">
             <img src="images/avatar.svg" alt="Benjamin Smith" class="w-20 h-20 rounded-full relative z-10">
           </div>
           <h1 class="text-4xl md:text-5xl font-extrabold leading-tight mb-4 text-slate-900 dark:text-slate-100">
@@ -78,10 +78,8 @@
           <div class="flex flex-wrap gap-2 mb-8" id="category-tabs">
             <button data-cat="all" class="tab-active px-3 py-1.5 rounded-full text-sm font-medium transition">All</button>
             <button data-cat="video" class="tab px-3 py-1.5 rounded-full text-sm font-medium transition">Videos</button>
-            <button data-cat="reel" class="tab px-3 py-1.5 rounded-full text-sm font-medium transition">Reels</button>
             <button data-cat="podcast" class="tab px-3 py-1.5 rounded-full text-sm font-medium transition">Podcast</button>
             <button data-cat="article" class="tab px-3 py-1.5 rounded-full text-sm font-medium transition">Articles</button>
-            <button data-cat="photo" class="tab px-3 py-1.5 rounded-full text-sm font-medium transition">Photography</button>
           </div>
           <div id="articles-grid" class="carousel"><!-- populated by js/main.js --></div>
         </section>
@@ -92,7 +90,7 @@
             <h2 class="text-2xl font-bold text-slate-900 dark:text-slate-100">What I'm building</h2>
             <a href="projects.html" class="text-sm text-indigo-500 hover:underline">All projects →</a>
           </div>
-          <div class="grid sm:grid-cols-2 gap-6" id="ventures-grid"><!-- populated by js/main.js --></div>
+          <div class="m-carousel sm:!flex sm:!flex-wrap" id="ventures-grid"><!-- populated by js/main.js --></div>
         </section>
 
         <!-- Philosophy -->
@@ -114,8 +112,8 @@
         <section id="subscribe" class="scroll-mt-24">
           <div class="glass rounded-2xl p-8 text-center">
             <div class="flex justify-center -space-x-3 mb-5" id="community-avatars"><!-- populated by js/main.js --></div>
-            <h2 class="text-2xl font-bold mb-2 text-slate-900 dark:text-slate-100">Come along for the ride</h2>
-            <p class="text-slate-500 dark:text-slate-400 mb-6">One email with my best content on business, investing, and living intentionally. No spam, ever.</p>
+            <h2 class="text-2xl font-bold mb-2 text-slate-900 dark:text-slate-100">Subscribe</h2>
+            <p class="text-slate-500 dark:text-slate-400 mb-6">Best insights on business, investing, and living intentionally.</p>
             <form id="subscribe-form" class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
               <input type="email" name="email" required placeholder="Your email" class="grow px-4 py-2.5 rounded-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
               <button type="submit" class="px-5 py-2.5 rounded-full bg-indigo-500 hover:bg-indigo-600 text-white font-medium text-sm transition">Subscribe</button>
