@@ -2,6 +2,10 @@
 html { scroll-behavior: smooth; }
 body { padding-top: 64px; } /* room for the fixed glass nav */
 
+/* Mobile safety: nothing may force the page wider than the screen */
+html, body { max-width: 100%; overflow-x: hidden; }
+img, svg, video { max-width: 100%; height: auto; }
+
 /* ---------- iOS liquid-glass surfaces ---------- */
 .glass {
   backdrop-filter: blur(16px) saturate(1.8);
