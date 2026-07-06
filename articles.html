@@ -20,32 +20,86 @@
       <h1 class="text-4xl md:text-5xl font-extrabold leading-tight text-slate-900 dark:text-slate-100 mb-3">Articles</h1>
       <p class="text-lg text-slate-500 dark:text-slate-400 max-w-2xl">Longer-form writing on business, investing, and the maker life. First pieces are being drafted now.</p>
     </header>
-    <section class="grid sm:grid-cols-2 gap-5">
-      <div class="glass rounded-2xl p-6">
-        <div class="text-3xl mb-3">📝</div>
-        <p class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1">Coming soon</p>
-        <h3 class="font-bold text-lg mb-1 text-slate-900 dark:text-slate-100">Entrepreneurship is lead gen, sales, and follow-up. Repeat.</h3>
-        <p class="text-sm text-slate-500 dark:text-slate-400">Every business has a formula — the fundamentals.</p>
+    <section>
+      <div class="carousel sm:grid sm:grid-cols-2 sm:gap-5" id="articles-grid">
+        <div class="glass rounded-2xl p-6 article-card">
+          <div class="text-3xl mb-3">📝</div>
+          <p class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1">Coming soon</p>
+          <h3 class="font-bold text-lg mb-1 text-slate-900 dark:text-slate-100">Entrepreneurship is lead gen, sales, and follow-up. Repeat.</h3>
+          <p class="text-sm text-slate-500 dark:text-slate-400">Every business has a formula — the fundamentals.</p>
+        </div>
+        <div class="glass rounded-2xl p-6 article-card">
+          <div class="text-3xl mb-3">⚙️</div>
+          <p class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1">Coming soon</p>
+          <h3 class="font-bold text-lg mb-1 text-slate-900 dark:text-slate-100">Build systems so discipline isn't required</h3>
+          <p class="text-sm text-slate-500 dark:text-slate-400">Accountability and automation — the backbone of scale.</p>
+        </div>
+        <div class="glass rounded-2xl p-6 article-card">
+          <div class="text-3xl mb-3">📊</div>
+          <p class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1">Coming soon</p>
+          <h3 class="font-bold text-lg mb-1 text-slate-900 dark:text-slate-100">One year of building in public</h3>
+          <p class="text-sm text-slate-500 dark:text-slate-400">The honest numbers: revenue, reach, and what I'd do differently.</p>
+        </div>
+        <div class="glass rounded-2xl p-6 article-card">
+          <div class="text-3xl mb-3">🏦</div>
+          <p class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1">Coming soon</p>
+          <h3 class="font-bold text-lg mb-1 text-slate-900 dark:text-slate-100">Why I bet on hard assets</h3>
+          <p class="text-sm text-slate-500 dark:text-slate-400">Bitcoin, real estate, precious metals — hard assets, long horizon.</p>
+        </div>
       </div>
-      <div class="glass rounded-2xl p-6">
-        <div class="text-3xl mb-3">⚙️</div>
-        <p class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1">Coming soon</p>
-        <h3 class="font-bold text-lg mb-1 text-slate-900 dark:text-slate-100">Build systems so discipline isn't required</h3>
-        <p class="text-sm text-slate-500 dark:text-slate-400">Accountability and automation — the backbone of scale.</p>
-      </div>
-      <div class="glass rounded-2xl p-6">
-        <div class="text-3xl mb-3">📊</div>
-        <p class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1">Coming soon</p>
-        <h3 class="font-bold text-lg mb-1 text-slate-900 dark:text-slate-100">One year of building in public</h3>
-        <p class="text-sm text-slate-500 dark:text-slate-400">The honest numbers: revenue, reach, and what I'd do differently.</p>
-      </div>
-      <div class="glass rounded-2xl p-6">
-        <div class="text-3xl mb-3">🏦</div>
-        <p class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1">Coming soon</p>
-        <h3 class="font-bold text-lg mb-1 text-slate-900 dark:text-slate-100">Why I bet on hard assets</h3>
-        <p class="text-sm text-slate-500 dark:text-slate-400">Bitcoin, real estate, precious metals — hard assets, long horizon.</p>
+      <div class="text-center mt-6 sm:hidden">
+        <button id="view-all-btn" class="text-indigo-500 hover:underline font-medium text-sm">View all →</button>
       </div>
     </section>
+
+    <div id="articles-modal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+      <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-auto">
+        <div class="sticky top-0 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-6 py-4 flex items-center justify-between">
+          <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">All articles</h2>
+          <button id="close-modal-btn" class="text-slate-500 hover:text-slate-900 dark:hover:text-slate-100">✕</button>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 p-6">
+          <div class="glass rounded-2xl p-6">
+            <div class="text-3xl mb-3">📝</div>
+            <p class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1">Coming soon</p>
+            <h3 class="font-bold text-lg mb-1 text-slate-900 dark:text-slate-100">Entrepreneurship is lead gen, sales, and follow-up. Repeat.</h3>
+            <p class="text-sm text-slate-500 dark:text-slate-400">Every business has a formula — the fundamentals.</p>
+          </div>
+          <div class="glass rounded-2xl p-6">
+            <div class="text-3xl mb-3">⚙️</div>
+            <p class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1">Coming soon</p>
+            <h3 class="font-bold text-lg mb-1 text-slate-900 dark:text-slate-100">Build systems so discipline isn't required</h3>
+            <p class="text-sm text-slate-500 dark:text-slate-400">Accountability and automation — the backbone of scale.</p>
+          </div>
+          <div class="glass rounded-2xl p-6">
+            <div class="text-3xl mb-3">📊</div>
+            <p class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1">Coming soon</p>
+            <h3 class="font-bold text-lg mb-1 text-slate-900 dark:text-slate-100">One year of building in public</h3>
+            <p class="text-sm text-slate-500 dark:text-slate-400">The honest numbers: revenue, reach, and what I'd do differently.</p>
+          </div>
+          <div class="glass rounded-2xl p-6">
+            <div class="text-3xl mb-3">🏦</div>
+            <p class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1">Coming soon</p>
+            <h3 class="font-bold text-lg mb-1 text-slate-900 dark:text-slate-100">Why I bet on hard assets</h3>
+            <p class="text-sm text-slate-500 dark:text-slate-400">Bitcoin, real estate, precious metals — hard assets, long horizon.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.getElementById('view-all-btn').addEventListener('click', () => {
+        document.getElementById('articles-modal').classList.remove('hidden');
+      });
+      document.getElementById('close-modal-btn').addEventListener('click', () => {
+        document.getElementById('articles-modal').classList.add('hidden');
+      });
+      document.getElementById('articles-modal').addEventListener('click', (e) => {
+        if (e.target.id === 'articles-modal') {
+          document.getElementById('articles-modal').classList.add('hidden');
+        }
+      });
+    </script>
   </main>
   <div id="site-footer"></div>
   <script src="js/site.js"></script>
