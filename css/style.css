@@ -1,20 +1,98 @@
-/* Small extras on top of Tailwind */
+/* ================= BJBS theme extras on top of Tailwind ================= */
 html { scroll-behavior: smooth; }
+body { padding-top: 64px; } /* room for the fixed glass nav */
 
-.tab {
-  background: rgb(241 245 249); /* slate-100 */
-  color: rgb(100 116 139);
+/* ---------- iOS liquid-glass surfaces ---------- */
+.glass {
+  backdrop-filter: blur(16px) saturate(1.8);
+  -webkit-backdrop-filter: blur(16px) saturate(1.8);
+  background: rgba(255, 255, 255, 0.65);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow:
+    inset 1.5px 1.5px 1px 0 rgba(255, 255, 255, 0.55),
+    inset -1px -1px 1px 0 rgba(255, 255, 255, 0.35),
+    0 6px 18px rgba(0, 0, 0, 0.08);
 }
-.dark .tab {
-  background: rgb(30 41 59); /* slate-800 */
-  color: rgb(148 163 184);
+.dark .glass {
+  background: rgba(22, 22, 23, 0.6);
+  border-color: rgba(255, 255, 255, 0.09);
+  box-shadow:
+    inset 1.5px 1.5px 1px 0 rgba(255, 255, 255, 0.08),
+    inset -1px -1px 1px 0 rgba(255, 255, 255, 0.05),
+    0 6px 18px rgba(0, 0, 0, 0.45);
 }
-.tab:hover { color: rgb(99 102 241); }
 
-.tab-active {
-  background: rgb(99 102 241); /* indigo-500 */
-  color: #fff;
+.glass-btn {
+  backdrop-filter: blur(10px) saturate(1.6);
+  -webkit-backdrop-filter: blur(10px) saturate(1.6);
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.6);
 }
+.glass-btn:hover { transform: scale(1.04); }
+.dark .glass-btn {
+  background: rgba(44, 44, 46, 0.55);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+/* ---------- Rainbow glow with an orange lean (cheers, crypto) ---------- */
+@keyframes glow-spin { to { --glow-angle: 360deg; } }
+@property --glow-angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
+
+.glow-ring { position: relative; }
+.glow-ring::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: inherit;
+  padding: 3px;
+  background: conic-gradient(from var(--glow-angle, 0deg),
+    #f7931a, #ff5f6d, #a855f7, #0071e3, #2dd4bf, #f7931a 65%, #ffb340, #f7931a);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: glow-spin 6s linear infinite;
+}
+.glow-ring::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: inherit;
+  background: conic-gradient(from var(--glow-angle, 0deg),
+    #f7931a, #ff5f6d, #a855f7, #0071e3, #2dd4bf, #f7931a 65%, #ffb340, #f7931a);
+  filter: blur(18px);
+  opacity: 0.45;
+  z-index: -1;
+  animation: glow-spin 6s linear infinite;
+}
+
+.glow-text {
+  background: linear-gradient(100deg, #f7931a, #ff5f6d 30%, #a855f7 55%, #0071e3 80%, #f7931a 110%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ---------- Single-row scroll-snap carousel ---------- */
+.carousel {
+  display: flex;
+  gap: 1.25rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 0.75rem;
+  scrollbar-width: thin;
+}
+.carousel > * {
+  scroll-snap-align: start;
+  flex: 0 0 auto;
+  width: min(280px, 78vw);
+}
+
+/* ---------- Tabs / pillars (Apple-toned) ---------- */
+.tab { background: #e8e8ed; color: #6e6e73; }
+.dark .tab { background: #1d1d1f; color: #86868b; }
+.tab:hover { color: #0071e3; }
+.tab-active { background: #0071e3; color: #fff; }
 
 .pillar {
   padding: 0.3rem 0.75rem;
@@ -22,10 +100,22 @@ html { scroll-behavior: smooth; }
   font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.02em;
-  border: 1px solid rgb(226 232 240); /* slate-200 */
-  color: rgb(100 116 139);
+  border: 1px solid #d2d2d7;
+  color: #6e6e73;
 }
-.dark .pillar {
-  border-color: rgb(51 65 85); /* slate-700 */
-  color: rgb(148 163 184);
+.dark .pillar { border-color: #424245; color: #86868b; }
+
+/* ---------- Top nav ---------- */
+#site-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 50; }
+#site-nav .nav-item { color: #1d1d1f; opacity: 0.75; transition: opacity 0.2s; font-size: 0.875rem; font-weight: 500; }
+.dark #site-nav .nav-item { color: #f5f5f7; }
+#site-nav .nav-item:hover, #site-nav .nav-item.active { opacity: 1; }
+
+#mobile-menu { display: none; }
+#mobile-menu.open { display: block; }
+
+.signature-script {
+  font-family: 'Snell Roundhand', 'Savoye LET', 'Brush Script MT', cursive;
+  font-size: 1.35rem;
+  line-height: 1;
 }

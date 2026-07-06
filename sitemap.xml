@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://vauraagency.github.io/bjbs-website/</loc>
-    <lastmod>2026-07-05</lastmod>
-    <changefreq>weekly</changefreq>
-  </url>
+  <url><loc>https://vauraagency.github.io/bjbs-website/</loc><lastmod>2026-07-05</lastmod><changefreq>daily</changefreq></url>
+  <url><loc>https://vauraagency.github.io/bjbs-website/about.html</loc><lastmod>2026-07-05</lastmod></url>
+  <url><loc>https://vauraagency.github.io/bjbs-website/projects.html</loc><lastmod>2026-07-05</lastmod></url>
+  <url><loc>https://vauraagency.github.io/bjbs-website/reads.html</loc><lastmod>2026-07-05</lastmod><changefreq>daily</changefreq></url>
+  <url><loc>https://vauraagency.github.io/bjbs-website/articles.html</loc><lastmod>2026-07-05</lastmod></url>
+  <url><loc>https://vauraagency.github.io/bjbs-website/videos.html</loc><lastmod>2026-07-05</lastmod><changefreq>daily</changefreq></url>
+  <url><loc>https://vauraagency.github.io/bjbs-website/podcast.html</loc><lastmod>2026-07-05</lastmod></url>
+  <url><loc>https://vauraagency.github.io/bjbs-website/crypto.html</loc><lastmod>2026-07-05</lastmod></url>
+  <url><loc>https://vauraagency.github.io/bjbs-website/invest.html</loc><lastmod>2026-07-05</lastmod></url>
+  <url><loc>https://vauraagency.github.io/bjbs-website/assets.html</loc><lastmod>2026-07-05</lastmod></url>
+  <url><loc>https://vauraagency.github.io/bjbs-website/community.html</loc><lastmod>2026-07-05</lastmod></url>
+  <url><loc>https://vauraagency.github.io/bjbs-website/contact.html</loc><lastmod>2026-07-05</lastmod></url>
 </urlset>

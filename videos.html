@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Videos | @BenjaminJBSmith</title>
+  <meta name="description" content="Videos and reels from Benjamin JB Smith — entrepreneurship, crypto, real estate, travel, fitness.">
+  <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="js/theme-config.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="font-sans antialiased bg-white text-slate-800 dark:bg-slate-900 dark:text-slate-200 tracking-tight">
+  <main class="max-w-4xl mx-auto px-6 md:px-10 py-14 space-y-12">
+    <header>
+      <p class="text-xs uppercase tracking-widest text-btc font-semibold mb-2">Watch</p>
+      <h1 class="text-4xl md:text-5xl font-extrabold leading-tight text-slate-900 dark:text-slate-100 mb-3">Videos & reels</h1>
+      <p class="text-lg text-slate-500 dark:text-slate-400 max-w-2xl">Everything from the channel — long-form videos and short-form reels, updated automatically.</p>
+    </header>
+    <section>
+      <h2 class="text-2xl font-bold mb-5 text-slate-900 dark:text-slate-100">Long form</h2>
+      <div id="videos-row" class="carousel"><p class="text-sm text-slate-500 dark:text-slate-400">Long-form videos are in production — the Mexico recap and the Bitcoin DCA breakdown are up first.</p></div>
+    </section>
+    <section>
+      <h2 class="text-2xl font-bold mb-5 text-slate-900 dark:text-slate-100">Reels</h2>
+      <div id="reels-row" class="carousel"></div>
+    </section>
+  </main>
+  <div id="site-footer"></div>
+  <script src="js/site.js"></script>
+  <script>
+    fetch('data/videos.json').then(r => r.ok ? r.json() : []).then(videos => {
+      const cardHtml = v => `
+        <a href="${v.url}" target="_blank" rel="noopener" class="group block">
+          <div class="aspect-video rounded-xl mb-3 overflow-hidden"><img src="${v.thumb}" alt="" loading="lazy" class="w-full h-full object-cover transition group-hover:scale-105"></div>
+          <p class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1">${v.label} · ${v.date}</p>
+          <h3 class="font-bold leading-snug text-slate-900 dark:text-slate-100 group-hover:text-indigo-500 transition">${v.title}</h3>
+        </a>`;
+      const longform = videos.filter(v => v.cat === 'video');
+      const reels = videos.filter(v => v.cat === 'reel');
+      if (longform.length) document.getElementById('videos-row').innerHTML = longform.map(cardHtml).join('');
+      document.getElementById('reels-row').innerHTML = reels.map(cardHtml).join('') || '<p class="text-sm text-slate-500 dark:text-slate-400">Reels load from YouTube daily.</p>';
+    });
+  </script>
+</body>
+</html>
