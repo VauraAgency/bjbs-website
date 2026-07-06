@@ -1,5 +1,23 @@
 [
   {
+    "cat": "video",
+    "label": "Long-form",
+    "date": "2026-07-06",
+    "title": "Mexico recap",
+    "desc": "Deep dive travel and business insights from Mexico.",
+    "url": "https://www.youtube.com/@BenjaminJBSmith/videos",
+    "thumb": "https://i.ytimg.com/vi/default/hqdefault.jpg"
+  },
+  {
+    "cat": "video",
+    "label": "Long-form",
+    "date": "2026-07-01",
+    "title": "Bitcoin DCA breakdown",
+    "desc": "Dollar-cost averaging strategy for Bitcoin investing.",
+    "url": "https://www.youtube.com/@BenjaminJBSmith/videos",
+    "thumb": "https://i.ytimg.com/vi/default/hqdefault.jpg"
+  },
+  {
     "cat": "reel",
     "label": "Reel",
     "date": "2026-01-09",
