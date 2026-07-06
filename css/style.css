@@ -119,3 +119,62 @@ body { padding-top: 64px; } /* room for the fixed glass nav */
   font-size: 1.35rem;
   line-height: 1;
 }
+
+/* ---------- Pointer-tracking spotlight glow (vanilla port of GlowCard) ---------- */
+[data-glow] {
+  --base: 30;            /* orange lean */
+  --spread: 200;
+  --radius: 16;
+  --border: 2;
+  --size: 220;
+  --border-size: calc(var(--border) * 1px);
+  --spotlight-size: calc(var(--size) * 1px);
+  --hue: calc(var(--base) + (var(--xp, 0) * var(--spread)));
+  position: relative;
+  touch-action: pan-y;
+  background-image: radial-gradient(
+    var(--spotlight-size) var(--spotlight-size) at
+    calc(var(--x, 0) * 1px) calc(var(--y, 0) * 1px),
+    hsl(var(--hue) 100% 70% / 0.08), transparent
+  );
+  background-size: calc(100% + (2 * var(--border-size))) calc(100% + (2 * var(--border-size)));
+  background-position: 50% 50%;
+  background-attachment: fixed;
+}
+
+[data-glow]::before,
+[data-glow]::after {
+  pointer-events: none;
+  content: "";
+  position: absolute;
+  inset: calc(var(--border-size) * -1);
+  border: var(--border-size) solid transparent;
+  border-radius: calc(var(--radius) * 1px);
+  background-attachment: fixed;
+  background-size: calc(100% + (2 * var(--border-size))) calc(100% + (2 * var(--border-size)));
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  mask: linear-gradient(transparent, transparent), linear-gradient(white, white);
+  mask-clip: padding-box, border-box;
+  mask-composite: intersect;
+  -webkit-mask: linear-gradient(transparent, transparent), linear-gradient(white, white);
+  -webkit-mask-clip: padding-box, border-box;
+  -webkit-mask-composite: source-in;
+}
+
+[data-glow]::before {
+  background-image: radial-gradient(
+    calc(var(--spotlight-size) * 0.75) calc(var(--spotlight-size) * 0.75) at
+    calc(var(--x, 0) * 1px) calc(var(--y, 0) * 1px),
+    hsl(var(--hue) 100% 50% / 0.9), transparent 100%
+  );
+  filter: brightness(1.8);
+}
+
+[data-glow]::after {
+  background-image: radial-gradient(
+    calc(var(--spotlight-size) * 0.5) calc(var(--spotlight-size) * 0.5) at
+    calc(var(--x, 0) * 1px) calc(var(--y, 0) * 1px),
+    hsl(0 100% 100% / 0.8), transparent 100%
+  );
+}
