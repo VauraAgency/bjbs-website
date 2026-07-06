@@ -54,9 +54,8 @@
     <div class="glass">
       <div class="max-w-7xl mx-auto px-4 md:px-8 h-16 flex items-center justify-between gap-4">
         <a href="index.html" class="flex items-center gap-3 shrink-0">
-          <span class="w-9 h-9 rounded-full bg-gradient-to-tr from-btc to-indigo-500 flex items-center justify-center text-white font-bold">B</span>
-          <img src="images/signature-black.png" alt="Benjamin JB Smith" class="h-12 hidden sm:inline dark:sm:hidden">
-          <img src="images/signature-white.png" alt="Benjamin JB Smith" class="h-12 hidden dark:sm:inline">
+          <img src="images/signature-black.png" alt="Benjamin JB Smith" class="h-10 dark:hidden">
+          <img src="images/signature-white.png" alt="Benjamin JB Smith" class="h-10 hidden dark:inline">
         </a>
         <nav class="hidden lg:flex items-center gap-5" aria-label="Main">${desktopItems}</nav>
         <div class="flex items-center gap-2">
