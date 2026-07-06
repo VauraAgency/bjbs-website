@@ -96,23 +96,18 @@ document.getElementById('social-links').innerHTML = SOCIALS.map(s => `
     <svg class="w-4 h-4 fill-current" viewBox="0 0 16 16">${s.icon}</svg>
   </a>`).join('');
 
-// ---------- Subscribe form → Google Sheets ----------
-// Paste your Apps Script web-app URL here (see scripts/subscribe-apps-script.gs).
-const SHEETS_ENDPOINT = '';
+// ---------- Subscribe form → Google Form ("BJBS Subscribe") → Sheets ----------
+const FORM_ENDPOINT = 'https://docs.google.com/forms/d/e/1FAIpQLScI7z61fGvj_lMK-UTAmsb6dZ0inv-jbT1v8ocoo64r1m1GWw/formResponse';
+const FORM_EMAIL_FIELD = 'entry.588412737';
 
 document.getElementById('subscribe-form').addEventListener('submit', (e) => {
   e.preventDefault();
   const form = e.target;
   const btn = form.querySelector('button');
-  const email = form.email.value.trim();
-  if (SHEETS_ENDPOINT) {
-    const body = new URLSearchParams({ email });
-    fetch(SHEETS_ENDPOINT, { method: 'POST', body, mode: 'no-cors' })
-      .then(() => { btn.textContent = 'Subscribed ✓'; form.email.value = ''; })
-      .catch(() => { btn.textContent = 'Try again'; });
-  } else {
-    btn.textContent = 'Subscribed ✓'; // endpoint not configured yet
-  }
+  const body = new URLSearchParams({ [FORM_EMAIL_FIELD]: form.email.value.trim() });
+  fetch(FORM_ENDPOINT, { method: 'POST', body, mode: 'no-cors' })
+    .then(() => { btn.textContent = 'Subscribed ✓'; form.email.value = ''; })
+    .catch(() => { btn.textContent = 'Try again'; });
 });
 
 // ---------- Community avatars ----------
