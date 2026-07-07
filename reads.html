@@ -64,7 +64,7 @@
   <script>
     const cardHtml = (read) => `
       <div class="glass rounded-2xl p-6 cursor-pointer hover:opacity-90 transition group" data-read-id="${read.id}">
-        <p class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1">${read.category} · 1 min</p>
+        <a href="https://app.notion.com/p/66d0db95e6b842408a8a14636d20a8b7?v=f23101416ba145c4a385bbd5015fede1&query=${encodeURIComponent(read.category)}" target="_blank" rel="noopener" class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1 hover:underline inline-block">${read.category}</a> · 1 min
         <h3 class="font-bold text-lg mb-1 text-slate-900 dark:text-slate-100 group-hover:text-indigo-500 transition">${read.title}</h3>
         <p class="text-sm text-slate-500 dark:text-slate-400">${read.excerpt}</p>
       </div>`;
