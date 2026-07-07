@@ -85,6 +85,9 @@ img, svg, video { max-width: 100%; height: auto; }
   scroll-snap-type: x mandatory;
   padding-bottom: 0.75rem;
   scrollbar-width: thin;
+  scrollbar-gutter: stable;
+  touch-action: pan-x;
+  -webkit-overflow-scrolling: touch;
 }
 .carousel > * {
   scroll-snap-align: start;
@@ -135,7 +138,7 @@ img, svg, video { max-width: 100%; height: auto; }
   --spotlight-size: calc(var(--size) * 1px);
   --hue: calc(var(--base) + (var(--xp, 0) * var(--spread)));
   position: relative;
-  touch-action: pan-y;
+  touch-action: auto;
   background-image: radial-gradient(
     var(--spotlight-size) var(--spotlight-size) at
     calc(var(--x, 0) * 1px) calc(var(--y, 0) * 1px),
@@ -185,9 +188,9 @@ img, svg, video { max-width: 100%; height: auto; }
 
 /* ---------- Mobile-only carousel: grids become one swipeable row on phones ---------- */
 @media (max-width: 639px) {
-  .m-carousel { display: flex !important; gap: 1.25rem; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 0.75rem; -webkit-overflow-scrolling: touch; }
+  .m-carousel { display: flex !important; gap: 1.25rem; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 0.75rem; -webkit-overflow-scrolling: touch; touch-action: pan-x; scrollbar-gutter: stable; }
   .m-carousel > * { scroll-snap-align: start; flex: 0 0 auto; width: 80vw; }
 
-  .carousel { display: flex !important; gap: 1.25rem; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 0.75rem; -webkit-overflow-scrolling: touch; }
+  .carousel { display: flex !important; gap: 1.25rem; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 0.75rem; -webkit-overflow-scrolling: touch; touch-action: pan-x; scrollbar-gutter: stable; }
   .carousel > * { scroll-snap-align: start; flex: 0 0 auto; width: 80vw; }
 }
