@@ -75,7 +75,7 @@
             <a href="articles.html" class="text-sm text-indigo-500 hover:underline">See all →</a>
           </div>
           <p class="text-slate-500 dark:text-slate-400 text-sm mb-4">Long-form writing on business, investing, and building.</p>
-          <div class="carousel sm:grid sm:grid-cols-3 sm:gap-5" id="articles-row"><!-- populated by JS --></div>
+          <div class="carousel" id="articles-row"><!-- populated by JS --></div>
         </section>
 
         <!-- Videos showcase -->
@@ -85,7 +85,17 @@
             <a href="videos.html" class="text-sm text-indigo-500 hover:underline">See all →</a>
           </div>
           <p class="text-slate-500 dark:text-slate-400 text-sm mb-4">Deep-dive content on YouTube.</p>
-          <div class="carousel sm:grid sm:grid-cols-3 sm:gap-5" id="videos-row"><!-- populated by JS --></div>
+          <div class="carousel" id="videos-row"><!-- populated by JS --></div>
+        </section>
+
+        <!-- Daily Reads showcase -->
+        <section id="reads" class="scroll-mt-24">
+          <div class="flex items-end justify-between mb-2">
+            <h2 class="text-2xl font-bold text-slate-900 dark:text-slate-100">Daily reads</h2>
+            <a href="reads.html" class="text-sm text-indigo-500 hover:underline">See all →</a>
+          </div>
+          <p class="text-slate-500 dark:text-slate-400 text-sm mb-4">One idea, one minute, every day.</p>
+          <div class="carousel" id="reads-row"><!-- populated by JS --></div>
         </section>
 
         <!-- Content feed -->
@@ -152,10 +162,10 @@
   <script>
     // Populate articles showcase
     const articleCardHtml = (article) => `
-      <a href="articles.html" class="glass rounded-2xl p-6 block hover:scale-[1.02] transition group">
-        <a href="https://app.notion.com/p/83f7269252d54d95be6515217888a28e?v=f23101416ba145c4a385bbd5015fede1&query=${encodeURIComponent(article.category)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1 hover:underline inline-block">${article.category}</a>
-        <h3 class="font-bold text-lg mb-1 text-slate-900 dark:text-slate-100 group-hover:text-indigo-500 transition">${article.title}</h3>
-        <p class="text-sm text-slate-500 dark:text-slate-400">${article.excerpt}</p>
+      <a href="articles.html" class="glass rounded-2xl p-6 block hover:scale-[1.02] transition group shrink-0 w-72">
+        <a href="https://app.notion.com/p/83f7269252d54d95be6515217888a28e?v=f23101416ba145c4a385bbd5015fede1&query=${encodeURIComponent(article.category)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-2 hover:underline inline-block">${article.category}</a>
+        <h3 class="font-bold text-lg mb-2 text-slate-900 dark:text-slate-100 group-hover:text-indigo-500 transition line-clamp-2">${article.title}</h3>
+        <p class="text-sm text-slate-500 dark:text-slate-400 line-clamp-2">${article.excerpt}</p>
       </a>`;
 
     fetch('data/articles.json').then(r => r.ok ? r.json() : []).then(articles => {
@@ -165,10 +175,10 @@
 
     // Populate videos showcase
     const videoCardHtml = (v) => `
-      <a href="${v.url}" target="_blank" rel="noopener" class="group block">
+      <a href="${v.url}" target="_blank" rel="noopener" class="group block shrink-0 w-72">
         <div class="aspect-video rounded-xl mb-3 overflow-hidden"><img src="${v.thumb}" alt="" loading="lazy" class="w-full h-full object-cover transition group-hover:scale-105"></div>
         <p class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1">${v.label}</p>
-        <h3 class="font-bold leading-snug text-slate-900 dark:text-slate-100 group-hover:text-indigo-500 transition">${v.title}</h3>
+        <h3 class="font-bold leading-snug text-slate-900 dark:text-slate-100 group-hover:text-indigo-500 transition line-clamp-2">${v.title}</h3>
       </a>`;
 
     fetch('data/videos.json').then(r => r.ok ? r.json() : []).then(videos => {
@@ -178,6 +188,23 @@
         document.getElementById('videos-row').innerHTML = first3.map(videoCardHtml).join('');
       } else {
         document.getElementById('videos-row').innerHTML = '<p class="text-sm text-slate-500">Long-form videos coming soon...</p>';
+      }
+    });
+
+    // Populate daily reads showcase
+    const readCardHtml = (read) => `
+      <a href="reads.html" class="glass rounded-2xl p-6 block hover:scale-[1.02] transition group shrink-0 w-72">
+        <a href="https://app.notion.com/p/66d0db95e6b842408a8a14636d20a8b7?v=f23101416ba145c4a385bbd5015fede1&query=${encodeURIComponent(read.category)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-2 hover:underline inline-block">${read.category} · 1 min</a>
+        <h3 class="font-bold text-lg mb-2 text-slate-900 dark:text-slate-100 group-hover:text-indigo-500 transition line-clamp-2">${read.title}</h3>
+        <p class="text-sm text-slate-500 dark:text-slate-400 line-clamp-2">${read.excerpt}</p>
+      </a>`;
+
+    fetch('data/daily-reads.json').then(r => r.ok ? r.json() : []).then(reads => {
+      const first3 = reads.slice(0, 3);
+      if (first3.length) {
+        document.getElementById('reads-row').innerHTML = first3.map(readCardHtml).join('');
+      } else {
+        document.getElementById('reads-row').innerHTML = '<p class="text-sm text-slate-500">Daily reads coming soon...</p>';
       }
     });
   </script>
