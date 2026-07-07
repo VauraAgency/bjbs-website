@@ -68,6 +68,26 @@
           </div>
         </section>
 
+        <!-- Articles showcase -->
+        <section id="articles" class="scroll-mt-24">
+          <div class="flex items-end justify-between mb-2">
+            <h2 class="text-2xl font-bold text-slate-900 dark:text-slate-100">Latest articles</h2>
+            <a href="articles.html" class="text-sm text-indigo-500 hover:underline">See all →</a>
+          </div>
+          <p class="text-slate-500 dark:text-slate-400 text-sm mb-4">Long-form writing on business, investing, and building.</p>
+          <div class="carousel sm:grid sm:grid-cols-3 sm:gap-5" id="articles-row"><!-- populated by JS --></div>
+        </section>
+
+        <!-- Videos showcase -->
+        <section id="videos" class="scroll-mt-24">
+          <div class="flex items-end justify-between mb-2">
+            <h2 class="text-2xl font-bold text-slate-900 dark:text-slate-100">Long-form videos</h2>
+            <a href="videos.html" class="text-sm text-indigo-500 hover:underline">See all →</a>
+          </div>
+          <p class="text-slate-500 dark:text-slate-400 text-sm mb-4">Deep-dive content on YouTube.</p>
+          <div class="carousel sm:grid sm:grid-cols-3 sm:gap-5" id="videos-row"><!-- populated by JS --></div>
+        </section>
+
         <!-- Content feed -->
         <section id="content" class="scroll-mt-24">
           <div class="flex items-end justify-between mb-2">
@@ -129,5 +149,37 @@
 
   <script src="js/site.js"></script>
   <script src="js/main.js"></script>
+  <script>
+    // Populate articles showcase
+    const articleCardHtml = (article) => `
+      <a href="articles.html" class="glass rounded-2xl p-6 block hover:scale-[1.02] transition group">
+        <a href="https://app.notion.com/p/83f7269252d54d95be6515217888a28e?v=f23101416ba145c4a385bbd5015fede1&query=${encodeURIComponent(article.category)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1 hover:underline inline-block">${article.category}</a>
+        <h3 class="font-bold text-lg mb-1 text-slate-900 dark:text-slate-100 group-hover:text-indigo-500 transition">${article.title}</h3>
+        <p class="text-sm text-slate-500 dark:text-slate-400">${article.excerpt}</p>
+      </a>`;
+
+    fetch('data/articles.json').then(r => r.ok ? r.json() : []).then(articles => {
+      const first3 = articles.slice(0, 3);
+      document.getElementById('articles-row').innerHTML = first3.map(articleCardHtml).join('');
+    });
+
+    // Populate videos showcase
+    const videoCardHtml = (v) => `
+      <a href="${v.url}" target="_blank" rel="noopener" class="group block">
+        <div class="aspect-video rounded-xl mb-3 overflow-hidden"><img src="${v.thumb}" alt="" loading="lazy" class="w-full h-full object-cover transition group-hover:scale-105"></div>
+        <p class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1">${v.label}</p>
+        <h3 class="font-bold leading-snug text-slate-900 dark:text-slate-100 group-hover:text-indigo-500 transition">${v.title}</h3>
+      </a>`;
+
+    fetch('data/videos.json').then(r => r.ok ? r.json() : []).then(videos => {
+      const longform = videos.filter(v => v.cat === 'video');
+      const first3 = longform.slice(0, 3);
+      if (first3.length) {
+        document.getElementById('videos-row').innerHTML = first3.map(videoCardHtml).join('');
+      } else {
+        document.getElementById('videos-row').innerHTML = '<p class="text-sm text-slate-500">Long-form videos coming soon...</p>';
+      }
+    });
+  </script>
 </body>
 </html>
