@@ -20,38 +20,108 @@
       <h1 class="text-4xl md:text-5xl font-extrabold leading-tight text-slate-900 dark:text-slate-100 mb-3">Daily Reads</h1>
       <p class="text-lg text-slate-500 dark:text-slate-400 max-w-2xl">One idea, one minute, every day — mindset, business, and the architecture of a good life. (Name TBD — it's getting a proper identity soon.)</p>
     </header>
-    <section class="grid sm:grid-cols-2 gap-5">
-      <div class="glass rounded-2xl p-6">
-        <div class="text-3xl mb-3">📐</div>
-        <p class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1">Sample read · 1 min</p>
-        <h3 class="font-bold text-lg mb-1 text-slate-900 dark:text-slate-100">Architects don't complain about weather</h3>
-        <p class="text-sm text-slate-500 dark:text-slate-400">You can't control the market, the algorithm, or other people. You can control the blueprint. Draft accordingly.</p>
-      </div>
-      <div class="glass rounded-2xl p-6">
-        <div class="text-3xl mb-3">📞</div>
-        <p class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1">Sample read · 1 min</p>
-        <h3 class="font-bold text-lg mb-1 text-slate-900 dark:text-slate-100">The follow-up is the business</h3>
-        <p class="text-sm text-slate-500 dark:text-slate-400">Everyone chases new leads. The money is in the fifth touch nobody else bothers to make.</p>
-      </div>
-      <div class="glass rounded-2xl p-6">
-        <div class="text-3xl mb-3">👟</div>
-        <p class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1">Sample read · 1 min</p>
-        <h3 class="font-bold text-lg mb-1 text-slate-900 dark:text-slate-100">Buy assets, wear the same shoes</h3>
-        <p class="text-sm text-slate-500 dark:text-slate-400">Rich is loud, wealth is quiet. Stack what compounds, skip what depreciates on your feet.</p>
-      </div>
-      <div class="glass rounded-2xl p-6">
-        <div class="text-3xl mb-3">🤫</div>
-        <p class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1">Sample read · 1 min</p>
-        <h3 class="font-bold text-lg mb-1 text-slate-900 dark:text-slate-100">Silence could never be misquoted</h3>
-        <p class="text-sm text-slate-500 dark:text-slate-400">Say less. Especially when it's working.</p>
+    <section>
+      <div class="carousel sm:grid sm:grid-cols-2 sm:gap-5" id="reads-grid"><!-- populated by JS --></div>
+      <div class="text-center mt-6 sm:hidden">
+        <button id="view-all-btn" class="text-indigo-500 hover:underline font-medium text-sm">View all →</button>
       </div>
     </section>
+
+    <div id="reads-modal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+      <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-auto">
+        <div class="sticky top-0 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-6 py-4 flex items-center justify-between">
+          <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">All daily reads</h2>
+          <button id="close-modal-btn" class="text-slate-500 hover:text-slate-900 dark:hover:text-slate-100">✕</button>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 p-6" id="reads-modal-grid"><!-- populated by JS --></div>
+      </div>
+    </div>
+
+    <div id="read-detail-modal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+      <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-auto">
+        <div class="sticky top-0 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-6 py-4 flex items-center justify-between">
+          <h2 class="text-lg font-bold text-slate-900 dark:text-slate-100" id="detail-title"></h2>
+          <button id="close-detail-btn" class="text-slate-500 hover:text-slate-900 dark:hover:text-slate-100">✕</button>
+        </div>
+        <div class="p-6">
+          <p class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-3" id="detail-meta"></p>
+          <div class="prose prose-invert max-w-none text-slate-600 dark:text-slate-400 leading-relaxed" id="detail-text"></div>
+        </div>
+      </div>
+    </div>
+
     <section class="glass rounded-2xl p-8 text-center">
-      <h2 class="text-xl font-bold mb-2 text-slate-900 dark:text-slate-100">Get these in your inbox</h2>
-      <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Daily reads land in the newsletter first. Subscribe on the <a href="index.html#subscribe" class="text-indigo-500 hover:underline">home page</a>.</p>
+      <h2 class="text-xl font-bold mb-2 text-slate-900 dark:text-slate-100">Subscribe for daily reads</h2>
+      <p class="text-slate-500 dark:text-slate-400 mb-6">Get one idea, one minute, every day straight to your inbox.</p>
+      <form id="subscribe-form" class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+        <input type="email" name="email" required placeholder="Your email" class="grow px-4 py-2.5 rounded-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
+        <button type="submit" class="px-5 py-2.5 rounded-full bg-indigo-500 hover:bg-indigo-600 text-white font-medium text-sm transition">Subscribe</button>
+      </form>
     </section>
   </main>
   <div id="site-footer"></div>
   <script src="js/site.js"></script>
+  <script>
+    const cardHtml = (read) => `
+      <div class="glass rounded-2xl p-6 cursor-pointer hover:opacity-90 transition group" data-read-id="${read.id}">
+        <p class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1">${read.category} · 1 min</p>
+        <h3 class="font-bold text-lg mb-1 text-slate-900 dark:text-slate-100 group-hover:text-indigo-500 transition">${read.title}</h3>
+        <p class="text-sm text-slate-500 dark:text-slate-400">${read.excerpt}</p>
+      </div>`;
+
+    fetch('data/daily-reads.json').then(r => r.ok ? r.json() : []).then(reads => {
+      if (!reads.length) {
+        document.getElementById('reads-grid').innerHTML = '<p class="text-sm text-slate-500">Daily reads coming soon...</p>';
+        return;
+      }
+
+      const first5 = reads.slice(0, 5);
+      document.getElementById('reads-grid').innerHTML = first5.map(cardHtml).join('');
+      document.getElementById('reads-modal-grid').innerHTML = reads.map(cardHtml).join('');
+
+      // Add click listeners to open detail modal
+      document.querySelectorAll('[data-read-id]').forEach(el => {
+        el.addEventListener('click', (e) => {
+          const id = el.getAttribute('data-read-id');
+          const read = reads.find(r => r.id === id);
+          if (read) {
+            document.getElementById('detail-title').textContent = read.title;
+            document.getElementById('detail-meta').textContent = `${read.category} · ${read.date}`;
+            document.getElementById('detail-text').innerHTML = read.fullText.split('\n').map(p => `<p>${p}</p>`).join('');
+            document.getElementById('read-detail-modal').classList.remove('hidden');
+          }
+        });
+      });
+    });
+
+    document.getElementById('view-all-btn').addEventListener('click', () => {
+      document.getElementById('reads-modal').classList.remove('hidden');
+    });
+    document.getElementById('close-modal-btn').addEventListener('click', () => {
+      document.getElementById('reads-modal').classList.add('hidden');
+    });
+    document.getElementById('reads-modal').addEventListener('click', (e) => {
+      if (e.target.id === 'reads-modal') document.getElementById('reads-modal').classList.add('hidden');
+    });
+    document.getElementById('close-detail-btn').addEventListener('click', () => {
+      document.getElementById('read-detail-modal').classList.add('hidden');
+    });
+    document.getElementById('read-detail-modal').addEventListener('click', (e) => {
+      if (e.target.id === 'read-detail-modal') document.getElementById('read-detail-modal').classList.add('hidden');
+    });
+
+    // Subscribe form
+    document.getElementById('subscribe-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = e.target.email.value;
+      const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLScI7z61fGvj_lMK-UTAmsb6dZ0inv-jbT1v8ocoo64r1m1GWw/formResponse';
+      const formData = new FormData();
+      formData.append('entry.1234567890', email);
+      fetch(formUrl, { method: 'POST', body: formData, mode: 'no-cors' }).then(() => {
+        e.target.reset();
+        alert('Thanks for subscribing!');
+      });
+    });
+  </script>
 </body>
 </html>

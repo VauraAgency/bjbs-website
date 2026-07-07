@@ -21,32 +21,7 @@
       <p class="text-lg text-slate-500 dark:text-slate-400 max-w-2xl">Longer-form writing on business, investing, and the maker life. First pieces are being drafted now.</p>
     </header>
     <section>
-      <div class="carousel sm:grid sm:grid-cols-2 sm:gap-5" id="articles-grid">
-        <div class="glass rounded-2xl p-6 article-card">
-          <div class="text-3xl mb-3">📝</div>
-          <p class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1">Coming soon</p>
-          <h3 class="font-bold text-lg mb-1 text-slate-900 dark:text-slate-100">Entrepreneurship is lead gen, sales, and follow-up. Repeat.</h3>
-          <p class="text-sm text-slate-500 dark:text-slate-400">Every business has a formula — the fundamentals.</p>
-        </div>
-        <div class="glass rounded-2xl p-6 article-card">
-          <div class="text-3xl mb-3">⚙️</div>
-          <p class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1">Coming soon</p>
-          <h3 class="font-bold text-lg mb-1 text-slate-900 dark:text-slate-100">Build systems so discipline isn't required</h3>
-          <p class="text-sm text-slate-500 dark:text-slate-400">Accountability and automation — the backbone of scale.</p>
-        </div>
-        <div class="glass rounded-2xl p-6 article-card">
-          <div class="text-3xl mb-3">📊</div>
-          <p class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1">Coming soon</p>
-          <h3 class="font-bold text-lg mb-1 text-slate-900 dark:text-slate-100">One year of building in public</h3>
-          <p class="text-sm text-slate-500 dark:text-slate-400">The honest numbers: revenue, reach, and what I'd do differently.</p>
-        </div>
-        <div class="glass rounded-2xl p-6 article-card">
-          <div class="text-3xl mb-3">🏦</div>
-          <p class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1">Coming soon</p>
-          <h3 class="font-bold text-lg mb-1 text-slate-900 dark:text-slate-100">Why I bet on hard assets</h3>
-          <p class="text-sm text-slate-500 dark:text-slate-400">Bitcoin, real estate, precious metals — hard assets, long horizon.</p>
-        </div>
-      </div>
+      <div class="carousel sm:grid sm:grid-cols-2 sm:gap-5" id="articles-grid"><!-- populated by JS --></div>
       <div class="text-center mt-6 sm:hidden">
         <button id="view-all-btn" class="text-indigo-500 hover:underline font-medium text-sm">View all →</button>
       </div>
@@ -58,36 +33,56 @@
           <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">All articles</h2>
           <button id="close-modal-btn" class="text-slate-500 hover:text-slate-900 dark:hover:text-slate-100">✕</button>
         </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 p-6">
-          <div class="glass rounded-2xl p-6">
-            <div class="text-3xl mb-3">📝</div>
-            <p class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1">Coming soon</p>
-            <h3 class="font-bold text-lg mb-1 text-slate-900 dark:text-slate-100">Entrepreneurship is lead gen, sales, and follow-up. Repeat.</h3>
-            <p class="text-sm text-slate-500 dark:text-slate-400">Every business has a formula — the fundamentals.</p>
-          </div>
-          <div class="glass rounded-2xl p-6">
-            <div class="text-3xl mb-3">⚙️</div>
-            <p class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1">Coming soon</p>
-            <h3 class="font-bold text-lg mb-1 text-slate-900 dark:text-slate-100">Build systems so discipline isn't required</h3>
-            <p class="text-sm text-slate-500 dark:text-slate-400">Accountability and automation — the backbone of scale.</p>
-          </div>
-          <div class="glass rounded-2xl p-6">
-            <div class="text-3xl mb-3">📊</div>
-            <p class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1">Coming soon</p>
-            <h3 class="font-bold text-lg mb-1 text-slate-900 dark:text-slate-100">One year of building in public</h3>
-            <p class="text-sm text-slate-500 dark:text-slate-400">The honest numbers: revenue, reach, and what I'd do differently.</p>
-          </div>
-          <div class="glass rounded-2xl p-6">
-            <div class="text-3xl mb-3">🏦</div>
-            <p class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1">Coming soon</p>
-            <h3 class="font-bold text-lg mb-1 text-slate-900 dark:text-slate-100">Why I bet on hard assets</h3>
-            <p class="text-sm text-slate-500 dark:text-slate-400">Bitcoin, real estate, precious metals — hard assets, long horizon.</p>
-          </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 p-6" id="articles-modal-grid"><!-- populated by JS --></div>
+      </div>
+    </div>
+
+    <div id="article-detail-modal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+      <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-auto">
+        <div class="sticky top-0 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-6 py-4 flex items-center justify-between">
+          <h2 class="text-lg font-bold text-slate-900 dark:text-slate-100" id="detail-title"></h2>
+          <button id="close-detail-btn" class="text-slate-500 hover:text-slate-900 dark:hover:text-slate-100">✕</button>
+        </div>
+        <div class="p-6">
+          <p class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-3" id="detail-meta"></p>
+          <div class="prose prose-invert max-w-none text-slate-600 dark:text-slate-400 leading-relaxed" id="detail-text"></div>
         </div>
       </div>
     </div>
 
     <script>
+      const cardHtml = (article) => `
+        <div class="glass rounded-2xl p-6 cursor-pointer hover:opacity-90 transition group" data-article-id="${article.id}">
+          <p class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1">${article.category}</p>
+          <h3 class="font-bold text-lg mb-1 text-slate-900 dark:text-slate-100 group-hover:text-indigo-500 transition">${article.title}</h3>
+          <p class="text-sm text-slate-500 dark:text-slate-400">${article.excerpt}</p>
+        </div>`;
+
+      fetch('data/articles.json').then(r => r.ok ? r.json() : []).then(articles => {
+        if (!articles.length) {
+          document.getElementById('articles-grid').innerHTML = '<p class="text-sm text-slate-500">Articles coming soon...</p>';
+          return;
+        }
+
+        const first5 = articles.slice(0, 5);
+        document.getElementById('articles-grid').innerHTML = first5.map(cardHtml).join('');
+        document.getElementById('articles-modal-grid').innerHTML = articles.map(cardHtml).join('');
+
+        // Add click listeners to open detail modal
+        document.querySelectorAll('[data-article-id]').forEach(el => {
+          el.addEventListener('click', (e) => {
+            const id = el.getAttribute('data-article-id');
+            const article = articles.find(a => a.id === id);
+            if (article) {
+              document.getElementById('detail-title').textContent = article.title;
+              document.getElementById('detail-meta').textContent = `${article.category} · ${article.date}`;
+              document.getElementById('detail-text').innerHTML = article.fullText.split('\n').map(p => `<p>${p}</p>`).join('');
+              document.getElementById('article-detail-modal').classList.remove('hidden');
+            }
+          });
+        });
+      });
+
       document.getElementById('view-all-btn').addEventListener('click', () => {
         document.getElementById('articles-modal').classList.remove('hidden');
       });
@@ -97,6 +92,14 @@
       document.getElementById('articles-modal').addEventListener('click', (e) => {
         if (e.target.id === 'articles-modal') {
           document.getElementById('articles-modal').classList.add('hidden');
+        }
+      });
+      document.getElementById('close-detail-btn').addEventListener('click', () => {
+        document.getElementById('article-detail-modal').classList.add('hidden');
+      });
+      document.getElementById('article-detail-modal').addEventListener('click', (e) => {
+        if (e.target.id === 'article-detail-modal') {
+          document.getElementById('article-detail-modal').classList.add('hidden');
         }
       });
     </script>
