@@ -27,11 +27,6 @@
       <p>I run multiple ventures — a branding agency, a real estate practice, a photography studio, and a lawn care company — and I share everything I learn along the way. The through-line in all of it: the fundamentals of business are the same everywhere. Find customers, serve them well, follow up, repeat.</p>
       <p>Off the clock you'll find me behind a camera, on a one-way flight, in the gym before sunrise, or deep in a conversation about Bitcoin, markets, and where the world is heading.</p>
     </section>
-
-    <!-- Globe Feature -->
-    <div class="flex items-center justify-center py-8">
-      <canvas id="globe-canvas" width="280" height="280" style="display: block; cursor: grab;"></canvas>
-    </div>
     <section>
       <h2 class="text-2xl font-bold mb-6 text-slate-900 dark:text-slate-100">The pillars</h2>
       <div class="m-carousel sm:!grid sm:!grid-cols-2 sm:!gap-5">
@@ -68,102 +63,5 @@
   </main>
   <div id="site-footer"></div>
   <script src="js/site.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script>
-    (function() {
-      const canvas = document.getElementById('globe-canvas');
-      if (!canvas) return;
-
-      const scene = new THREE.Scene();
-      const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
-      const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-
-      renderer.setSize(280, 280);
-      renderer.setClearColor(0x000000, 0);
-      camera.position.z = 2;
-
-      // Create globe
-      const geometry = new THREE.SphereGeometry(1, 64, 64);
-      const isDark = document.documentElement.classList.contains('dark');
-      const globeColor = isDark ? 0x1e3a8a : 0x3b82f6;
-      const material = new THREE.MeshPhongMaterial({ color: globeColor, emissive: 0x111827 });
-      const sphere = new THREE.Mesh(geometry, material);
-      scene.add(sphere);
-
-      // Add light
-      const light = new THREE.DirectionalLight(0xffffff, 0.8);
-      light.position.set(5, 3, 5);
-      scene.add(light);
-      scene.add(new THREE.AmbientLight(0xffffff, 0.4));
-
-      // Add markers
-      const markerColor = isDark ? 0xf97316 : 0xdc2626;
-      const markers = [
-        { lat: 40.7128, lng: -74.006 }, // New York
-        { lat: 34.0522, lng: -118.2437 }, // LA
-        { lat: 51.5074, lng: -0.1278 }, // London
-        { lat: 35.6762, lng: 139.6503 }, // Tokyo
-        { lat: 25.7617, lng: -80.1918 }, // Miami
-        { lat: 44.9778, lng: -93.2650 }, // Minnesota
-        { lat: 41.3874, lng: 2.1686 }, // Barcelona
-        { lat: 41.9028, lng: 12.4964 }, // Rome
-      ];
-
-      markers.forEach(({ lat, lng }) => {
-        const phi = (90 - lat) * (Math.PI / 180);
-        const theta = (lng + 180) * (Math.PI / 180);
-        const x = Math.sin(phi) * Math.cos(theta);
-        const y = Math.cos(phi);
-        const z = Math.sin(phi) * Math.sin(theta);
-
-        const dot = new THREE.Mesh(
-          new THREE.SphereGeometry(0.05, 8, 8),
-          new THREE.MeshBasicMaterial({ color: markerColor })
-        );
-        dot.position.set(x, y, z);
-        sphere.add(dot);
-      });
-
-      // Animation
-      let rotation = 0;
-      let isDragging = false;
-      let dragX = 0;
-
-      function animate() {
-        requestAnimationFrame(animate);
-
-        if (!isDragging) {
-          rotation += 0.001;
-        }
-
-        sphere.rotation.y = rotation + dragX;
-        renderer.render(scene, camera);
-      }
-
-      canvas.addEventListener('mousedown', (e) => {
-        isDragging = true;
-        dragX = e.clientX;
-        canvas.style.cursor = 'grabbing';
-      });
-
-      canvas.addEventListener('mousemove', (e) => {
-        if (isDragging) {
-          dragX = (e.clientX - 140) * 0.005;
-        }
-      });
-
-      canvas.addEventListener('mouseup', () => {
-        isDragging = false;
-        canvas.style.cursor = 'grab';
-      });
-
-      canvas.addEventListener('mouseleave', () => {
-        isDragging = false;
-        canvas.style.cursor = 'grab';
-      });
-
-      animate();
-    })();
-  </script>
 </body>
 </html>
