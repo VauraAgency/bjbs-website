@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
+  <script>(function(){var t=localStorage.theme,d=document.documentElement;if(t==='light'){d.classList.remove('dark');}else if(t!=='dark'&&window.matchMedia&&!window.matchMedia('(prefers-color-scheme: dark)').matches){d.classList.remove('dark');}})();</script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>@BenjaminJBSmith — Entrepreneur, Investor, Photographer & Content Creator | Minneapolis</title>
@@ -24,19 +25,19 @@
 
       <!-- Side rail: quick on-page navigation -->
       <aside class="sticky top-16 h-[calc(100vh-4rem)] w-14 md:w-20 shrink-0 border-r border-slate-200 dark:border-slate-800 hidden sm:flex flex-col items-center justify-center gap-6 z-10">
-        <a href="#home" class="nav-link group" title="Top">
+        <a href="#home" class="nav-link group" title="Top" aria-label="Top">
           <svg class="w-5 h-5 fill-slate-400 group-hover:fill-indigo-500 transition" viewBox="0 0 20 20"><path d="M10 1.5 1.5 9h2v9h5v-6h3v6h5V9h2L10 1.5Z"/></svg>
         </a>
-        <a href="#content" class="nav-link group" title="Content">
+        <a href="#content" class="nav-link group" title="Content" aria-label="Content">
           <svg class="w-5 h-5 fill-slate-400 group-hover:fill-indigo-500 transition" viewBox="0 0 20 20"><path d="M3 2h11a3 3 0 0 1 3 3v13H6a3 3 0 0 1-3-3V2Zm2 2v11a1 1 0 0 0 1 1h9V5a1 1 0 0 0-1-1H5Zm2 2h6v2H7V6Zm0 4h6v2H7v-2Z"/></svg>
         </a>
-        <a href="#ventures" class="nav-link group" title="Ventures">
+        <a href="#ventures" class="nav-link group" title="Ventures" aria-label="Ventures">
           <svg class="w-5 h-5 fill-slate-400 group-hover:fill-indigo-500 transition" viewBox="0 0 20 20"><path d="m10 1 9 5-9 5-9-5 9-5Zm-9 9 9 5 9-5v3l-9 5-9-5v-3Z"/></svg>
         </a>
-        <a href="#philosophy" class="nav-link group" title="Philosophy">
+        <a href="#philosophy" class="nav-link group" title="Philosophy" aria-label="Philosophy">
           <svg class="w-5 h-5 fill-slate-400 group-hover:fill-indigo-500 transition" viewBox="0 0 20 20"><path d="M2 3h16v10H9l-4 4v-4H2V3Zm3 3v2h10V6H5Z"/></svg>
         </a>
-        <a href="#subscribe" class="nav-link group" title="Subscribe">
+        <a href="#subscribe" class="nav-link group" title="Subscribe" aria-label="Subscribe">
           <svg class="w-5 h-5 fill-slate-400 group-hover:fill-indigo-500 transition" viewBox="0 0 20 20"><path d="M2 4h16v12H2V4Zm2 2.4V14h12V6.4l-6 4-6-4ZM16 6H4l6 4 6-4Z"/></svg>
         </a>
       </aside>
@@ -163,10 +164,10 @@
     // Populate articles showcase
     const articleThumb = (article) => article.image
       ? `<img src="${article.image}" alt="" loading="lazy" class="w-full h-full object-cover transition group-hover:scale-105">`
-      : `<div class="w-full h-full bg-gradient-to-br from-indigo-500/25 via-purple-500/15 to-btc/25 dark:from-indigo-500/30 dark:via-purple-500/20 dark:to-btc/30 flex items-center justify-center"><span class="text-4xl opacity-70">📝</span></div>`;
+      : `<div class="w-full h-full bg-gradient-to-br from-btc/25 via-indigo-500/15 to-btc/10 dark:from-btc/30 dark:via-indigo-500/20 dark:to-btc/15 flex items-center justify-center"><span class="text-4xl opacity-70">📝</span></div>`;
 
     const articleCardHtml = (article) => `
-      <div class="group shrink-0 w-72">
+      <div class="card group shrink-0 w-72 p-4">
         <a href="articles.html" class="block">
           <div class="aspect-video rounded-xl mb-3 overflow-hidden">${articleThumb(article)}</div>
         </a>
@@ -177,14 +178,27 @@
         </a>
       </div>`;
 
+    const rowSkeleton = (n) => Array.from({ length: n }).map(() => `
+      <div class="shrink-0 w-72">
+        <div class="skeleton aspect-video mb-3"></div>
+        <div class="skeleton h-3 w-1/3 mb-2 rounded-full"></div>
+        <div class="skeleton h-4 w-full mb-1 rounded-full"></div>
+        <div class="skeleton h-3 w-2/3 rounded-full"></div>
+      </div>`).join('');
+    document.getElementById('articles-row').innerHTML = rowSkeleton(3);
+    document.getElementById('videos-row').innerHTML = rowSkeleton(3);
+    document.getElementById('reads-row').innerHTML = rowSkeleton(3);
+
     fetch('data/articles.json').then(r => r.ok ? r.json() : []).then(articles => {
       const first3 = articles.slice(0, 3);
-      document.getElementById('articles-row').innerHTML = first3.map(articleCardHtml).join('');
+      document.getElementById('articles-row').innerHTML = first3.length
+        ? first3.map(articleCardHtml).join('')
+        : '<p class="text-sm text-slate-500">Articles coming soon...</p>';
     });
 
     // Populate videos showcase
     const videoCardHtml = (v) => `
-      <a href="${v.url}" target="_blank" rel="noopener" class="group block shrink-0 w-72">
+      <a href="${v.url}" target="_blank" rel="noopener" class="card group block shrink-0 w-72 p-4">
         <div class="aspect-video rounded-xl mb-3 overflow-hidden"><img src="${v.thumb}" alt="" loading="lazy" class="w-full h-full object-cover transition group-hover:scale-105"></div>
         <p class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1">${v.label}</p>
         <h3 class="font-bold leading-snug text-slate-900 dark:text-slate-100 group-hover:text-indigo-500 transition line-clamp-2">${v.title}</h3>
@@ -203,10 +217,10 @@
     // Populate daily reads showcase
     const readThumb = (read) => read.image
       ? `<img src="${read.image}" alt="" loading="lazy" class="w-full h-full object-cover transition group-hover:scale-105">`
-      : `<div class="w-full h-full bg-gradient-to-br from-indigo-500/25 via-purple-500/15 to-btc/25 dark:from-indigo-500/30 dark:via-purple-500/20 dark:to-btc/30 flex items-center justify-center"><span class="text-4xl opacity-70">💡</span></div>`;
+      : `<div class="w-full h-full bg-gradient-to-br from-btc/25 via-indigo-500/15 to-btc/10 dark:from-btc/30 dark:via-indigo-500/20 dark:to-btc/15 flex items-center justify-center"><span class="text-4xl opacity-70">💡</span></div>`;
 
     const readCardHtml = (read) => `
-      <div class="group shrink-0 w-72">
+      <div class="card group shrink-0 w-72 p-4">
         <a href="reads.html" class="block">
           <div class="aspect-video rounded-xl mb-3 overflow-hidden">${readThumb(read)}</div>
         </a>

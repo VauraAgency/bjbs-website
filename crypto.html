@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
+  <script>(function(){var t=localStorage.theme,d=document.documentElement;if(t==='light'){d.classList.remove('dark');}else if(t!=='dark'&&window.matchMedia&&!window.matchMedia('(prefers-color-scheme: dark)').matches){d.classList.remove('dark');}})();</script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Crypto | @BenjaminJBSmith</title>
@@ -22,25 +23,25 @@
     </header>
     <section>
       <div class="carousel sm:grid sm:grid-cols-2 sm:gap-5" id="crypto-grid">
-        <div class="glass rounded-2xl p-6">
+        <div class="card rounded-2xl p-6">
           <div class="text-3xl mb-3">₿</div>
           <p class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1">Video · coming soon</p>
           <h3 class="font-bold text-lg mb-1 text-slate-900 dark:text-slate-100">Bitcoin DCA breakdown</h3>
           <p class="text-sm text-slate-500 dark:text-slate-400">Why dollar-cost averaging the best-performing asset class beats timing it.</p>
         </div>
-        <div class="glass rounded-2xl p-6">
+        <div class="card rounded-2xl p-6">
           <div class="text-3xl mb-3">📉</div>
           <p class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1">Video · coming soon</p>
           <h3 class="font-bold text-lg mb-1 text-slate-900 dark:text-slate-100">The 3 types of traders</h3>
           <p class="text-sm text-slate-500 dark:text-slate-400">Day trader panics at 6am. Swing trader hits the gym. Holder wakes up at 3pm.</p>
         </div>
-        <div class="glass rounded-2xl p-6">
+        <div class="card rounded-2xl p-6">
           <div class="text-3xl mb-3">😱</div>
           <p class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1">Video · coming soon</p>
           <h3 class="font-bold text-lg mb-1 text-slate-900 dark:text-slate-100">Fear & Greed playbook</h3>
           <p class="text-sm text-slate-500 dark:text-slate-400">Why the best buys happen when everyone else is scared.</p>
         </div>
-        <div class="glass rounded-2xl p-6">
+        <div class="card rounded-2xl p-6">
           <div class="text-3xl mb-3">🥇</div>
           <p class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1">Video · coming soon</p>
           <h3 class="font-bold text-lg mb-1 text-slate-900 dark:text-slate-100">Bitcoin vs. gold</h3>
@@ -53,31 +54,31 @@
     </section>
 
     <div id="crypto-modal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-      <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-auto">
+      <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-auto elevation">
         <div class="sticky top-0 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-6 py-4 flex items-center justify-between">
           <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">All content</h2>
           <button id="close-modal-btn" class="text-slate-500 hover:text-slate-900 dark:hover:text-slate-100">✕</button>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 p-6">
-          <div class="glass rounded-2xl p-6">
+          <div class="card rounded-2xl p-6">
             <div class="text-3xl mb-3">₿</div>
             <p class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1">Video · coming soon</p>
             <h3 class="font-bold text-lg mb-1 text-slate-900 dark:text-slate-100">Bitcoin DCA breakdown</h3>
             <p class="text-sm text-slate-500 dark:text-slate-400">Why dollar-cost averaging the best-performing asset class beats timing it.</p>
           </div>
-          <div class="glass rounded-2xl p-6">
+          <div class="card rounded-2xl p-6">
             <div class="text-3xl mb-3">📉</div>
             <p class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1">Video · coming soon</p>
             <h3 class="font-bold text-lg mb-1 text-slate-900 dark:text-slate-100">The 3 types of traders</h3>
             <p class="text-sm text-slate-500 dark:text-slate-400">Day trader panics at 6am. Swing trader hits the gym. Holder wakes up at 3pm.</p>
           </div>
-          <div class="glass rounded-2xl p-6">
+          <div class="card rounded-2xl p-6">
             <div class="text-3xl mb-3">😱</div>
             <p class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1">Video · coming soon</p>
             <h3 class="font-bold text-lg mb-1 text-slate-900 dark:text-slate-100">Fear & Greed playbook</h3>
             <p class="text-sm text-slate-500 dark:text-slate-400">Why the best buys happen when everyone else is scared.</p>
           </div>
-          <div class="glass rounded-2xl p-6">
+          <div class="card rounded-2xl p-6">
             <div class="text-3xl mb-3">🥇</div>
             <p class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1">Video · coming soon</p>
             <h3 class="font-bold text-lg mb-1 text-slate-900 dark:text-slate-100">Bitcoin vs. gold</h3>
@@ -101,7 +102,7 @@
       });
     </script>
     <section class="glass rounded-2xl p-8" style="border-color: rgba(247,147,26,.35)">
-      <h2 class="text-xl font-bold mb-2 text-slate-900 dark:text-slate-100">The reading list</h2>
+      <h2 class="text-2xl font-bold mb-2 text-slate-900 dark:text-slate-100">The reading list</h2>
       <p class="text-sm text-slate-500 dark:text-slate-400">The Bitcoin Standard · End the Fed · The Price of Tomorrow — start there, thank me later.</p>
     </section>
   </main>

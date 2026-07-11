@@ -26,7 +26,7 @@ function render(cat) {
   activeCat = cat;
   grid.innerHTML = feed.filter(c => cat === 'all' || c.cat === cat)
     .map(c => `
-      <a href="${c.url}" ${c.url.startsWith('http') ? 'target="_blank" rel="noopener"' : ''} class="group block">
+      <a href="${c.url}" ${c.url.startsWith('http') ? 'target="_blank" rel="noopener"' : ''} class="card group block p-4">
         ${thumb(c)}
         <p class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1">${c.label} · ${c.date}</p>
         <h3 class="font-bold text-lg leading-snug mb-1 text-slate-900 dark:text-slate-100 group-hover:text-indigo-500 transition">${c.title}</h3>
@@ -68,7 +68,7 @@ const VENTURES = [
 ];
 
 document.getElementById('ventures-grid').innerHTML = VENTURES.map(v => `
-  <a href="${v.url}" target="_blank" rel="noopener" class="block p-5 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-indigo-400 dark:hover:border-indigo-500 transition bg-slate-50 dark:bg-slate-850">
+  <a href="${v.url}" target="_blank" rel="noopener" class="card block p-5 rounded-xl">
     <div class="h-10 flex items-center mb-4">${v.icon}</div>
     <h3 class="font-semibold mb-0.5 text-slate-900 dark:text-slate-100">${v.name}</h3>
     <p class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-2">${v.tag}</p>
@@ -85,8 +85,8 @@ document.getElementById('subscribe-form').addEventListener('submit', (e) => {
   const btn = form.querySelector('button');
   const body = new URLSearchParams({ [FORM_EMAIL_FIELD]: form.email.value.trim() });
   fetch(FORM_ENDPOINT, { method: 'POST', body, mode: 'no-cors' })
-    .then(() => { btn.textContent = 'Subscribed ✓'; form.email.value = ''; })
-    .catch(() => { btn.textContent = 'Try again'; });
+    .then(() => { btn.textContent = 'Subscribed ✓'; btn.classList.add('text-success'); form.email.value = ''; })
+    .catch(() => { btn.textContent = 'Try again'; btn.classList.add('text-error'); });
 });
 
 // ---------- Community avatars ----------
