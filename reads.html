@@ -27,7 +27,7 @@
       </div>
     </section>
 
-    <div id="reads-modal" class="hidden fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
+    <div id="reads-modal" class="hidden fixed top-16 inset-x-0 bottom-0 bg-black/70 z-40 flex items-center justify-center p-4">
       <div class="bg-white dark:bg-[#1c1c1e] border border-slate-200 dark:border-white/10 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-auto shadow-2xl">
         <div class="sticky top-0 bg-white dark:bg-[#1c1c1e] border-b border-slate-200 dark:border-white/10 px-6 py-4 flex items-center justify-between">
           <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">All daily reads</h2>
@@ -37,7 +37,7 @@
       </div>
     </div>
 
-    <div id="read-detail-modal" class="hidden fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
+    <div id="read-detail-modal" class="hidden fixed top-16 inset-x-0 bottom-0 bg-black/70 z-40 flex items-center justify-center p-4">
       <div class="bg-white dark:bg-[#1c1c1e] border border-slate-200 dark:border-white/10 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-auto shadow-2xl">
         <div class="sticky top-0 bg-white dark:bg-[#1c1c1e] border-b border-slate-200 dark:border-white/10 px-6 py-4 flex items-center justify-between">
           <h2 class="text-lg font-bold text-slate-900 dark:text-slate-100" id="detail-title"></h2>
@@ -87,7 +87,7 @@
           if (read) {
             document.getElementById('detail-title').textContent = read.title;
             document.getElementById('detail-meta').textContent = `${read.category} · ${read.date}`;
-            document.getElementById('detail-text').innerHTML = read.fullText.split('\n').map(p => `<p>${p}</p>`).join('');
+            document.getElementById('detail-text').innerHTML = read.fullText.split('\n').filter(p => p.trim()).map(p => `<p class="mb-4">${p}</p>`).join('');
             document.getElementById('read-detail-modal').classList.remove('hidden');
           }
         });
