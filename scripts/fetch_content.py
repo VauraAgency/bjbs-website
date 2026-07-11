@@ -76,8 +76,25 @@ def main() -> None:
 
     out = Path(__file__).resolve().parent.parent / "data" / "videos.json"
     out.parent.mkdir(exist_ok=True)
-    out.write_text(json.dumps(videos, indent=2, ensure_ascii=False) + "\n")
-    print(f"Wrote {len(videos)} videos to {out}")
+
+    # Merge with existing entries instead of overwriting — the RSS feed only
+    # returns the channel's most recent MAX_ITEMS uploads, so a plain
+    # overwrite silently deletes older manually-curated videos (e.g. imported
+    # back-catalog content) once they age out of that window.
+    existing = []
+    if out.exists():
+        try:
+            existing = json.loads(out.read_text())
+        except json.JSONDecodeError:
+            existing = []
+
+    merged_by_url = {v["url"]: v for v in existing}
+    for v in videos:
+        merged_by_url[v["url"]] = v  # upsert: refresh title/thumb/date from feed
+    merged = sorted(merged_by_url.values(), key=lambda v: v["date"], reverse=True)
+
+    out.write_text(json.dumps(merged, indent=2, ensure_ascii=False) + "\n")
+    print(f"Wrote {len(merged)} videos to {out} ({len(videos)} from feed, {len(merged) - len(videos)} preserved from history)")
 
 
 if __name__ == "__main__":
