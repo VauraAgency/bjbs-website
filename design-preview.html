@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BJBS Design Tokens — Preview</title>
+<style>
+  :root {
+    --neutral-50:#f5f5f7; --neutral-200:#e8e8ed; --neutral-300:#d2d2d7; --neutral-400:#86868b;
+    --neutral-500:#6e6e73; --neutral-700:#424245; --neutral-800:#1d1d1f; --neutral-850:#161617; --neutral-900:#000000;
+    --primary:#0071e3; --primary-hover:#0077ed; --primary-light:#2997ff;
+    --accent:#f7931a; --accent-dark:#c67612;
+    --success:#30d158; --warning:#ff9f0a; --error:#ff453a; --info:#0071e3;
+    --bg:#ffffff; --text:#1d1d1f; --text-muted:#6e6e73; --text-faint:#86868b;
+    --border:#d2d2d7; --glass-bg:rgba(255,255,255,0.65); --glass-border:rgba(0,0,0,0.06);
+    --glass-shadow:0 6px 18px rgba(0,0,0,.08);
+    --radius-sm:12px; --radius-lg:16px; --radius-full:9999px;
+    --font-sans:'Inter',ui-sans-serif,system-ui,sans-serif;
+  }
+  html.dark {
+    --bg:#000000; --text:#f5f5f7; --text-muted:#86868b; --text-faint:#6e6e73;
+    --border:#424245; --glass-bg:rgba(22,22,23,0.6); --glass-border:rgba(255,255,255,0.09);
+    --glass-shadow:0 6px 18px rgba(0,0,0,.45);
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: var(--font-sans);
+    background: var(--bg);
+    color: var(--text);
+    margin: 0;
+    padding: 2rem 1.25rem 5rem;
+    letter-spacing: -0.01em;
+    transition: background .2s, color .2s;
+  }
+  .wrap { max-width: 980px; margin: 0 auto; }
+  h1 { font-size: 2.5rem; font-weight: 800; margin: 0 0 .25rem; }
+  .lede { color: var(--text-muted); font-size: 1.1rem; margin: 0 0 2.5rem; max-width: 640px; }
+  h2 { font-size: 1.5rem; font-weight: 700; margin: 3rem 0 .5rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
+  h2:first-of-type { border-top: none; padding-top: 0; }
+  .sub { color: var(--text-muted); font-size: .875rem; margin: 0 0 1.5rem; }
+  .grid { display: grid; gap: 1rem; }
+  .swatch-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+  .swatch { border-radius: var(--radius-sm); overflow: hidden; border: 1px solid var(--border); }
+  .swatch-color { height: 72px; }
+  .swatch-label { padding: .6rem .75rem; font-size: .8rem; background: var(--bg); }
+  .swatch-name { font-weight: 600; display: block; }
+  .swatch-hex { color: var(--text-muted); font-family: ui-monospace, monospace; font-size: .75rem; }
+  .type-row { display: flex; align-items: baseline; gap: 1rem; padding: .9rem 0; border-bottom: 1px solid var(--border); }
+  .type-row:last-child { border-bottom: none; }
+  .type-tag { flex: 0 0 140px; color: var(--text-muted); font-size: .75rem; font-family: ui-monospace, monospace; }
+  .type-sample { flex: 1; }
+  .space-ruler { display: flex; align-items: flex-end; gap: 1.25rem; padding: 1rem 0; flex-wrap: wrap; }
+  .space-block { display: flex; flex-direction: column; align-items: center; gap: .4rem; }
+  .space-bar { background: var(--primary); border-radius: 3px; width: 28px; }
+  .space-label { font-size: .7rem; color: var(--text-muted); font-family: ui-monospace, monospace; }
+  .radius-row, .shadow-row { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+  .demo-box { width: 110px; height: 80px; background: var(--primary); display: flex; align-items: center; justify-content: center; color: #fff; font-size: .75rem; font-weight: 600; }
+  .demo-label { text-align: center; font-size: .75rem; color: var(--text-muted); margin-top: .5rem; font-family: ui-monospace, monospace; }
+  .glass-demo {
+    backdrop-filter: blur(16px) saturate(1.8);
+    -webkit-backdrop-filter: blur(16px) saturate(1.8);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    width: 220px;
+  }
+  .glass-demo h3 { margin: 0 0 .35rem; font-size: 1.05rem; }
+  .glass-demo p { margin: 0; color: var(--text-muted); font-size: .875rem; }
+  .toggle-btn {
+    position: fixed; top: 1.25rem; right: 1.25rem; z-index: 10;
+    background: var(--primary); color: #fff; border: none; border-radius: var(--radius-full);
+    padding: .6rem 1.1rem; font-size: .8rem; font-weight: 600; cursor: pointer; font-family: var(--font-sans);
+  }
+  .toggle-btn:hover { background: var(--primary-hover); }
+  .pill-row { display: flex; gap: .5rem; flex-wrap: wrap; }
+  .pill { padding: .3rem .75rem; border-radius: var(--radius-full); font-size: .75rem; font-weight: 600; letter-spacing: .02em; border: 1px solid var(--border); color: var(--text-muted); }
+  .semantic-row { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .semantic-chip { display: flex; align-items: center; gap: .5rem; padding: .5rem .9rem; border-radius: var(--radius-full); border: 1px solid var(--border); font-size: .8rem; font-weight: 600; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; flex: none; }
+  code { font-family: ui-monospace, monospace; background: var(--neutral-200); color: var(--text); padding: .1rem .35rem; border-radius: 4px; font-size: .85em; }
+  html.dark code { background: var(--neutral-800); }
+  footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border); color: var(--text-faint); font-size: .8rem; }
+</style>
+</head>
+<body>
+<button class="toggle-btn" id="toggle">Toggle light / dark</button>
+<div class="wrap">
+  <h1>BJBS Design Tokens</h1>
+  <p class="lede">A live preview of every token proposed in <code>design-tokens.json</code>, grounded in <code>css/style.css</code> and <code>js/theme-config.js</code>. Toggle the button top-right — this mirrors the site's real dark-mode default.</p>
+
+  <h2>Neutral palette</h2>
+  <p class="sub">Apple-gray remap from js/theme-config.js:11-21</p>
+  <div class="grid swatch-grid" id="neutral-swatches"></div>
+
+  <h2>Brand &amp; accent</h2>
+  <p class="sub">Primary blue (js/theme-config.js:26-27) + Bitcoin-orange accent (js/theme-config.js:31)</p>
+  <div class="grid swatch-grid" id="brand-swatches"></div>
+
+  <h2>Semantic (proposed additions)</h2>
+  <p class="sub">Not present in the current codebase — proposed to replace unstyled states like js/main.js:88-89</p>
+  <div class="semantic-row" id="semantic-chips"></div>
+
+  <h2>Typography scale</h2>
+  <p class="sub">Inter, weights 400&ndash;800 &mdash; scale observed in de facto use across all pages</p>
+  <div id="type-scale"></div>
+
+  <h2>Spacing scale</h2>
+  <p class="sub">4px base unit (Tailwind default), steps actually used in the codebase</p>
+  <div class="space-ruler" id="space-ruler"></div>
+
+  <h2>Border radius</h2>
+  <p class="sub">3-step scale: rounded-xl (62&times; rounded-2xl usage dominant), rounded-2xl, rounded-full</p>
+  <div class="radius-row" id="radius-demo"></div>
+
+  <h2>Shadow &amp; glass surface</h2>
+  <p class="sub">css/style.css:10-27 &mdash; the only shadow definition in the codebase</p>
+  <div class="shadow-row">
+    <div class="glass-demo">
+      <h3>Glass card</h3>
+      <p>backdrop-filter blur(16px) saturate(1.8)</p>
+    </div>
+  </div>
+
+  <h2>Pills &amp; tags</h2>
+  <p class="sub">css/style.css:104-113 &mdash; used for brand pillars (Entrepreneur, Investor, etc.)</p>
+  <div class="pill-row">
+    <span class="pill">Entrepreneur</span>
+    <span class="pill">Photographer</span>
+    <span class="pill">Philosopher</span>
+    <span class="pill">Investor</span>
+    <span class="pill">Crypto Magnate</span>
+  </div>
+
+  <footer>Generated from live observation of the BJBS codebase &mdash; see DESIGN.md for full rationale and citations.</footer>
+</div>
+
+<script>
+  const neutrals = [
+    ['50','#f5f5f7'], ['200','#e8e8ed'], ['300','#d2d2d7'], ['400','#86868b'],
+    ['500','#6e6e73'], ['700','#424245'], ['800','#1d1d1f'], ['850','#161617'], ['900','#000000']
+  ];
+  const brand = [
+    ['primary','#0071e3'], ['primary-hover','#0077ed'], ['primary-light','#2997ff'],
+    ['accent (btc)','#f7931a'], ['accent-dark','#c67612']
+  ];
+  const semantic = [
+    ['success','#30d158'], ['warning','#ff9f0a'], ['error','#ff453a'], ['info','#0071e3']
+  ];
+  const typeScale = [
+    ['display-xl / 48px / 800', '3rem', 800, 'Building businesses and documenting the whole ride.'],
+    ['heading-lg / 24px / 700', '1.5rem', 700, 'What I’m building'],
+    ['heading-md / 20px / 700', '1.25rem', 700, 'All content'],
+    ['heading-sm / 18px / 700', '1.125rem', 700, 'Entrepreneur'],
+    ['body-lead / 18px / 400', '1.125rem', 400, 'I run multiple ventures and share everything I learn.'],
+    ['body / 16px / 400', '1rem', 400, 'Default paragraph text across the site.'],
+    ['body-sm / 14px / 400', '0.875rem', 400, 'Long-form writing on business, investing, and building.'],
+    ['caption / 12px / 600', '0.75rem', 600, 'ENTREPRENEUR · 1 MIN']
+  ];
+  const spaceSteps = [
+    ['xs','5px',5], ['sm','12px',12], ['md','20px',20], ['lg','24px',24], ['xl','40px',40], ['2xl','56px',56]
+  ];
+  const radii = [
+    ['rounded-xl / 12px', '12px'], ['rounded-2xl / 16px', '16px'], ['rounded-full', '9999px']
+  ];
+
+  function swatch(name, hex) {
+    return `<div class="swatch"><div class="swatch-color" style="background:${hex}"></div><div class="swatch-label"><span class="swatch-name">${name}</span><span class="swatch-hex">${hex}</span></div></div>`;
+  }
+  document.getElementById('neutral-swatches').innerHTML = neutrals.map(([n,h]) => swatch('neutral-'+n, h)).join('');
+  document.getElementById('brand-swatches').innerHTML = brand.map(([n,h]) => swatch(n, h)).join('');
+  document.getElementById('semantic-chips').innerHTML = semantic.map(([n,h]) =>
+    `<div class="semantic-chip"><span class="dot" style="background:${h}"></span>${n} &middot; ${h}</div>`).join('');
+
+  document.getElementById('type-scale').innerHTML = typeScale.map(([tag, size, weight, sample]) =>
+    `<div class="type-row"><span class="type-tag">${tag}</span><span class="type-sample" style="font-size:${size};font-weight:${weight};line-height:1.25">${sample}</span></div>`
+  ).join('');
+
+  document.getElementById('space-ruler').innerHTML = spaceSteps.map(([label, px, val]) =>
+    `<div class="space-block"><div class="space-bar" style="height:${Math.max(val,4)}px"></div><span class="space-label">${label} / ${px}</span></div>`
+  ).join('');
+
+  document.getElementById('radius-demo').innerHTML = radii.map(([label, r]) =>
+    `<div><div class="demo-box" style="border-radius:${r}">${label.split(' / ')[0]}</div><div class="demo-label">${label}</div></div>`
+  ).join('');
+
+  document.getElementById('toggle').addEventListener('click', () => {
+    document.documentElement.classList.toggle('dark');
+  });
+</script>
+</body>
+</html>

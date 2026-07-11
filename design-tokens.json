@@ -1,0 +1,121 @@
+{
+  "$schema": "BJBS design tokens — grounded in css/style.css, js/theme-config.js, and observed HTML usage across index.html, about.html, crypto.html, contact.html, js/site.js, js/main.js",
+  "meta": {
+    "brand": "@BenjaminJBSmith",
+    "sourceOfTruth": "js/theme-config.js (Tailwind CDN config) + css/style.css",
+    "mode": "class-based dark mode via <html class=\"dark\">, toggled in js/site.js, persisted to localStorage.theme"
+  },
+  "color": {
+    "neutral": {
+      "50":  { "value": "#f5f5f7", "role": "app background tint, light-mode surfaces", "source": "js/theme-config.js:11-12 (slate.50/100)" },
+      "100": { "value": "#f5f5f7", "role": "duplicate of 50 — collapse in v2", "source": "js/theme-config.js:12" },
+      "200": { "value": "#e8e8ed", "role": "borders (light), tab background (light)", "source": "js/theme-config.js:13; css/style.css:99" },
+      "300": { "value": "#d2d2d7", "role": "input borders, pillar border (light)", "source": "js/theme-config.js:14; css/style.css:110" },
+      "400": { "value": "#86868b", "role": "muted text, tab text (dark), pillar text (dark)", "source": "js/theme-config.js:15; css/style.css:100,113" },
+      "500": { "value": "#6e6e73", "role": "secondary body text, tab text (light), pillar text (light)", "source": "js/theme-config.js:16; css/style.css:99,111" },
+      "600": { "value": "#515154", "role": "reserved / rarely used", "source": "js/theme-config.js:17" },
+      "700": { "value": "#424245", "role": "borders (dark), pillar border (dark)", "source": "js/theme-config.js:18; css/style.css:113" },
+      "800": { "value": "#1d1d1f", "role": "primary text (light-on-dark inverse), tab bg (dark), nav-item text (light)", "source": "js/theme-config.js:19; css/style.css:100,117" },
+      "850": { "value": "#161617", "role": "dark-mode card/section background", "source": "js/theme-config.js:20" },
+      "900": { "value": "#000000", "role": "true black, rarely used directly (body uses slate-900 ~ near-black via Tailwind, not pure black)", "source": "js/theme-config.js:21" }
+    },
+    "brand": {
+      "primary":   { "value": "#0071e3", "role": "primary action color: links, active tab, primary buttons (indigo-500 remapped to Apple blue)", "source": "js/theme-config.js:26" },
+      "primaryHover": { "value": "#0077ed", "role": "hover state for primary blue (indigo-600 remap)", "source": "js/theme-config.js:27" },
+      "primaryLight": { "value": "#2997ff", "role": "lighter blue variant (indigo-400 / sky-400 remap)", "source": "js/theme-config.js:25,29" },
+      "accent":    { "value": "#f7931a", "role": "Bitcoin-orange accent — eyebrow labels (text-btc), glow motif anchor color", "source": "js/theme-config.js:31; css/style.css:53,66,74" },
+      "accentDark":{ "value": "#c67612", "role": "darker accent for dark-mode contrast needs (defined, currently unused in HTML)", "source": "js/theme-config.js:31" }
+    },
+    "glowGradientStops": {
+      "description": "5-stop conic/linear gradient used ONLY for the decorative avatar ring (.glow-ring) and hero gradient text (.glow-text) — not a general palette, kept isolated to avoid bleeding into UI chrome",
+      "stops": ["#f7931a", "#ff5f6d", "#a855f7", "#0071e3", "#2dd4bf"],
+      "source": "css/style.css:53-54,65-66,74"
+    },
+    "surface": {
+      "bgLight": { "value": "#ffffff", "role": "page background, light mode", "source": "index.html:20 bg-white" },
+      "bgDark":  { "value": "slate-900 (Tailwind default, NOT remapped)", "role": "page background, dark mode — note: slate-900 is remapped to #000000 by theme-config.js, so dark bg is pure black, not a soft dark gray", "source": "index.html:20 dark:bg-slate-900; js/theme-config.js:21" },
+      "glassLight": { "value": "rgba(255,255,255,0.65)", "role": "glassmorphism card fill, light mode", "source": "css/style.css:13" },
+      "glassDark":  { "value": "rgba(22,22,23,0.6)", "role": "glassmorphism card fill, dark mode", "source": "css/style.css:21" }
+    },
+    "semantic": {
+      "note": "No dedicated success/warning/error/info tokens exist anywhere in the codebase today. Proposed additions below follow the Apple-system-color convention already implied by the blue/orange palette.",
+      "success": { "value": "#30d158", "role": "PROPOSED — form success states (e.g. subscribe confirmation currently uses plain text 'Subscribed ✓' with no color, js/main.js:88)" },
+      "warning": { "value": "#ff9f0a", "role": "PROPOSED — close to existing btc orange, reuse accent for warning to avoid adding a new hue" },
+      "error":   { "value": "#ff453a", "role": "PROPOSED — form error / failed states (js/main.js:89 'Try again' currently unstyled)" },
+      "info":    { "value": "#0071e3", "role": "PROPOSED — reuse primary blue" }
+    }
+  },
+  "typography": {
+    "fontFamily": {
+      "sans": "'Inter', ui-sans-serif, system-ui, sans-serif",
+      "source": "js/theme-config.js:7; loaded via Google Fonts weights 400;500;600;700;800 (index.html:17)",
+      "scriptUnused": {
+        "stack": "'Snell Roundhand', 'Savoye LET', 'Brush Script MT', cursive",
+        "class": ".signature-script",
+        "status": "DEAD CODE — defined in css/style.css:124-128 but not referenced by any HTML file in the site. Either wire it up (e.g. for the pull-quote figure) or delete it."
+      }
+    },
+    "scale": [
+      { "token": "display-xl", "class": "text-5xl md:text-4xl (responsive down)", "size": "48px / 36px", "weight": "800 (font-extrabold)", "usage": "H1 hero headline", "source": "index.html:52" },
+      { "token": "heading-lg", "class": "text-2xl", "size": "24px", "weight": "700 (font-bold)", "usage": "H2 section headings", "source": "index.html:74,84,94,104,120,128,145" },
+      { "token": "heading-md", "class": "text-xl", "size": "20px", "weight": "700 (font-bold)", "usage": "H2 in modals/sub-pages", "source": "crypto.html:58,104" },
+      { "token": "heading-sm", "class": "text-lg", "size": "18px", "weight": "700 (font-bold)", "usage": "H3 card titles", "source": "about.html:36; contact.html:26" },
+      { "token": "body-lead", "class": "text-lg", "size": "18px", "weight": "400", "usage": "intro/lede paragraphs under H1", "source": "index.html:55; about.html:24" },
+      { "token": "body", "class": "(base, no class = 16px)", "size": "16px", "weight": "400", "usage": "default paragraph text", "source": "body element default" },
+      { "token": "body-sm", "class": "text-sm", "size": "14px", "weight": "400/500", "usage": "card descriptions, nav items, buttons", "source": "index.html:77,97,107" },
+      { "token": "caption", "class": "text-xs uppercase tracking-wide/widest", "size": "12px", "weight": "600 (font-semibold)", "usage": "eyebrow labels/category tags", "source": "index.html:173,189,206; about.html:22" }
+    ],
+    "lineHeight": {
+      "tight": "leading-tight (hero H1)",
+      "snug": "leading-snug (card titles, blockquotes)",
+      "relaxed": "leading-relaxed (about.html body copy)"
+    },
+    "letterSpacing": {
+      "wide": "tracking-wide (eyebrow labels)",
+      "widest": "tracking-widest (page-top eyebrow, about.html:22)",
+      "tight": "tracking-tight (body element, index.html:20 — applied globally)"
+    }
+  },
+  "spacing": {
+    "baseUnit": "4px (Tailwind default rem-based scale, 0.25rem increments)",
+    "commonSteps": {
+      "xs": "0.3rem (~5px) — pillar padding, css/style.css:105",
+      "sm": "0.75rem (12px) — gap-3, small button padding",
+      "md": "1.25rem (20px) — carousel gap, css/style.css:83",
+      "lg": "1.5rem (24px) — space-y-16 sections divide on homepage",
+      "xl": "2.5rem (40px) — px-10 page gutters on sub-pages",
+      "2xl": "3.5rem (56px) — py-14 vertical page padding, contact.html:17"
+    },
+    "sectionRhythm": "space-y-12 (sub-pages) / space-y-16 (homepage) between major sections",
+    "cardPadding": "p-6 (24px) standard card, p-8 (32px) for feature/quote cards"
+  },
+  "radius": {
+    "sm": { "value": "0.75rem / 12px", "class": "rounded-xl", "usage": "thumbnails, dropdown menu, venture cards (9 occurrences)" },
+    "lg": { "value": "1rem / 16px", "class": "rounded-2xl", "usage": "dominant card radius — glass cards, modals, pillar cards (62 occurrences — the de facto standard)" },
+    "full": { "value": "9999px", "class": "rounded-full", "usage": "buttons, pills, avatars, tabs (21 occurrences)" }
+  },
+  "shadow": {
+    "glass": {
+      "light": "inset 1.5px 1.5px 1px rgba(255,255,255,.55), inset -1px -1px 1px rgba(255,255,255,.35), 0 6px 18px rgba(0,0,0,.08)",
+      "dark": "inset 1.5px 1.5px 1px rgba(255,255,255,.08), inset -1px -1px 1px rgba(255,255,255,.05), 0 6px 18px rgba(0,0,0,.45)",
+      "source": "css/style.css:15-18,23-26"
+    },
+    "note": "Only ONE shadow token exists (the glass surface). No separate elevation scale (sm/md/lg) for non-glass elements like the crypto-modal dialog, which currently ships with no shadow at all (crypto.html:56)."
+  },
+  "breakpoints": {
+    "sm": "640px (Tailwind default; also the ONLY custom @media breakpoint in style.css, max-width:639px, css/style.css:190)",
+    "md": "768px (Tailwind default, used for md:px-12, md:text-5xl etc.)",
+    "lg": "1024px (Tailwind default, used for nav desktop/mobile split, js/site.js:60,66)",
+    "xl": "1280px (Tailwind default, max-w-7xl container)"
+  },
+  "motion": {
+    "durationDefault": "Tailwind default `transition` ~150ms (used bareword 42 times across pages with no explicit duration — inconsistent)",
+    "glassBtnEasing": "0.5s cubic-bezier(0.175, 0.885, 0.32, 1.6) — bouncy overshoot on hover scale, css/style.css:34",
+    "glowSpin": "6s linear infinite conic-gradient rotation, css/style.css:43,58,70",
+    "hoverScale": "hover:scale-[1.02] (cards), hover:scale-105 (images) — informal, not tokenized"
+  },
+  "darkMode": {
+    "strategy": "Tailwind class strategy — 'dark' class added to <html> by default (index.html:2) and toggled by js/site.js:81-85, persisted via localStorage.theme",
+    "defaultState": "dark (every page ships with class=\"dark\" hardcoded in the HTML tag; light mode is opt-out, not opt-in)"
+  }
+}

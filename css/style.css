@@ -6,6 +6,70 @@ body { padding-top: 64px; } /* room for the fixed glass nav */
 html, body { max-width: 100%; overflow-x: hidden; }
 img, svg, video { max-width: 100%; height: auto; }
 
+/* ---------- Accessibility: keyboard focus ---------- */
+/* Global focus-visible ring — matches the existing focus:ring-indigo-500
+   pattern already used on form inputs, applied sitewide so nav links, tab
+   buttons, icon buttons, and cards all get a visible keyboard-focus state. */
+:focus-visible {
+  outline: 2px solid #0071e3;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+/* Fully-rounded controls (pills, icon buttons, avatars) get a matching round ring */
+.rounded-full:focus-visible { border-radius: 9999px; }
+.dark :focus-visible { outline-color: #2997ff; }
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .glow-ring::before,
+  .glow-ring::after {
+    animation: none;
+  }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---------- Flat-bordered card (grid/list content) ----------
+   Second of the two reconciled card patterns: .glass stays reserved for
+   genuinely elevated/floating surfaces (nav, dropdown, modals, CTA panels);
+   everything else — grid items, feed cards, list cards — uses this flatter,
+   bordered treatment instead of glassmorphism. */
+.card {
+  border-radius: 0.75rem;
+  border: 1px solid #e8e8ed;
+  background: #f5f5f7;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+.dark .card {
+  background: #161617;
+  border-color: #1d1d1f;
+}
+a.card:hover, .card.card-link:hover {
+  border-color: #0071e3;
+}
+.dark a.card:hover, .dark .card.card-link:hover {
+  border-color: #2997ff;
+}
+
+/* ---------- Elevation shadow for non-glass overlays (modals) ---------- */
+.elevation {
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.16), 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+.dark .elevation {
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55), 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+/* ---------- Semantic status colors (form/subscribe feedback) ---------- */
+.text-success { color: #1a8f4c; }
+.dark .text-success { color: #34d399; }
+.text-error { color: #d92d20; }
+.dark .text-error { color: #f87171; }
+
 /* ---------- iOS liquid-glass surfaces ---------- */
 .glass {
   backdrop-filter: blur(16px) saturate(1.8);

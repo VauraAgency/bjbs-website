@@ -1,0 +1,73 @@
+# BJBS Design System
+
+This document grounds every proposed token in code that already exists in this repo, formalizes it, and audits the current UI against it. Companion files: `design-tokens.json` (machine-readable tokens) and `design-preview.html` (open directly in a browser to see every token rendered, including a light/dark toggle).
+
+## What the site actually is
+
+Read from `index.html` and `about.html`: a personal-brand site for Benjamin "Benji" Smith (@BenjaminJBSmith), an entrepreneur/investor/photographer in Minneapolis. It aggregates four content pillars (Entrepreneur, Photographer, Philosopher, Investor/Crypto) plus four ventures (Vaura agency, BensEstates real estate, JPGBenji photography, Mow Bros lawn care). Tone: confident, direct, "documenting the whole ride" — closer to a creator/finance-content site than a corporate brand.
+
+## 1. What's already there (grounded findings)
+
+Sources checked: `css/style.css` (196 lines), `js/theme-config.js`, `js/site.js`, `js/main.js`, and every `.html` page.
+
+- **Color system**: `js/theme-config.js` remaps Tailwind's default `slate` palette onto real Apple system grays (`#f5f5f7` → `#000000`) and remaps `indigo`/`sky` onto Apple's blue (`#0071e3`). This is a deliberate, already-cohesive decision — the site is visually an "Apple-toned" system, not generic Tailwind defaults. A single accent, `btc` (`#f7931a`, Bitcoin orange), is layered on top for eyebrow labels and the decorative glow. Confirmed via grep: `#f7931a` appears 9×, `#0071e3` 7× — these two are the only colors used with any real frequency outside the decorative gradient.
+- **Typography**: Inter only, weights 400–800 (`index.html:17`), mapped as the default sans stack in `theme-config.js:7`. Scale in practice: `text-5xl`/`text-4xl` hero, `text-2xl` section H2, `text-lg` card H3, `text-sm` body-secondary, `text-xs uppercase tracking-wide` eyebrows — consistently applied across all 12 pages.
+- **Border radius**: `rounded-2xl` is used 62 times, `rounded-full` 21 times, `rounded-xl` 9 times, and nothing else. This is already a clean 3-step scale — one of the most consistent things in the codebase.
+- **Shadows**: exactly one shadow definition exists, the `.glass` inset+drop combo (`css/style.css:15-18`, dark variant `:23-26`). Nothing else in the site uses `box-shadow`.
+- **Breakpoints**: Tailwind defaults (`sm/md/lg/xl`) plus exactly one custom `@media (max-width: 639px)` block (`css/style.css:190`) that turns grids into swipeable carousels on phones.
+- **Dark mode**: real, working, class-based (`darkMode: 'class'` in `theme-config.js:4`). Every page hardcodes `<html class="dark">` as the default, and `js/site.js:81-85` toggles it and persists to `localStorage.theme`. This is a genuine two-mode system, not a half-finished one — but it ships dark-first, which is a real product decision worth naming explicitly (see Audit §6).
+
+## 2. Competitor research
+
+Fetched via WebFetch (no browser automation used, per constraint):
+
+- **jamesclear.com** — near-white background, generous whitespace, minimal decoration, sans-serif body copy, rounded corners on buttons/cards but restrained. Worth borrowing: the confidence to leave empty space and let one accent (book cover imagery) carry visual interest instead of decorative gradients.
+- **grahamstephan.com** — flat design, almost no shadows or rounded corners, single green accent, grid-based project showcase with consistent card spacing. Worth borrowing: flat, confident cards without glassmorphism — proof that a finance/investing creator site doesn't need glass effects or glow to feel premium.
+- **codiesanchez.com** — unreachable (TLS cert mismatch on fetch), skipped.
+
+Not worth borrowing from either: neither site uses BJBS's rainbow-glow motif or glass cards — that's a legitimate point of differentiation, but see the AI Slop Check below for where it tips into "generic AI card" territory rather than "distinctive brand element."
+
+## 3. Proposed token set
+
+Full machine-readable version in `design-tokens.json`. Summary:
+
+- **Color**: keep the existing Apple-gray neutral scale and Apple-blue primary as-is (they're good, already cohesive, and re-theming them would throw away real design equity). Formalize `btc` orange as the single named accent — don't introduce a second accent hue. Add four semantic tokens (success/warning/error/info) that don't currently exist anywhere: right now `js/main.js:88-89` shows a subscribe success/failure state as plain unstyled text ("Subscribed ✓" / "Try again"), which is a missed opportunity for a real design system.
+- **Typography**: formalize the 8-step scale already in de facto use (display-xl → caption) instead of leaving pages to reach for `text-lg` vs `text-xl` inconsistently case-by-case (see Audit §2 for the one place this drifts).
+- **Spacing**: keep Tailwind's 4px-based scale; name the 6 steps actually used (`xs` 5px pillar padding → `2xl` 56px page vertical padding) so future pages don't invent new one-off paddings.
+- **Radius**: formalize the existing 3-step scale (`sm` 12px / `lg` 16px / `full`) — no changes needed, this is already right.
+- **Shadow**: keep the single `.glass` shadow, but add a plain "elevation" shadow for non-glass overlays — the `crypto.html` modal (`crypto.html:56`) currently renders with zero shadow, so it visually merges into the page behind its own backdrop.
+- **Breakpoints**: keep Tailwind defaults; no change needed.
+- **Dark mode**: formalize both light and dark surface/glass values as tokens (already captured in `design-tokens.json` → `color.surface`), and treat "dark by default" as a documented decision, not an accident.
+
+## Audit
+
+Scored against the actual current HTML/CSS across all 12 pages (`index.html`, `about.html`, `articles.html`, `assets.html`, `community.html`, `contact.html`, `crypto.html`, `invest.html`, `podcast.html`, `projects.html`, `reads.html`, `videos.html`).
+
+| # | Dimension | Score | Top issue | Fix |
+|---|---|---|---|---|
+| 1 | Color consistency | 8/10 | `slate-600`, `slate-100` (Tailwind numeric steps) appear once each site-wide, next to the standard `slate-400/500/900` trio — stray one-offs (`about.html:60` uses `text-slate-300`, others don't) | Standardize on the 3-step text hierarchy (`900`/`500`/`400`) documented in `design-tokens.json`; remove the one-off `slate-300`/`600` usages |
+| 2 | Typography hierarchy | 7/10 | `text-xl` is used for H2 on some sub-pages (`crypto.html:58`) while homepage uses `text-2xl` for the equivalent level (`index.html:74`) — same semantic level, two sizes | Pick one H2 size (`text-2xl`) sitewide; reserve `text-xl` for H3/modal titles only |
+| 3 | Spacing rhythm | 8/10 | Section spacing alternates between `space-y-12` (sub-pages) and `space-y-16` (homepage) with no stated reason | Document the rule (homepage gets more breathing room because it's longer) in the token set, done in `design-tokens.json`; otherwise fine — padding values are consistent |
+| 4 | Component consistency | 6/10 | Card component has 3 unreconciled variants: `.glass` cards (about/crypto/contact), plain-bordered cards (`js/main.js:71` ventures grid: `border border-slate-200 ... bg-slate-50`), and the content-feed cards (`js/main.js:28-34`, no border/no glass, just image+text) — three different "card" treatments doing the same job | Consolidate to two card types max: glass (for feature/quote content) and flat-bordered (for grid/list content); apply the flat-bordered pattern to the content-feed cards too |
+| 5 | Responsive behavior | 8/10 | Solid — the `.carousel`/`.m-carousel` swipe pattern (`css/style.css:80-96,189-196`) is applied consistently, single documented breakpoint | Minor: `crypto-modal` (`crypto.html:55-88`) uses `max-h-[90vh]` with no test for very short viewports (landscape mobile) — verify it doesn't clip the close button |
+| 6 | Dark mode | 8/10 | Real, working, complete — but every page hardcodes `class="dark"` in the `<html>` tag (e.g. `index.html:2`) rather than reading system preference (`prefers-color-scheme`) on first visit, so light-mode users get a flash of dark UI before/unless they've toggled before | Read `prefers-color-scheme` as the initial default when `localStorage.theme` is unset, instead of hardcoding dark |
+| 7 | Animation | 6/10 | The `.glow-ring`/`.glow-text` conic gradient spins continuously and unconditionally (`css/style.css:43,58,70`, `animation: glow-spin 6s linear infinite`) with no `prefers-reduced-motion` guard — runs forever even for users who've asked for reduced motion, and even off-screen | Add `@media (prefers-reduced-motion: reduce) { .glow-ring::before, .glow-ring::after { animation: none } }` |
+| 8 | Accessibility | 5/10 | No visible `:focus` state defined anywhere — grep shows `focus:` classes appear on only 3 of 12 pages and only on form inputs, never on nav links, tab buttons, or the `.glass-btn` icon buttons (`js/site.js:62,66`, both 36×36px, under the 44×44px touch-target guideline) | Add a global `:focus-visible` ring token (reuse the existing `focus:ring-2 focus:ring-indigo-500` pattern from `index.html:148` sitewide) and bump icon buttons to `w-11 h-11` (44px) |
+| 9 | Information density | 8/10 | Generally clean — carousels and grids keep pages scannable. Homepage packs 6 sections plus a content-tab-filter grid onto one continuous scroll, which is a lot for a single page, but pacing (whitespace, section headers) keeps it from feeling cluttered | No urgent fix; consider a "jump to section" affordance beyond the icon-only side rail (`index.html:26-42`, whose icons have no visible labels except a `title` tooltip) |
+| 10 | Polish | 6/10 | No loading state for the three `fetch()`-populated showcases (`index.html:180-220`) — if the JSON fetch is slow, sections sit empty with no skeleton/spinner; no empty-state copy for `articles-row`/`community-avatars` if data is empty (only `videos-row`/`reads-row` have a fallback message, `index.html:199,218`) | Add a shared skeleton/loading placeholder and empty-state text to all `fetch()`-driven sections, not just two of them |
+
+**Average score: 7.0/10** — the system is more consistent than a typical AI-scaffolded site because real Apple-derived tokens replace Tailwind defaults, but accessibility (focus states, touch targets, reduced-motion) and component consolidation are the clear gaps.
+
+## AI Slop Check
+
+Specific patterns found, with file:line, plus what's genuinely intentional vs. generic:
+
+- **Gratuitous gradient — confirmed, one instance.** `index.html:166`, the `articleThumb()` fallback: `bg-gradient-to-br from-indigo-500/25 via-purple-500/15 to-btc/25` — a purple-to-blue-ish gradient placeholder box used only when an article has no image. This is the single clearest "AI slop" marker on the site: a decorative gradient standing in for missing content rather than a designed empty state.
+- **Purple-to-blue default — partially present, but contextualized.** The `.glow-ring`/`.glow-text` 5-stop gradient (`css/style.css:53-54,65-66,74`) does pass through `#a855f7` (purple) → `#0071e3` (blue) as two of its five stops, which is the classic AI-generated-hero-gradient palette. However it's bookended by Bitcoin orange (`#f7931a`) on both ends and explicitly commented as "an orange lean (cheers, crypto)" — so it's brand-intentional, not a copy-pasted default. Recommendation: keep the motif but consider dropping to a 3-stop orange→pink→orange gradient to reduce the purple/blue "AI slop" signature while keeping the crypto tie-in.
+- **Unmotivated glassmorphism — confirmed, widespread.** `.glass` (`css/style.css:10-27`) is applied to nearly every card type: quote blocks, pillar cards, crypto cards, contact cards, the subscribe box, even the nav dropdown menu (`js/site.js:41`). Glassmorphism is one of the most common "generic AI UI" tells, and here it's used as the default card treatment rather than reserved for a specific surface (e.g., only the floating nav). Recommendation: per Audit §4, keep `.glass` for 1-2 genuinely elevated/floating surfaces (nav, modals) and move grid/list cards to a flatter bordered treatment — which also matches what both competitor sites researched above do.
+- **Pointer-tracking spotlight glow — confirmed, generic-effect tell.** `[data-glow]` (`css/style.css:130-187`) applies a cursor-following radial-gradient border glow to every `.glass` element and the ventures grid (`js/site.js:97-101`) — a popular copy-paste "GlowCard" effect (the code comment itself says "vanilla port of GlowCard," `css/style.css:130`) rather than something designed for this brand specifically.
+- **Rounded corners applied indiscriminately — mild, mostly fine.** 62 uses of `rounded-2xl` span very different component types (quote box, dropdown menu, modal, feature cards) with no variation, which is on the edge of "one radius for everything" AI-slop behavior — but since it's a deliberate 3-step scale used consistently (see token set above) rather than random per-element values, this reads as a real design decision, not slop.
+- **Dead/orphaned CSS as a symptom of unreviewed scaffolding.** `.signature-script` (`css/style.css:124-128`, a cursive font stack) is defined but never referenced in any HTML file — a leftover from generated boilerplate that was never wired up or cleaned out.
+- **Not present / site is clean of these:** no generic centered-text-over-gradient hero (the hero is left-aligned, real copy, real avatar — `index.html:48-69`); no excessive scroll-triggered animation (the only continuous animation is the glow-ring spin, not scroll-linked); typography is plain Inter but used with real hierarchy and restraint rather than as a personality-free filler — it's a legitimate minimal choice matching the James Clear reference, not slop by itself.
+
+**Bottom line:** the site is not a wholesale AI-slop template — the Apple-gray/blue remap and Bitcoin-orange accent show real brand thought — but three patterns (the gradient placeholder box, blanket glassmorphism, and the copy-pasted pointer-glow effect) are the generic-AI-UI tells worth deliberately reconsidering rather than defaults to keep by inertia.
