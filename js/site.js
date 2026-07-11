@@ -1,7 +1,17 @@
 // Shared chrome for every page: glass top nav, mobile menu, theme toggle, footer.
 (function () {
-  // Apply saved theme before paint
-  if (localStorage.theme === 'light') document.documentElement.classList.remove('dark');
+  // The real theme decision happens in a blocking inline <script> in <head>
+  // on every page (explicit saved choice > system preference > dark
+  // fallback), so there's no flash of the wrong theme before paint. This is
+  // just a safety net in case that inline script is ever missing.
+  const saved = localStorage.theme;
+  if (saved === 'light') {
+    document.documentElement.classList.remove('dark');
+  } else if (saved === 'dark') {
+    document.documentElement.classList.add('dark');
+  } else if (window.matchMedia && !window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    document.documentElement.classList.remove('dark');
+  }
 
   const NAV = [
     { href: 'index.html', label: 'Home' },
@@ -34,10 +44,10 @@
     const open = item.children.some(c => c.href === here);
     return `
       <div class="relative group">
-        <button class="nav-item${open ? ' active' : ''} flex items-center gap-1">${item.label}
+        <button class="nav-item${open ? ' active' : ''} flex items-center gap-1" aria-haspopup="true">${item.label}
           <svg class="w-3 h-3 fill-current opacity-60" viewBox="0 0 12 12"><path d="M2 4l4 4 4-4"/></svg>
         </button>
-        <div class="absolute left-0 top-full pt-2 hidden group-hover:block">
+        <div class="nav-dropdown absolute left-0 top-full pt-2 hidden group-hover:block">
           <div class="glass rounded-2xl p-2 flex flex-col min-w-[10rem]">
             ${item.children.map(c => `<a href="${c.href}" class="nav-item px-3 py-2 rounded-xl hover:bg-black/5 dark:hover:bg-white/10${c.href === here ? ' active' : ''}">${c.label}</a>`).join('')}
           </div>
@@ -59,11 +69,11 @@
         </a>
         <nav class="hidden lg:flex items-center gap-5" aria-label="Main">${desktopItems}</nav>
         <div class="flex items-center gap-2">
-          <button id="theme-toggle" class="glass-btn w-9 h-9 rounded-full flex items-center justify-center" aria-label="Toggle dark mode">
+          <button id="theme-toggle" class="glass-btn w-11 h-11 rounded-full flex items-center justify-center" aria-label="Toggle dark mode">
             <svg class="w-4 h-4 fill-amber-400 hidden dark:block" viewBox="0 0 20 20"><path d="M10 14a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm0-13 1.5 3h-3L10 1Zm0 18-1.5-3h3L10 19ZM1 10l3-1.5v3L1 10Zm18 0-3 1.5v-3l3 1.5ZM3.6 3.6l3.2 1.1-2.1 2.1-1.1-3.2Zm12.8 12.8-3.2-1.1 2.1-2.1 1.1 3.2Zm0-12.8-1.1 3.2-2.1-2.1 3.2-1.1ZM3.6 16.4l1.1-3.2 2.1 2.1-3.2 1.1Z"/></svg>
             <svg class="w-4 h-4 fill-slate-500 dark:hidden" viewBox="0 0 20 20"><path d="M17.3 12.2A8 8 0 0 1 7.8 2.7 8 8 0 1 0 17.3 12.2Z"/></svg>
           </button>
-          <button id="menu-toggle" class="glass-btn w-9 h-9 rounded-full flex items-center justify-center lg:hidden" aria-label="Menu">
+          <button id="menu-toggle" class="glass-btn w-11 h-11 rounded-full flex items-center justify-center lg:hidden" aria-label="Menu">
             <svg class="w-4 h-4 fill-slate-600 dark:fill-slate-300" viewBox="0 0 16 16"><path d="M1 3h14v2H1V3Zm0 4h14v2H1V7Zm0 4h14v2H1v-2Z"/></svg>
           </button>
         </div>

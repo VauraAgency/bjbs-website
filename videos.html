@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
+  <script>(function(){var t=localStorage.theme,d=document.documentElement;if(t==='light'){d.classList.remove('dark');}else if(t!=='dark'&&window.matchMedia&&!window.matchMedia('(prefers-color-scheme: dark)').matches){d.classList.remove('dark');}})();</script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Videos | @BenjaminJBSmith</title>
@@ -57,7 +58,7 @@
     </section>
 
     <div id="videos-modal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-      <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-auto">
+      <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-auto elevation">
         <div class="sticky top-0 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-6 py-4 flex items-center justify-between">
           <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">All videos</h2>
           <button id="close-modal-btn" class="text-slate-500 hover:text-slate-900 dark:hover:text-slate-100">✕</button>
@@ -70,7 +71,7 @@
   <script src="js/site.js" defer></script>
   <script>
     const cardHtml = v => `
-      <a href="${v.url}" target="_blank" rel="noopener" class="group block">
+      <a href="${v.url}" target="_blank" rel="noopener" class="card group block p-4">
         <div class="aspect-video rounded-xl mb-3 overflow-hidden"><img src="${v.thumb}" alt="" loading="lazy" class="w-full h-full object-cover transition group-hover:scale-105"></div>
         <p class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1">${v.label} · ${v.date}</p>
         <h3 class="font-bold leading-snug text-slate-900 dark:text-slate-100 group-hover:text-indigo-500 transition">${v.title}</h3>

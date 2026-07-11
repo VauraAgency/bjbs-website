@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
+  <script>(function(){var t=localStorage.theme,d=document.documentElement;if(t==='light'){d.classList.remove('dark');}else if(t!=='dark'&&window.matchMedia&&!window.matchMedia('(prefers-color-scheme: dark)').matches){d.classList.remove('dark');}})();</script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Articles | @BenjaminJBSmith</title>
@@ -73,7 +74,7 @@
         </div>
         <div class="p-6">
           <p class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-3" id="detail-meta"></p>
-          <div class="prose prose-invert max-w-none text-slate-600 dark:text-slate-400 leading-relaxed" id="detail-text"></div>
+          <div class="prose prose-invert max-w-none text-slate-500 dark:text-slate-400 leading-relaxed" id="detail-text"></div>
         </div>
       </div>
     </div>
@@ -84,12 +85,20 @@
         : '';
 
       const cardHtml = (article) => `
-        <div class="glass rounded-2xl p-6 cursor-pointer hover:opacity-90 transition group" data-article-id="${article.id}">
+        <div class="card rounded-2xl p-6 cursor-pointer hover:border-indigo-400 dark:hover:border-indigo-500 transition group" data-article-id="${article.id}" tabindex="0" role="button" aria-label="Read ${article.title}">
           ${cardThumb(article)}
           <a href="https://app.notion.com/p/83f7269252d54d95be6515217888a28e?v=f23101416ba145c4a385bbd5015fede1&query=${encodeURIComponent(article.category)}" target="_blank" rel="noopener" class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1 hover:underline inline-block">${article.category}</a>
           <h3 class="font-bold text-lg mb-1 text-slate-900 dark:text-slate-100 group-hover:text-indigo-500 transition">${article.title}</h3>
           <p class="text-sm text-slate-500 dark:text-slate-400">${article.excerpt}</p>
         </div>`;
+
+      document.getElementById('articles-grid').innerHTML = Array.from({ length: 4 }).map(() => `
+        <div class="p-2">
+          <div class="skeleton aspect-video mb-3"></div>
+          <div class="skeleton h-3 w-1/3 mb-2 rounded-full"></div>
+          <div class="skeleton h-5 w-full mb-1 rounded-full"></div>
+          <div class="skeleton h-3 w-2/3 rounded-full"></div>
+        </div>`).join('');
 
       fetch('data/articles.json').then(r => r.ok ? r.json() : []).then(articles => {
         if (!articles.length) {
@@ -101,9 +110,9 @@
         document.getElementById('articles-grid').innerHTML = first5.map(cardHtml).join('');
         document.getElementById('articles-modal-grid').innerHTML = articles.map(cardHtml).join('');
 
-        // Add click listeners to open detail modal
+        // Add click + keyboard listeners to open detail modal
         document.querySelectorAll('[data-article-id]').forEach(el => {
-          el.addEventListener('click', (e) => {
+          const open = () => {
             const id = el.getAttribute('data-article-id');
             const article = articles.find(a => a.id === id);
             if (article) {
@@ -113,6 +122,10 @@
               document.getElementById('detail-text').innerHTML = imgHtml + article.fullText.split('\n').filter(p => p.trim()).map(p => `<p class="mb-4">${p}</p>`).join('');
               document.getElementById('article-detail-modal').classList.remove('hidden');
             }
+          };
+          el.addEventListener('click', open);
+          el.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); }
           });
         });
       });
