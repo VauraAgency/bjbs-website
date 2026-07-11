@@ -161,12 +161,14 @@
   <script src="js/main.js"></script>
   <script>
     // Populate articles showcase
+    const articleThumb = (article) => article.image
+      ? `<img src="${article.image}" alt="" loading="lazy" class="w-full h-full object-cover transition group-hover:scale-105">`
+      : `<div class="w-full h-full bg-gradient-to-br from-indigo-500/25 via-purple-500/15 to-btc/25 dark:from-indigo-500/30 dark:via-purple-500/20 dark:to-btc/30 flex items-center justify-center"><span class="text-4xl opacity-70">📝</span></div>`;
+
     const articleCardHtml = (article) => `
       <div class="group shrink-0 w-72">
         <a href="articles.html" class="block">
-          <div class="aspect-video rounded-xl mb-3 overflow-hidden bg-gradient-to-br from-indigo-500/25 via-purple-500/15 to-btc/25 dark:from-indigo-500/30 dark:via-purple-500/20 dark:to-btc/30 flex items-center justify-center">
-            <span class="text-4xl opacity-70">📝</span>
-          </div>
+          <div class="aspect-video rounded-xl mb-3 overflow-hidden">${articleThumb(article)}</div>
         </a>
         <a href="https://app.notion.com/p/83f7269252d54d95be6515217888a28e?v=f23101416ba145c4a385bbd5015fede1&query=${encodeURIComponent(article.category)}" target="_blank" rel="noopener" class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1 hover:underline inline-block">${article.category}</a>
         <a href="articles.html" class="block">

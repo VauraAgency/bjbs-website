@@ -51,8 +51,13 @@
     </div>
 
     <script>
+      const cardThumb = (article) => article.image
+        ? `<div class="aspect-video rounded-xl mb-3 overflow-hidden"><img src="${article.image}" alt="" loading="lazy" class="w-full h-full object-cover transition group-hover:scale-105"></div>`
+        : '';
+
       const cardHtml = (article) => `
         <div class="glass rounded-2xl p-6 cursor-pointer hover:opacity-90 transition group" data-article-id="${article.id}">
+          ${cardThumb(article)}
           <a href="https://app.notion.com/p/83f7269252d54d95be6515217888a28e?v=f23101416ba145c4a385bbd5015fede1&query=${encodeURIComponent(article.category)}" target="_blank" rel="noopener" class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1 hover:underline inline-block">${article.category}</a>
           <h3 class="font-bold text-lg mb-1 text-slate-900 dark:text-slate-100 group-hover:text-indigo-500 transition">${article.title}</h3>
           <p class="text-sm text-slate-500 dark:text-slate-400">${article.excerpt}</p>
@@ -74,9 +79,10 @@
             const id = el.getAttribute('data-article-id');
             const article = articles.find(a => a.id === id);
             if (article) {
+              const imgHtml = article.image ? `<img src="${article.image}" alt="" class="w-full aspect-video object-cover rounded-xl mb-5">` : '';
               document.getElementById('detail-title').textContent = article.title;
               document.getElementById('detail-meta').textContent = `${article.category} · ${article.date}`;
-              document.getElementById('detail-text').innerHTML = article.fullText.split('\n').map(p => `<p>${p}</p>`).join('');
+              document.getElementById('detail-text').innerHTML = imgHtml + article.fullText.split('\n').map(p => p.trim() ? `<p>${p}</p>` : '').join('');
               document.getElementById('article-detail-modal').classList.remove('hidden');
             }
           });
