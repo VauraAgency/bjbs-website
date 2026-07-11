@@ -201,11 +201,18 @@
     });
 
     // Populate daily reads showcase
+    const readThumb = (read) => read.image
+      ? `<img src="${read.image}" alt="" loading="lazy" class="w-full h-full object-cover transition group-hover:scale-105">`
+      : `<div class="w-full h-full bg-gradient-to-br from-indigo-500/25 via-purple-500/15 to-btc/25 dark:from-indigo-500/30 dark:via-purple-500/20 dark:to-btc/30 flex items-center justify-center"><span class="text-4xl opacity-70">💡</span></div>`;
+
     const readCardHtml = (read) => `
-      <div class="glass rounded-2xl p-6 hover:scale-[1.02] transition group shrink-0 w-72">
-        <a href="https://app.notion.com/p/66d0db95e6b842408a8a14636d20a8b7?v=f23101416ba145c4a385bbd5015fede1&query=${encodeURIComponent(read.category)}" target="_blank" rel="noopener" class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-2 hover:underline inline-block">${read.category} · 1 min</a>
+      <div class="group shrink-0 w-72">
         <a href="reads.html" class="block">
-          <h3 class="font-bold text-lg mb-2 text-slate-900 dark:text-slate-100 group-hover:text-indigo-500 transition line-clamp-2">${read.title}</h3>
+          <div class="aspect-video rounded-xl mb-3 overflow-hidden">${readThumb(read)}</div>
+        </a>
+        <a href="https://app.notion.com/p/66d0db95e6b842408a8a14636d20a8b7?v=f23101416ba145c4a385bbd5015fede1&query=${encodeURIComponent(read.category)}" target="_blank" rel="noopener" class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1 hover:underline inline-block">${read.category} · 1 min</a>
+        <a href="reads.html" class="block">
+          <h3 class="font-bold leading-snug mb-1 text-slate-900 dark:text-slate-100 group-hover:text-indigo-500 transition line-clamp-2">${read.title}</h3>
           <p class="text-sm text-slate-500 dark:text-slate-400 line-clamp-2">${read.excerpt}</p>
         </a>
       </div>`;

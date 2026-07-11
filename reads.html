@@ -62,8 +62,13 @@
   <div id="site-footer"></div>
   <script src="js/site.js"></script>
   <script>
+    const readThumb = (read) => read.image
+      ? `<div class="aspect-video rounded-xl mb-3 overflow-hidden"><img src="${read.image}" alt="" loading="lazy" class="w-full h-full object-cover transition group-hover:scale-105"></div>`
+      : '';
+
     const cardHtml = (read) => `
       <div class="glass rounded-2xl p-6 cursor-pointer hover:opacity-90 transition group" data-read-id="${read.id}">
+        ${readThumb(read)}
         <a href="https://app.notion.com/p/66d0db95e6b842408a8a14636d20a8b7?v=f23101416ba145c4a385bbd5015fede1&query=${encodeURIComponent(read.category)}" target="_blank" rel="noopener" class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1 hover:underline inline-block">${read.category}</a> · 1 min
         <h3 class="font-bold text-lg mb-1 text-slate-900 dark:text-slate-100 group-hover:text-indigo-500 transition">${read.title}</h3>
         <p class="text-sm text-slate-500 dark:text-slate-400">${read.excerpt}</p>
@@ -85,9 +90,10 @@
           const id = el.getAttribute('data-read-id');
           const read = reads.find(r => r.id === id);
           if (read) {
+            const imgHtml = read.image ? `<img src="${read.image}" alt="" class="w-full aspect-video object-cover rounded-xl mb-5">` : '';
             document.getElementById('detail-title').textContent = read.title;
             document.getElementById('detail-meta').textContent = `${read.category} · ${read.date}`;
-            document.getElementById('detail-text').innerHTML = read.fullText.split('\n').filter(p => p.trim()).map(p => `<p class="mb-4">${p}</p>`).join('');
+            document.getElementById('detail-text').innerHTML = imgHtml + read.fullText.split('\n').filter(p => p.trim()).map(p => `<p class="mb-4">${p}</p>`).join('');
             document.getElementById('read-detail-modal').classList.remove('hidden');
           }
         });
