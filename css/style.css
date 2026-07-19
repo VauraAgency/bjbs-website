@@ -211,20 +211,20 @@ a.card:hover, .card.card-link:hover {
 
 /* ---------- Pointer-tracking spotlight glow (vanilla port of GlowCard) ---------- */
 [data-glow] {
-  --base: 30;            /* orange lean */
-  --spread: 200;
+  /* Brand-locked: blends Bitcoin orange <-> Apple blue with cursor X,
+     matching .glow-ring — never drifts through green/purple */
+  --glow-color: color-mix(in oklab, #0071e3 calc(var(--xp, 0) * 100%), #f7931a);
   --radius: 16;
   --border: 2;
   --size: 220;
   --border-size: calc(var(--border) * 1px);
   --spotlight-size: calc(var(--size) * 1px);
-  --hue: calc(var(--base) + (var(--xp, 0) * var(--spread)));
   position: relative;
   touch-action: auto;
   background-image: radial-gradient(
     var(--spotlight-size) var(--spotlight-size) at
     calc(var(--x, 0) * 1px) calc(var(--y, 0) * 1px),
-    hsl(var(--hue) 100% 70% / 0.08), transparent
+    color-mix(in srgb, var(--glow-color) 8%, transparent), transparent
   );
   background-size: calc(100% + (2 * var(--border-size))) calc(100% + (2 * var(--border-size)));
   background-position: 50% 50%;
@@ -255,7 +255,7 @@ a.card:hover, .card.card-link:hover {
   background-image: radial-gradient(
     calc(var(--spotlight-size) * 0.75) calc(var(--spotlight-size) * 0.75) at
     calc(var(--x, 0) * 1px) calc(var(--y, 0) * 1px),
-    hsl(var(--hue) 100% 50% / 0.9), transparent 100%
+    color-mix(in srgb, var(--glow-color) 90%, transparent), transparent 100%
   );
   filter: brightness(1.8);
 }

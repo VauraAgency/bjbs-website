@@ -79,7 +79,7 @@
         </div>
       </div>
       <div id="mobile-menu" class="lg:hidden border-t border-black/5 dark:border-white/10 px-6 py-4">
-        <div class="flex flex-col gap-3">${mobileItems}</div>
+        <div class="flex flex-col items-end text-right gap-3">${mobileItems}</div>
       </div>
     </div>`;
   document.body.prepend(nav);
@@ -94,8 +94,8 @@
     localStorage.theme = root.classList.contains('dark') ? 'dark' : 'light';
   });
 
-  // Pointer-tracking spotlight glow: cards pick up a hue-shifting border glow
-  // that follows the cursor (orange-leaning, per the crypto theme).
+  // Pointer-tracking spotlight glow: cards pick up a brand-colored border glow
+  // (Bitcoin orange <-> Apple blue) that follows the cursor.
   document.addEventListener('pointermove', (e) => {
     const root = document.documentElement.style;
     root.setProperty('--x', e.clientX.toFixed(2));
