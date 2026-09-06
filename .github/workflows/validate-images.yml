@@ -1,0 +1,28 @@
+name: Validate images
+
+# The hero-image pipeline once committed JPEGs whose bytes had been decoded as
+# UTF-8 text, so every image on the site silently rendered as a blank box.
+# Nothing failed at the time. This job makes that failure loud instead.
+on:
+  push:
+    paths:
+      - "data/images/**"
+      - "images/**"
+      - "data/*.json"
+      - "scripts/validate_images.py"
+  pull_request:
+    paths:
+      - "data/images/**"
+      - "images/**"
+      - "data/*.json"
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Pillow
+        run: pip install --quiet Pillow
+      - name: Validate every committed image decodes
+        run: python3 scripts/validate_images.py
