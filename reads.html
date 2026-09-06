@@ -43,14 +43,14 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="font-sans antialiased bg-white text-slate-800 dark:bg-slate-900 dark:text-slate-200 tracking-tight">
-  <main class="max-w-4xl mx-auto px-6 md:px-10 py-14 space-y-12">
+  <main class="page-shell px-6 md:px-10 py-14 space-y-12">
     <header>
       <p class="text-xs uppercase tracking-widest text-btc font-semibold mb-2">One minute a day</p>
       <h1 class="text-4xl md:text-5xl font-extrabold leading-tight text-slate-900 dark:text-slate-100 mb-3">Daily Reads</h1>
       <p class="text-lg text-slate-500 dark:text-slate-400 max-w-2xl">One idea, one minute, every day — mindset, business, and the architecture of a good life. (Name TBD — it's getting a proper identity soon.)</p>
     </header>
     <section>
-      <div class="carousel sm:grid sm:grid-cols-2 sm:gap-5" id="reads-grid"><!-- populated by JS --></div>
+      <div class="m-carousel content-grid" id="reads-grid"><!-- populated by JS --></div>
       <div class="text-center mt-6 sm:hidden">
         <button id="view-all-btn" class="text-indigo-500 hover:underline font-medium text-sm">View all →</button>
       </div>
@@ -96,9 +96,10 @@
       const d = new Date(iso + 'T00:00:00Z');
       return isNaN(d) ? iso : d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
     };
-    const readThumb = (read) => read.image
-      ? `<div class="aspect-video rounded-xl mb-3 overflow-hidden"><img src="${read.image}" alt="" loading="lazy" class="w-full h-full object-cover transition group-hover:scale-105"></div>`
-      : '';
+    const THUMB_FALLBACK = "<div class='w-full h-full bg-gradient-to-br from-btc/25 via-indigo-500/15 to-btc/10 dark:from-btc/30 dark:via-indigo-500/20 dark:to-btc/15 flex items-center justify-center'><span class='text-4xl opacity-70'>💡</span></div>";
+    const readThumb = (read) => `<div class="aspect-video rounded-xl mb-3 overflow-hidden">` + (read.image
+      ? `<img src="${read.image}" alt="" loading="lazy" class="w-full h-full object-cover transition group-hover:scale-105" onerror="this.parentNode.innerHTML=THUMB_FALLBACK">`
+      : THUMB_FALLBACK) + `</div>`;
 
     const cardHtml = (read) => `
       <div class="card rounded-2xl p-6 cursor-pointer hover:border-indigo-400 dark:hover:border-indigo-500 transition group" data-read-id="${read.id}" tabindex="0" role="button" aria-label="Read ${read.title}">
@@ -124,8 +125,7 @@
         return;
       }
 
-      const first5 = reads.slice(0, 5);
-      document.getElementById('reads-grid').innerHTML = first5.map(cardHtml).join('');
+      document.getElementById('reads-grid').innerHTML = reads.map(cardHtml).join('');
       document.getElementById('reads-modal-grid').innerHTML = reads.map(cardHtml).join('');
 
       // Add click + keyboard listeners to open detail modal

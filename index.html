@@ -49,7 +49,7 @@
 </head>
 <body class="font-sans antialiased bg-white text-slate-800 dark:bg-slate-900 dark:text-slate-200 tracking-tight">
 
-  <div class="max-w-7xl mx-auto">
+  <div class="page-shell">
     <div class="min-h-screen flex">
 
       <!-- Side rail: quick on-page navigation -->
@@ -72,17 +72,17 @@
       </aside>
 
       <!-- Main -->
-      <main class="grow min-w-0 px-6 md:px-12 py-12 md:py-16 space-y-16 max-w-3xl">
+      <main class="grow min-w-0 px-6 md:px-12 py-12 md:py-16 space-y-16">
 
         <!-- Hero -->
         <section id="home" class="scroll-mt-24">
           <div class="glow-ring rounded-full w-20 h-20 mb-6">
             <img src="images/avatar.jpg" alt="Benjamin Smith" class="w-20 h-20 rounded-full relative z-10 object-cover">
           </div>
-          <h1 class="text-4xl md:text-5xl font-extrabold leading-tight mb-4 text-slate-900 dark:text-slate-100">
+          <h1 class="text-4xl md:text-5xl font-extrabold leading-tight mb-4 text-slate-900 dark:text-slate-100 max-w-3xl">
             Building businesses and <span class="glow-text">documenting the whole ride</span>.
           </h1>
-          <p class="text-lg text-slate-500 dark:text-slate-400 mb-5">
+          <p class="text-lg text-slate-500 dark:text-slate-400 mb-5 max-w-3xl">
             I'm Benjamin Smith — entrepreneur, photographer, and investor out of Minneapolis. I run multiple ventures and share everything I learn about business, real estate, crypto, and self-mastery along the way.
           </p>
           <div class="flex flex-wrap gap-2 mb-6" aria-label="Brand pillars">
@@ -227,7 +227,7 @@
     document.getElementById('reads-row').innerHTML = rowSkeleton(3);
 
     fetch('data/articles.json').then(r => r.ok ? r.json() : []).then(articles => {
-      const first3 = articles.slice(0, 3);
+      const first3 = articles.slice(0, 6);
       document.getElementById('articles-row').innerHTML = first3.length
         ? first3.map(articleCardHtml).join('')
         : '<p class="text-sm text-slate-500">Articles coming soon...</p>';
@@ -243,7 +243,7 @@
 
     fetch('data/videos.json').then(r => r.ok ? r.json() : []).then(videos => {
       const longform = videos.filter(v => v.cat === 'video');
-      const first3 = longform.slice(0, 3);
+      const first3 = longform.slice(0, 6);
       if (first3.length) {
         document.getElementById('videos-row').innerHTML = first3.map(videoCardHtml).join('');
       } else {
@@ -272,7 +272,7 @@
       </div>`;
 
     fetch('data/daily-reads.json').then(r => r.ok ? r.json() : []).then(reads => {
-      const first3 = reads.slice(0, 3);
+      const first3 = reads.slice(0, 6);
       if (first3.length) {
         document.getElementById('reads-row').innerHTML = first3.map(readCardHtml).join('');
       } else {
