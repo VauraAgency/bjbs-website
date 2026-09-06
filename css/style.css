@@ -276,3 +276,34 @@ a.card:hover, .card.card-link:hover {
   .carousel { display: flex !important; gap: 1.25rem; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 0.75rem; -webkit-overflow-scrolling: touch; touch-action: pan-x; scrollbar-gutter: stable; }
   .carousel > * { scroll-snap-align: start; flex: 0 0 auto; width: 80vw; }
 }
+
+/* ---------- Page shell: use the whole desktop canvas ----------
+   Content pages were capped at Tailwind's max-w-4xl (896px), which left most
+   of a desktop screen empty and squeezed card grids down to two columns.
+   This is defined here rather than as a Tailwind utility because
+   tailwind-built.css is a pre-built artifact (zero-build site) and only
+   contains the classes that were in the markup when it was generated. */
+.page-shell {
+  width: 100%;
+  max-width: 1600px;
+  margin-inline: auto;
+}
+
+/* ---------- Responsive content grid (articles, reads, videos, podcast) ----------
+   Replaces the `carousel sm:grid sm:grid-cols-2` pattern, which never became a
+   grid on desktop: style.css loads after tailwind-built.css, so the unscoped
+   `.carousel { display: flex }` rule beat `.sm\:grid` at equal specificity and
+   every breakpoint got a clipped one-row scroller. Pairs with .m-carousel,
+   which restores the swipeable row on phones only. */
+.content-grid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 1.25rem;
+  align-items: start;
+}
+@media (min-width: 640px) {
+  .content-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 1024px) {
+  .content-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
