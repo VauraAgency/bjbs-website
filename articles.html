@@ -80,6 +80,11 @@
     </div>
 
     <script>
+    const fmtDate = (iso) => {
+      if (!iso) return '';
+      const d = new Date(iso + 'T00:00:00Z');
+      return isNaN(d) ? iso : d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
+    };
       const cardThumb = (article) => article.image
         ? `<div class="aspect-video rounded-xl mb-3 overflow-hidden"><img src="${article.image}" alt="" loading="lazy" class="w-full h-full object-cover transition group-hover:scale-105"></div>`
         : '';
@@ -87,7 +92,10 @@
       const cardHtml = (article) => `
         <div class="card rounded-2xl p-6 cursor-pointer hover:border-indigo-400 dark:hover:border-indigo-500 transition group" data-article-id="${article.id}" tabindex="0" role="button" aria-label="Read ${article.title}">
           ${cardThumb(article)}
-          <a href="https://app.notion.com/p/83f7269252d54d95be6515217888a28e?v=f23101416ba145c4a385bbd5015fede1&query=${encodeURIComponent(article.category)}" target="_blank" rel="noopener" class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1 hover:underline inline-block">${article.category}</a>
+          <div class="flex items-center gap-1.5 mb-1">
+            <a href="https://app.notion.com/p/83f7269252d54d95be6515217888a28e?v=f23101416ba145c4a385bbd5015fede1&query=${encodeURIComponent(article.category)}" target="_blank" rel="noopener" class="text-xs uppercase tracking-wide text-indigo-500 font-semibold hover:underline">${article.category}</a>
+            <span class="text-xs text-slate-400 dark:text-slate-500">· ${fmtDate(article.date)}</span>
+          </div>
           <h3 class="font-bold text-lg mb-1 text-slate-900 dark:text-slate-100 group-hover:text-indigo-500 transition">${article.title}</h3>
           <p class="text-sm text-slate-500 dark:text-slate-400">${article.excerpt}</p>
         </div>`;
@@ -118,7 +126,7 @@
             if (article) {
               const imgHtml = article.image ? `<img src="${article.image}" alt="" class="w-full aspect-video object-cover rounded-xl mb-5">` : '';
               document.getElementById('detail-title').textContent = article.title;
-              document.getElementById('detail-meta').textContent = `${article.category} · ${article.date}`;
+              document.getElementById('detail-meta').textContent = `${article.category} · ${fmtDate(article.date)}`;
               document.getElementById('detail-text').innerHTML = imgHtml + article.fullText.split('\n').filter(p => p.trim()).map(p => `<p class="mb-4">${p}</p>`).join('');
               document.getElementById('article-detail-modal').classList.remove('hidden');
             }
