@@ -191,6 +191,11 @@
   <script src="js/main.js" defer></script>
   <script>
     // Populate articles showcase
+    const fmtDate = (iso) => {
+      if (!iso) return '';
+      const d = new Date(iso + 'T00:00:00Z');
+      return isNaN(d) ? iso : d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
+    };
     const articleThumb = (article) => article.image
       ? `<img src="${article.image}" alt="" loading="lazy" class="w-full h-full object-cover transition group-hover:scale-105">`
       : `<div class="w-full h-full bg-gradient-to-br from-btc/25 via-indigo-500/15 to-btc/10 dark:from-btc/30 dark:via-indigo-500/20 dark:to-btc/15 flex items-center justify-center"><span class="text-4xl opacity-70">📝</span></div>`;
@@ -200,7 +205,10 @@
         <a href="articles.html" class="block">
           <div class="aspect-video rounded-xl mb-3 overflow-hidden">${articleThumb(article)}</div>
         </a>
-        <a href="https://app.notion.com/p/83f7269252d54d95be6515217888a28e?v=f23101416ba145c4a385bbd5015fede1&query=${encodeURIComponent(article.category)}" target="_blank" rel="noopener" class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1 hover:underline inline-block">${article.category}</a>
+        <div class="flex items-center gap-1.5 mb-1">
+          <a href="https://app.notion.com/p/83f7269252d54d95be6515217888a28e?v=f23101416ba145c4a385bbd5015fede1&query=${encodeURIComponent(article.category)}" target="_blank" rel="noopener" class="text-xs uppercase tracking-wide text-indigo-500 font-semibold hover:underline">${article.category}</a>
+          <span class="text-xs text-slate-400 dark:text-slate-500">· ${fmtDate(article.date)}</span>
+        </div>
         <a href="articles.html" class="block">
           <h3 class="font-bold leading-snug mb-1 text-slate-900 dark:text-slate-100 group-hover:text-indigo-500 transition line-clamp-2">${article.title}</h3>
           <p class="text-sm text-slate-500 dark:text-slate-400 line-clamp-2">${article.excerpt}</p>
@@ -253,7 +261,10 @@
         <a href="reads.html" class="block">
           <div class="aspect-video rounded-xl mb-3 overflow-hidden">${readThumb(read)}</div>
         </a>
-        <a href="https://app.notion.com/p/66d0db95e6b842408a8a14636d20a8b7?v=f23101416ba145c4a385bbd5015fede1&query=${encodeURIComponent(read.category)}" target="_blank" rel="noopener" class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1 hover:underline inline-block">${read.category} · 1 min</a>
+        <div class="flex items-center gap-1.5 mb-1">
+          <a href="https://app.notion.com/p/66d0db95e6b842408a8a14636d20a8b7?v=f23101416ba145c4a385bbd5015fede1&query=${encodeURIComponent(read.category)}" target="_blank" rel="noopener" class="text-xs uppercase tracking-wide text-indigo-500 font-semibold hover:underline">${read.category} · 1 min</a>
+          <span class="text-xs text-slate-400 dark:text-slate-500">· ${fmtDate(read.date)}</span>
+        </div>
         <a href="reads.html" class="block">
           <h3 class="font-bold leading-snug mb-1 text-slate-900 dark:text-slate-100 group-hover:text-indigo-500 transition line-clamp-2">${read.title}</h3>
           <p class="text-sm text-slate-500 dark:text-slate-400 line-clamp-2">${read.excerpt}</p>
