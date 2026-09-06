@@ -311,3 +311,20 @@ a.card:hover, .card.card-link:hover {
 @media (min-width: 1024px) {
   .content-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
+
+/* ---------- Shorts row ----------
+   Short-form is vertical, so its cards use a portrait thumb and sit narrower
+   than the standard 280px carousel card — a 9:16 thumb at full card width
+   makes a ~500px-tall row. Defined here rather than as Tailwind's
+   aspect-[9/16], which isn't in the pre-built stylesheet. */
+.aspect-short { aspect-ratio: 9 / 16; }
+.carousel.carousel-shorts > * { width: min(200px, 52vw); }
+
+/* line-clamp-2 ships in tailwind-built.css but -3 does not, and the feed cards
+   need a slightly longer excerpt than the showcase rows. */
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
