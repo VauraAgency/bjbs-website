@@ -132,16 +132,11 @@
         <section id="content" class="scroll-mt-24">
           <div class="flex items-end justify-between mb-2">
             <h2 class="text-2xl font-bold text-slate-900 dark:text-slate-100">Latest content</h2>
-            <a href="videos.html" class="text-sm text-indigo-500 hover:underline">See all →</a>
           </div>
-          <p class="text-slate-500 dark:text-slate-400 text-sm mb-4">Long-form videos, podcasts, articles, and photography.</p>
-          <div class="flex flex-wrap gap-2 mb-8" id="category-tabs">
-            <button data-cat="all" class="tab-active px-3 py-1.5 rounded-full text-sm font-medium transition">All</button>
-            <button data-cat="video" class="tab px-3 py-1.5 rounded-full text-sm font-medium transition">Videos</button>
-            <button data-cat="podcast" class="tab px-3 py-1.5 rounded-full text-sm font-medium transition">Podcast</button>
-            <button data-cat="article" class="tab px-3 py-1.5 rounded-full text-sm font-medium transition">Articles</button>
-          </div>
-          <div id="articles-grid" class="carousel"><!-- populated by js/main.js --></div>
+          <p class="text-slate-500 dark:text-slate-400 text-sm mb-4">Everything in one place — articles, daily reads, videos, and reels. Filter by type below.</p>
+          <div class="flex flex-wrap gap-2 mb-8" id="category-tabs"><!-- tabs built from the feed by js/main.js --></div>
+          <div id="articles-grid" class="content-grid"><!-- populated by js/main.js --></div>
+          <div class="text-center mt-6" id="content-more"></div>
         </section>
 
         <!-- Ventures -->
