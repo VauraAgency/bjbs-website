@@ -1,152 +1,143 @@
 // Theme toggle + footer live in js/site.js (shared across all pages).
 
 // ---------- Content feed ----------
-// One mixed feed of everything published, newest first, filterable by type.
-// Every card is real content pulled from the data/ feeds — articles and daily
-// reads from their JSON, videos and reels from the YouTube sync. Categories
-// with nothing in them simply don't get a tab, so this stays correct on its
-// own as new content types land.
-const FEED_SOURCES = [
-  { url: 'data/articles.json',    cat: 'article', page: 'articles.html' },
-  { url: 'data/daily-reads.json', cat: 'read',    page: 'reads.html' },
-];
-
-// Type name shown on every card, so a mixed feed stays readable.
-const CAT_NAMES = { article: 'Article', read: 'Daily Read', video: 'Video', reel: 'Reel' };
-
-// Tab order — anything not listed here is appended alphabetically.
-const CAT_ORDER  = ['article', 'read', 'video', 'reel'];
-const CAT_LABELS = { article: 'Articles', read: 'Daily Reads', video: 'Videos', reel: 'Reels' };
-
-const INITIAL_VISIBLE = 12;
-
-const grid     = document.getElementById('articles-grid');
-const tabsWrap = document.getElementById('category-tabs');
-const moreWrap = document.getElementById('content-more');
-
-let feed = [];
-let activeCat = 'all';
-let expanded = false;
-
-const feedDate = (iso) => {
-  if (!iso) return '';
-  const d = new Date(iso + 'T00:00:00Z');
-  return isNaN(d) ? iso : d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
-};
-
-const FEED_FALLBACK = "<div class='w-full h-full bg-gradient-to-br from-btc/25 via-indigo-500/15 to-btc/10 dark:from-btc/30 dark:via-indigo-500/20 dark:to-btc/15 flex items-center justify-center'><span class='text-4xl opacity-70'>✦</span></div>";
-
-function thumb(c) {
-  const inner = c.thumb
-    ? `<img src="${c.thumb}" alt="" loading="lazy" class="w-full h-full object-cover transition group-hover:scale-105" onerror="this.parentNode.innerHTML=FEED_FALLBACK">`
-    : FEED_FALLBACK;
-  return `<div class="aspect-video rounded-xl mb-3 overflow-hidden">${inner}</div>`;
-}
-
-function cardHtml(c) {
-  const ext = /^https?:/.test(c.url);
-  return `
-    <a href="${c.url}" ${ext ? 'target="_blank" rel="noopener"' : ''} class="card group block p-4">
-      ${thumb(c)}
-      <p class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1">${CAT_NAMES[c.cat] || c.cat}<span class="text-slate-400 dark:text-slate-500 font-medium normal-case tracking-normal">${c.topic ? ` · ${c.topic}` : ''}${c.date ? ` · ${feedDate(c.date)}` : ''}</span></p>
-      <h3 class="font-bold text-lg leading-snug mb-1 text-slate-900 dark:text-slate-100 group-hover:text-indigo-500 transition">${c.title}</h3>
-      ${c.desc ? `<p class="text-sm text-slate-500 dark:text-slate-400">${c.desc}</p>` : ''}
-    </a>`;
-}
-
-function renderTabs() {
-  const present = [...new Set(feed.map(c => c.cat))];
-  const ordered = [
-    ...CAT_ORDER.filter(c => present.includes(c)),
-    ...present.filter(c => !CAT_ORDER.includes(c)).sort(),
+// Scoped: index.html runs its own inline script in the same global
+// scope, so nothing in here may leak a top-level binding.
+(function () {
+  // "Latest content" is one scrollable row mixing every long-form type, newest
+  // first. Short-form gets its own row below it, because 19 reels would otherwise
+  // swamp a feed of 4 articles and 7 reads.
+  const FEED_SOURCES = [
+    { url: 'data/articles.json',    cat: 'article', page: 'articles.html' },
+    { url: 'data/daily-reads.json', cat: 'read',    page: 'reads.html' },
   ];
-  const counts = c => feed.filter(x => x.cat === c).length;
-  const btn = (cat, text) =>
-    `<button data-cat="${cat}" aria-pressed="${activeCat === cat}" class="${activeCat === cat ? 'tab-active' : 'tab'} px-3 py-1.5 rounded-full text-sm font-medium transition">${text}</button>`;
 
-  tabsWrap.innerHTML = [
-    btn('all', `All <span class="opacity-60">${feed.length}</span>`),
-    ...ordered.map(c => btn(c, `${CAT_LABELS[c] || c} <span class="opacity-60">${counts(c)}</span>`)),
-  ].join('');
-}
+  // Type name shown on every card, so a mixed feed stays readable.
+  const CAT_NAMES  = { article: 'Article', read: 'Daily Read', video: 'Video', reel: 'Short' };
+  const CAT_ORDER  = ['article', 'read', 'video'];
+  const CAT_LABELS = { article: 'Articles', read: 'Daily Reads', video: 'Videos' };
 
-function render() {
-  const items = feed.filter(c => activeCat === 'all' || c.cat === activeCat);
+  const grid      = document.getElementById('articles-grid');
+  const tabsWrap  = document.getElementById('category-tabs');
+  const shortsRow = document.getElementById('shorts-row');
 
-  if (!items.length) {
-    grid.innerHTML = '<p class="text-sm text-slate-500 dark:text-slate-400">Nothing here yet — check back soon.</p>';
-    moreWrap.innerHTML = '';
-    return;
+  let feed = [];
+  let activeCat = 'all';
+
+  const feedDate = (iso) => {
+    if (!iso) return '';
+    const d = new Date(iso + 'T00:00:00Z');
+    return isNaN(d) ? iso : d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
+  };
+
+  // Newest first. Dates are ISO (YYYY-MM-DD) across every feed, so a plain string
+  // compare is a correct chronological sort.
+  const byNewest = (arr) => [...arr].sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')));
+
+  // Referenced from inline onerror="" attributes, so it has to be global.
+  window.FEED_FALLBACK = "<div class='w-full h-full bg-gradient-to-br from-btc/25 via-indigo-500/15 to-btc/10 dark:from-btc/30 dark:via-indigo-500/20 dark:to-btc/15 flex items-center justify-center'><span class='text-4xl opacity-70'>✦</span></div>";
+
+  function feedThumb(c, ratio) {
+    const inner = c.thumb
+      ? `<img src="${c.thumb}" alt="" loading="lazy" class="w-full h-full object-cover transition group-hover:scale-105" onerror="this.parentNode.innerHTML=FEED_FALLBACK">`
+      : FEED_FALLBACK;
+    return `<div class="${ratio} rounded-xl mb-3 overflow-hidden">${inner}</div>`;
   }
 
-  const shown = expanded ? items : items.slice(0, INITIAL_VISIBLE);
-  grid.innerHTML = shown.map(cardHtml).join('');
+  function cardHtml(c, ratio = 'aspect-video') {
+    const ext = /^https?:/.test(c.url);
+    return `
+      <a href="${c.url}" ${ext ? 'target="_blank" rel="noopener"' : ''} class="card group block p-4">
+        ${feedThumb(c, ratio)}
+        <p class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1">${CAT_NAMES[c.cat] || c.cat}<span class="text-slate-400 dark:text-slate-500 font-medium normal-case tracking-normal">${c.topic ? ` · ${c.topic}` : ''}${c.date ? ` · ${feedDate(c.date)}` : ''}</span></p>
+        <h3 class="font-bold text-lg leading-snug mb-1 text-slate-900 dark:text-slate-100 group-hover:text-indigo-500 transition line-clamp-2">${c.title}</h3>
+        ${c.desc ? `<p class="text-sm text-slate-500 dark:text-slate-400 line-clamp-3">${c.desc}</p>` : ''}
+      </a>`;
+  }
 
-  moreWrap.innerHTML = items.length > INITIAL_VISIBLE
-    ? `<button id="content-more-btn" class="text-indigo-500 hover:underline font-medium text-sm">${
-        expanded ? 'Show less' : `Show all ${items.length} →`}</button>`
-    : '';
-}
+  function renderTabs() {
+    const present = [...new Set(feed.map(c => c.cat))];
+    const ordered = [
+      ...CAT_ORDER.filter(c => present.includes(c)),
+      ...present.filter(c => !CAT_ORDER.includes(c)).sort(),
+    ];
+    const counts = c => feed.filter(x => x.cat === c).length;
+    const btn = (cat, text) =>
+      `<button data-cat="${cat}" aria-pressed="${activeCat === cat}" class="${activeCat === cat ? 'tab-active' : 'tab'} px-3 py-1.5 rounded-full text-sm font-medium transition">${text}</button>`;
 
-function renderAll() {
-  renderTabs();
-  render();
-}
+    tabsWrap.innerHTML = [
+      btn('all', `All <span class="opacity-60">${feed.length}</span>`),
+      ...ordered.map(c => btn(c, `${CAT_LABELS[c] || c} <span class="opacity-60">${counts(c)}</span>`)),
+    ].join('');
+  }
 
-// Skeletons while the feeds load.
-grid.innerHTML = Array.from({ length: 8 }).map(() => `
-  <div class="p-2">
-    <div class="skeleton aspect-video mb-3"></div>
-    <div class="skeleton h-3 w-1/3 mb-2 rounded-full"></div>
-    <div class="skeleton h-5 w-full mb-1 rounded-full"></div>
-    <div class="skeleton h-3 w-2/3 rounded-full"></div>
-  </div>`).join('');
+  function render() {
+    const items = feed.filter(c => activeCat === 'all' || c.cat === activeCat);
+    grid.innerHTML = items.length
+      ? items.map(c => cardHtml(c)).join('')
+      : '<p class="text-sm text-slate-500 dark:text-slate-400">Nothing here yet — check back soon.</p>';
+    grid.scrollLeft = 0; // a filtered row should start at the beginning
+  }
 
-const getJson = (url) => fetch(url).then(r => (r.ok ? r.json() : [])).catch(() => []);
+  const rowSkeleton = (n) => Array.from({ length: n }).map(() => `
+    <div class="p-2">
+      <div class="skeleton aspect-video mb-3"></div>
+      <div class="skeleton h-3 w-1/3 mb-2 rounded-full"></div>
+      <div class="skeleton h-5 w-full mb-1 rounded-full"></div>
+      <div class="skeleton h-3 w-2/3 rounded-full"></div>
+    </div>`).join('');
 
-Promise.all([
-  ...FEED_SOURCES.map(src =>
-    getJson(src.url).then(items => items.map(i => ({
-      cat: src.cat,
-      topic: i.category || '',
-      date: i.date,
-      title: i.title,
-      desc: i.excerpt,
-      thumb: i.image || '',
-      url: src.page,
-    })))
-  ),
-  // videos.json carries cat ('video' | 'reel'), thumb and url. Long-form
-  // entries put the topic in `label`; shorts just repeat the type there.
-  getJson('data/videos.json').then(items => items.map(v => ({
-    cat: v.cat,
-    topic: /^(video|reel)$/i.test(v.label || '') ? '' : (v.label || ''),
-    date: v.date,
-    title: v.title,
-    desc: v.desc,
-    thumb: v.thumb,
-    url: v.url,
-  }))),
-]).then(groups => {
-  feed = groups.flat()
-    .filter(c => c.title)
-    .sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')));
-  renderAll();
-});
+  grid.innerHTML = rowSkeleton(5);
+  if (shortsRow) shortsRow.innerHTML = rowSkeleton(5);
 
-tabsWrap.addEventListener('click', (e) => {
-  const btn = e.target.closest('button[data-cat]');
-  if (!btn) return;
-  activeCat = btn.dataset.cat;
-  expanded = false;
-  renderAll();
-});
+  const getJson = (url) => fetch(url).then(r => (r.ok ? r.json() : [])).catch(() => []);
 
-moreWrap.addEventListener('click', (e) => {
-  if (!e.target.closest('#content-more-btn')) return;
-  expanded = !expanded;
-  render();
-});
+  Promise.all([
+    ...FEED_SOURCES.map(src =>
+      getJson(src.url).then(items => items.map(i => ({
+        cat: src.cat,
+        topic: i.category || '',
+        date: i.date,
+        title: i.title,
+        desc: i.excerpt,
+        thumb: i.image || '',
+        url: src.page,
+      })))
+    ),
+    // videos.json carries cat ('video' | 'reel'), thumb and url. Long-form
+    // entries put the topic in `label`; shorts just repeat the type there.
+    getJson('data/videos.json').then(items => items.map(v => ({
+      cat: v.cat,
+      topic: /^(video|reel|short)$/i.test(v.label || '') ? '' : (v.label || ''),
+      date: v.date,
+      title: v.title,
+      desc: v.desc,
+      thumb: v.thumb,
+      url: v.url,
+    }))),
+  ]).then(groups => {
+    const all = groups.flat().filter(c => c.title);
+
+    feed = byNewest(all.filter(c => c.cat !== 'reel'));
+    renderTabs();
+    render();
+
+    if (shortsRow) {
+      const shorts = byNewest(all.filter(c => c.cat === 'reel'));
+      shortsRow.innerHTML = shorts.length
+        ? shorts.map(c => cardHtml(c, 'aspect-short')).join('')
+        : '<p class="text-sm text-slate-500 dark:text-slate-400">Shorts coming soon...</p>';
+    }
+  });
+
+  tabsWrap.addEventListener('click', (e) => {
+    const btn = e.target.closest('button[data-cat]');
+    if (!btn) return;
+    activeCat = btn.dataset.cat;
+    renderTabs();
+    render();
+  });
+})();
 
 // ---------- Ventures ----------
 const VENTURES = [
