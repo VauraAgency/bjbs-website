@@ -328,3 +328,37 @@ a.card:hover, .card.card-link:hover {
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+/* ---------- Page gutter ----------
+   The horizontal padding each <main> actually uses, exposed as a variable so
+   carousels can cancel it on the right. Values mirror the Tailwind classes on
+   each page's <main>; left padding is untouched so nothing shifts. */
+main           { --page-gutter: 1.5rem; }  /* every page: px-6 */
+
+/* Width of the centred container a carousel has to break out of. */
+.page-shell      { --shell-max: 1600px; }
+main.max-w-4xl   { --shell-max: 56rem; }
+@media (min-width: 768px) {
+  main      { --page-gutter: 2.5rem; }  /* content pages: md:px-10 */
+  main.grow { --page-gutter: 3rem; }    /* index.html:    md:px-12 */
+}
+
+/* ---------- Carousels run to the edge of the screen ----------
+   A scrolling row clipped at the page gutter looks like a bug: the card stops
+   short of the screen edge with dead space beside it. Cancel the right gutter
+   so the row bleeds to the edge, and re-add it as scroll padding so the last
+   card still lands flush with the left margin when you reach the end. */
+/* The page container is capped and centred, so on a wide screen a row stopped
+   at the container edge with dead space beyond it. Cancel the centring margin
+   as well as the gutter so the row always runs to the edge of the screen; keep
+   a gutter of scroll padding so the last card lands cleanly at the end. */
+.carousel {
+  --bleed-right: calc(max(0px, (100vw - var(--shell-max, 100vw)) / 2) + var(--page-gutter, 0px));
+  margin-right: calc(-1 * var(--bleed-right));
+  padding-right: var(--page-gutter, 0px);
+  scroll-padding-right: var(--page-gutter, 0px);
+}
+
+/* Tailwind's whitespace-nowrap isn't in the pre-built stylesheet, so the
+   "See all" link wrapped onto two lines instead of staying on one. */
+.whitespace-nowrap { white-space: nowrap; }
