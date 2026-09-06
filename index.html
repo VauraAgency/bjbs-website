@@ -133,10 +133,19 @@
           <div class="flex items-end justify-between mb-2">
             <h2 class="text-2xl font-bold text-slate-900 dark:text-slate-100">Latest content</h2>
           </div>
-          <p class="text-slate-500 dark:text-slate-400 text-sm mb-4">Everything in one place — articles, daily reads, videos, and reels. Filter by type below.</p>
+          <p class="text-slate-500 dark:text-slate-400 text-sm mb-4">Everything in one place — articles, daily reads, and videos, newest first. Filter by type below.</p>
           <div class="flex flex-wrap gap-2 mb-8" id="category-tabs"><!-- tabs built from the feed by js/main.js --></div>
-          <div id="articles-grid" class="content-grid"><!-- populated by js/main.js --></div>
-          <div class="text-center mt-6" id="content-more"></div>
+          <div id="articles-grid" class="carousel"><!-- populated by js/main.js --></div>
+        </section>
+
+        <!-- Shorts -->
+        <section id="shorts" class="scroll-mt-24">
+          <div class="flex items-end justify-between mb-2">
+            <h2 class="text-2xl font-bold text-slate-900 dark:text-slate-100">Shorts</h2>
+            <a href="https://www.instagram.com/benjaminjbsmith/reels/" target="_blank" rel="noopener" class="text-sm text-indigo-500 hover:underline">See all on Instagram →</a>
+          </div>
+          <p class="text-slate-500 dark:text-slate-400 text-sm mb-4">Short-form video, newest first.</p>
+          <div class="carousel carousel-shorts" id="shorts-row"><!-- populated by js/main.js --></div>
         </section>
 
         <!-- Ventures -->
@@ -186,6 +195,8 @@
   <script src="js/main.js" defer></script>
   <script>
     // Populate articles showcase
+    // Newest first, regardless of the order the feed happens to be written in.
+    const byNewest = (arr) => [...arr].sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')));
     const fmtDate = (iso) => {
       if (!iso) return '';
       const d = new Date(iso + 'T00:00:00Z');
@@ -222,7 +233,7 @@
     document.getElementById('reads-row').innerHTML = rowSkeleton(3);
 
     fetch('data/articles.json').then(r => r.ok ? r.json() : []).then(articles => {
-      const first3 = articles.slice(0, 6);
+      const first3 = byNewest(articles).slice(0, 6);
       document.getElementById('articles-row').innerHTML = first3.length
         ? first3.map(articleCardHtml).join('')
         : '<p class="text-sm text-slate-500">Articles coming soon...</p>';
@@ -232,12 +243,12 @@
     const videoCardHtml = (v) => `
       <a href="${v.url}" target="_blank" rel="noopener" class="card group block shrink-0 w-72 p-4">
         <div class="aspect-video rounded-xl mb-3 overflow-hidden"><img src="${v.thumb}" alt="" loading="lazy" class="w-full h-full object-cover transition group-hover:scale-105"></div>
-        <p class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1">${v.label}</p>
+        <p class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1">${v.label}<span class="text-slate-400 dark:text-slate-500 font-medium normal-case tracking-normal"> · ${fmtDate(v.date)}</span></p>
         <h3 class="font-bold leading-snug text-slate-900 dark:text-slate-100 group-hover:text-indigo-500 transition line-clamp-2">${v.title}</h3>
       </a>`;
 
     fetch('data/videos.json').then(r => r.ok ? r.json() : []).then(videos => {
-      const longform = videos.filter(v => v.cat === 'video');
+      const longform = byNewest(videos.filter(v => v.cat === 'video'));
       const first3 = longform.slice(0, 6);
       if (first3.length) {
         document.getElementById('videos-row').innerHTML = first3.map(videoCardHtml).join('');
@@ -267,7 +278,7 @@
       </div>`;
 
     fetch('data/daily-reads.json').then(r => r.ok ? r.json() : []).then(reads => {
-      const first3 = reads.slice(0, 6);
+      const first3 = byNewest(reads).slice(0, 6);
       if (first3.length) {
         document.getElementById('reads-row').innerHTML = first3.map(readCardHtml).join('');
       } else {
