@@ -1,58 +1,151 @@
 // Theme toggle + footer live in js/site.js (shared across all pages).
 
 // ---------- Content feed ----------
-// Swap `url: '#'` with real links as content gets published.
-const CONTENT = [
-  { cat: 'video',   label: 'Video',       date: 'Coming soon', title: 'Bitcoin DCA: why it beats timing the market', desc: 'Dollar cost averaging, compound returns, and why BTC is the best-performing asset class.', hue: [39, 92], url: '#' },
-  { cat: 'video',   label: 'Video',       date: 'Coming soon', title: 'The 3 types of traders', desc: 'Day trader wakes up panicking. Swing trader hits the gym. Long-term holder wakes up at 3pm.', hue: [239, 84], url: '#' },
-  { cat: 'article', label: 'Article',     date: 'Coming soon', title: 'Entrepreneurship is lead gen, sales, and follow-up. Repeat.', desc: 'Every business has a formula — the fundamentals that apply from lawn care to real estate.', hue: [199, 89], url: '#' },
-  { cat: 'podcast', label: 'Podcast',     date: 'Coming soon', title: 'Storytime with Benji: booking one-way flights', desc: 'I remember when I used to fear missing flights. Now I book one-ways. Tulum, Basel, and beyond.', hue: [280, 80], url: '#' },
-  { cat: 'photo',   label: 'Photography', date: 'Coming soon', title: 'Skyscapes: a drone series over Minneapolis', desc: 'JPG Benji drone work — golden hour over the skyline and the lakes.', hue: [160, 84], url: '#' },
-  { cat: 'article', label: 'Article',     date: 'Coming soon', title: 'Build systems so discipline isn’t required', desc: 'Procedures plus protocols equals proficiency — how I run multiple ventures without burning out.', hue: [24, 90], url: '#' },
-  { cat: 'video',   label: 'Video',       date: 'Coming soon', title: 'Do you own or rent in Minnesota?', desc: 'Stopping strangers in Minneapolis to talk real estate — BensEstates in the wild.', hue: [335, 78], url: '#' },
-  { cat: 'photo',   label: 'Photography', date: 'Coming soon', title: 'Moving photos: stills that breathe', desc: 'A photo and a short video of the same frame — an experiment in living images.', hue: [190, 90], url: '#' },
+// One mixed feed of everything published, newest first, filterable by type.
+// Every card is real content pulled from the data/ feeds — articles and daily
+// reads from their JSON, videos and reels from the YouTube sync. Categories
+// with nothing in them simply don't get a tab, so this stays correct on its
+// own as new content types land.
+const FEED_SOURCES = [
+  { url: 'data/articles.json',    cat: 'article', page: 'articles.html' },
+  { url: 'data/daily-reads.json', cat: 'read',    page: 'reads.html' },
 ];
 
-const grid = document.getElementById('articles-grid');
-let feed = [...CONTENT];
+// Type name shown on every card, so a mixed feed stays readable.
+const CAT_NAMES = { article: 'Article', read: 'Daily Read', video: 'Video', reel: 'Reel' };
+
+// Tab order — anything not listed here is appended alphabetically.
+const CAT_ORDER  = ['article', 'read', 'video', 'reel'];
+const CAT_LABELS = { article: 'Articles', read: 'Daily Reads', video: 'Videos', reel: 'Reels' };
+
+const INITIAL_VISIBLE = 12;
+
+const grid     = document.getElementById('articles-grid');
+const tabsWrap = document.getElementById('category-tabs');
+const moreWrap = document.getElementById('content-more');
+
+let feed = [];
 let activeCat = 'all';
+let expanded = false;
+
+const feedDate = (iso) => {
+  if (!iso) return '';
+  const d = new Date(iso + 'T00:00:00Z');
+  return isNaN(d) ? iso : d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
+};
+
+const FEED_FALLBACK = "<div class='w-full h-full bg-gradient-to-br from-btc/25 via-indigo-500/15 to-btc/10 dark:from-btc/30 dark:via-indigo-500/20 dark:to-btc/15 flex items-center justify-center'><span class='text-4xl opacity-70'>✦</span></div>";
 
 function thumb(c) {
-  if (c.thumb) return `<div class="aspect-video rounded-xl mb-3 overflow-hidden"><img src="${c.thumb}" alt="" loading="lazy" class="w-full h-full object-cover transition group-hover:scale-105"></div>`;
-  return `<div class="aspect-video rounded-xl mb-3 transition group-hover:opacity-90" style="background:linear-gradient(135deg,hsl(${c.hue[0]} ${c.hue[1]}% 55%),hsl(${(c.hue[0] + 60) % 360} ${c.hue[1]}% 45%))"></div>`;
+  const inner = c.thumb
+    ? `<img src="${c.thumb}" alt="" loading="lazy" class="w-full h-full object-cover transition group-hover:scale-105" onerror="this.parentNode.innerHTML=FEED_FALLBACK">`
+    : FEED_FALLBACK;
+  return `<div class="aspect-video rounded-xl mb-3 overflow-hidden">${inner}</div>`;
 }
 
-function render(cat) {
-  activeCat = cat;
-  grid.innerHTML = feed.filter(c => cat === 'all' || c.cat === cat)
-    .map(c => `
-      <a href="${c.url}" ${c.url.startsWith('http') ? 'target="_blank" rel="noopener"' : ''} class="card group block p-4">
-        ${thumb(c)}
-        <p class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1">${c.label} · ${c.date}</p>
-        <h3 class="font-bold text-lg leading-snug mb-1 text-slate-900 dark:text-slate-100 group-hover:text-indigo-500 transition">${c.title}</h3>
-        <p class="text-sm text-slate-500 dark:text-slate-400">${c.desc}</p>
-      </a>`).join('');
+function cardHtml(c) {
+  const ext = /^https?:/.test(c.url);
+  return `
+    <a href="${c.url}" ${ext ? 'target="_blank" rel="noopener"' : ''} class="card group block p-4">
+      ${thumb(c)}
+      <p class="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-1">${CAT_NAMES[c.cat] || c.cat}<span class="text-slate-400 dark:text-slate-500 font-medium normal-case tracking-normal">${c.topic ? ` · ${c.topic}` : ''}${c.date ? ` · ${feedDate(c.date)}` : ''}</span></p>
+      <h3 class="font-bold text-lg leading-snug mb-1 text-slate-900 dark:text-slate-100 group-hover:text-indigo-500 transition">${c.title}</h3>
+      ${c.desc ? `<p class="text-sm text-slate-500 dark:text-slate-400">${c.desc}</p>` : ''}
+    </a>`;
 }
-render('all');
 
-// Live feed: data/videos.json is refreshed daily by GitHub Actions from the
-// YouTube channel RSS. Real videos replace the placeholder video cards.
-fetch('data/videos.json')
-  .then(r => r.ok ? r.json() : [])
-  .then(videos => {
-    if (!videos.length) return;
-    const longform = videos.filter(v => v.cat === 'video').slice(0, 6);
-    feed = [...longform, ...CONTENT.filter(c => c.cat !== 'video')];
-    render(activeCat);
-  })
-  .catch(() => {});
+function renderTabs() {
+  const present = [...new Set(feed.map(c => c.cat))];
+  const ordered = [
+    ...CAT_ORDER.filter(c => present.includes(c)),
+    ...present.filter(c => !CAT_ORDER.includes(c)).sort(),
+  ];
+  const counts = c => feed.filter(x => x.cat === c).length;
+  const btn = (cat, text) =>
+    `<button data-cat="${cat}" aria-pressed="${activeCat === cat}" class="${activeCat === cat ? 'tab-active' : 'tab'} px-3 py-1.5 rounded-full text-sm font-medium transition">${text}</button>`;
 
-document.getElementById('category-tabs').addEventListener('click', (e) => {
-  const btn = e.target.closest('button');
+  tabsWrap.innerHTML = [
+    btn('all', `All <span class="opacity-60">${feed.length}</span>`),
+    ...ordered.map(c => btn(c, `${CAT_LABELS[c] || c} <span class="opacity-60">${counts(c)}</span>`)),
+  ].join('');
+}
+
+function render() {
+  const items = feed.filter(c => activeCat === 'all' || c.cat === activeCat);
+
+  if (!items.length) {
+    grid.innerHTML = '<p class="text-sm text-slate-500 dark:text-slate-400">Nothing here yet — check back soon.</p>';
+    moreWrap.innerHTML = '';
+    return;
+  }
+
+  const shown = expanded ? items : items.slice(0, INITIAL_VISIBLE);
+  grid.innerHTML = shown.map(cardHtml).join('');
+
+  moreWrap.innerHTML = items.length > INITIAL_VISIBLE
+    ? `<button id="content-more-btn" class="text-indigo-500 hover:underline font-medium text-sm">${
+        expanded ? 'Show less' : `Show all ${items.length} →`}</button>`
+    : '';
+}
+
+function renderAll() {
+  renderTabs();
+  render();
+}
+
+// Skeletons while the feeds load.
+grid.innerHTML = Array.from({ length: 8 }).map(() => `
+  <div class="p-2">
+    <div class="skeleton aspect-video mb-3"></div>
+    <div class="skeleton h-3 w-1/3 mb-2 rounded-full"></div>
+    <div class="skeleton h-5 w-full mb-1 rounded-full"></div>
+    <div class="skeleton h-3 w-2/3 rounded-full"></div>
+  </div>`).join('');
+
+const getJson = (url) => fetch(url).then(r => (r.ok ? r.json() : [])).catch(() => []);
+
+Promise.all([
+  ...FEED_SOURCES.map(src =>
+    getJson(src.url).then(items => items.map(i => ({
+      cat: src.cat,
+      topic: i.category || '',
+      date: i.date,
+      title: i.title,
+      desc: i.excerpt,
+      thumb: i.image || '',
+      url: src.page,
+    })))
+  ),
+  // videos.json carries cat ('video' | 'reel'), thumb and url. Long-form
+  // entries put the topic in `label`; shorts just repeat the type there.
+  getJson('data/videos.json').then(items => items.map(v => ({
+    cat: v.cat,
+    topic: /^(video|reel)$/i.test(v.label || '') ? '' : (v.label || ''),
+    date: v.date,
+    title: v.title,
+    desc: v.desc,
+    thumb: v.thumb,
+    url: v.url,
+  }))),
+]).then(groups => {
+  feed = groups.flat()
+    .filter(c => c.title)
+    .sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')));
+  renderAll();
+});
+
+tabsWrap.addEventListener('click', (e) => {
+  const btn = e.target.closest('button[data-cat]');
   if (!btn) return;
-  document.querySelectorAll('#category-tabs button').forEach(b => b.className = 'tab px-3 py-1.5 rounded-full text-sm font-medium transition');
-  btn.className = 'tab-active px-3 py-1.5 rounded-full text-sm font-medium transition';
-  render(btn.dataset.cat);
+  activeCat = btn.dataset.cat;
+  expanded = false;
+  renderAll();
+});
+
+moreWrap.addEventListener('click', (e) => {
+  if (!e.target.closest('#content-more-btn')) return;
+  expanded = !expanded;
+  render();
 });
 
 // ---------- Ventures ----------
