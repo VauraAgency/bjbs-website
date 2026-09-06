@@ -268,7 +268,11 @@ a.card:hover, .card.card-link:hover {
   );
 }
 
-/* ---------- Mobile-only carousel: grids become one swipeable row on phones ---------- */
+/* ---------- Mobile-only carousel: grids become one swipeable row on phones ----------
+   No longer applied to content grids — an 80vw card leaves the next one clipped
+   at the right edge and nothing centred, which reads as a layout bug rather than
+   a swipe affordance. Content grids now stack full-width on phones; the class is
+   kept for any deliberate one-row carousel that still wants this. */
 @media (max-width: 639px) {
   .m-carousel { display: flex !important; gap: 1.25rem; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 0.75rem; -webkit-overflow-scrolling: touch; touch-action: pan-x; scrollbar-gutter: stable; }
   .m-carousel > * { scroll-snap-align: start; flex: 0 0 auto; width: 80vw; }
