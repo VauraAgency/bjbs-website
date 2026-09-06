@@ -17,8 +17,20 @@
   const CAT_ORDER  = ['article', 'read', 'video'];
   const CAT_LABELS = { article: 'Articles', read: 'Daily Reads', video: 'Videos' };
 
+  // The subhead each type used to carry on its own showcase row, plus that
+  // row's "See all" destination — now shown under the filters for whichever
+  // type is selected.
+  const CAT_BLURBS = {
+    all:     'Everything in one place, newest first.',
+    article: 'Long-form writing on business, investing, and building.',
+    read:    'One idea, one minute, every day.',
+    video:   'Deep-dive content on YouTube.',
+  };
+  const CAT_PAGES = { article: 'articles.html', read: 'reads.html', video: 'videos.html' };
+
   const grid      = document.getElementById('articles-grid');
   const tabsWrap  = document.getElementById('category-tabs');
+  const blurbWrap = document.getElementById('content-blurb');
   const shortsRow = document.getElementById('shorts-row');
 
   let feed = [];
@@ -71,12 +83,21 @@
     ].join('');
   }
 
+  function renderBlurb() {
+    if (!blurbWrap) return;
+    const page = CAT_PAGES[activeCat];
+    blurbWrap.innerHTML =
+      `<p class="text-slate-500 dark:text-slate-400 text-sm">${CAT_BLURBS[activeCat] || ''}</p>` +
+      (page ? `<a href="${page}" class="text-sm text-indigo-500 hover:underline whitespace-nowrap">See all →</a>` : '');
+  }
+
   function render() {
     const items = feed.filter(c => activeCat === 'all' || c.cat === activeCat);
     grid.innerHTML = items.length
       ? items.map(c => cardHtml(c)).join('')
       : '<p class="text-sm text-slate-500 dark:text-slate-400">Nothing here yet — check back soon.</p>';
     grid.scrollLeft = 0; // a filtered row should start at the beginning
+    renderBlurb();
   }
 
   const rowSkeleton = (n) => Array.from({ length: n }).map(() => `
