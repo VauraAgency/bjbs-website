@@ -88,7 +88,7 @@
     const page = CAT_PAGES[activeCat];
     blurbWrap.innerHTML =
       `<p class="text-slate-500 dark:text-slate-400 text-sm">${CAT_BLURBS[activeCat] || ''}</p>` +
-      (page ? `<a href="${page}" class="text-sm text-indigo-500 hover:underline whitespace-nowrap">See all →</a>` : '');
+      (page ? `<a href="${page}" class="text-sm text-indigo-500 hover:underline whitespace-nowrap shrink-0">See all →</a>` : '');
   }
 
   function render() {
