@@ -6,16 +6,15 @@
 (function () {
   // "Latest content" is one scrollable row mixing every long-form type, newest
   // first. Short-form gets its own row below it, because 19 reels would otherwise
-  // swamp a feed of 4 articles and 7 reads.
+  // swamp a feed of articles.
   const FEED_SOURCES = [
     { url: 'data/articles.json',    cat: 'article', page: 'articles.html' },
-    { url: 'data/daily-reads.json', cat: 'read',    page: 'reads.html' },
   ];
 
   // Type name shown on every card, so a mixed feed stays readable.
-  const CAT_NAMES  = { article: 'Article', read: 'Daily Read', video: 'Video', reel: 'Short' };
-  const CAT_ORDER  = ['article', 'read', 'video'];
-  const CAT_LABELS = { article: 'Articles', read: 'Daily Reads', video: 'Videos' };
+  const CAT_NAMES  = { article: 'Article', video: 'Video', reel: 'Short' };
+  const CAT_ORDER  = ['article', 'video'];
+  const CAT_LABELS = { article: 'Articles', video: 'Videos' };
 
   // The subhead each type used to carry on its own showcase row, plus that
   // row's "See all" destination — now shown under the filters for whichever
@@ -23,10 +22,9 @@
   const CAT_BLURBS = {
     all:     'Everything in one place, newest first.',
     article: 'Long-form writing on business, investing, and building.',
-    read:    'One idea, one minute, every day.',
     video:   'Deep-dive content on YouTube.',
   };
-  const CAT_PAGES = { article: 'articles.html', read: 'reads.html', video: 'videos.html' };
+  const CAT_PAGES = { article: 'articles.html', video: 'videos.html' };
 
   const grid      = document.getElementById('articles-grid');
   const tabsWrap  = document.getElementById('category-tabs');

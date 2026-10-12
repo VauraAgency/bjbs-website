@@ -18,7 +18,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 IMAGE_DIRS = [ROOT / "data" / "images", ROOT / "images"]
-FEEDS = [ROOT / "data" / "articles.json", ROOT / "data" / "daily-reads.json"]
+FEEDS = [ROOT / "data" / "articles.json"]
 EXTS = {".jpg", ".jpeg", ".png", ".gif", ".webp", ".avif"}
 MAX_BYTES = 6 * 1024 * 1024          # a web hero image has no business being bigger
 MOJIBAKE = b"\xef\xbf\xbd" * 3       # three consecutive U+FFFD = text-mangled binary

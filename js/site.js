@@ -21,7 +21,6 @@
       label: 'Content', children: [
         { href: 'articles.html', label: 'Articles' },
         { href: 'videos.html', label: 'Videos' },
-        { href: 'reads.html', label: 'Daily Reads' },
         { href: 'podcast.html', label: 'Podcast' },
       ],
     },
